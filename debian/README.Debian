@@ -1,0 +1,54 @@
+sl-modem for Debian
+-------------------
+
+Please see README for a description of the sl-modem software.
+
+The Debian sl-modem source package provides the package sl-modem-source, which
+provides the source for the kernel modules
+
+To get the final modules from sl-modem-source, follow these instructions:
+
+a) First, update the local source directory. If you use
+   module-assistant, running "m-a clean sl-modem" should be enough.
+   Otherwise, change to /usr/src and extract the driver source executing:
+   
+   tar jxvf sl-modem.tar.bz2
+   
+b) Next, build and install the driver using one of the following ways:
+
+ - For already compiled kernel (eg. the currently running) with the
+   module-assistant tool:
+
+   module-assistant auto-install sl-modem-source
+
+ - Using the make-kpkg(1) command provided by the kernel-package Debian
+   package. This will produce a corresponding sl-modem-modules package for
+   the Debian kernel-image package that you are using. This is "the Debian
+   way". See the "modules_image" section of the make-kpkg(1) man page. When
+   done, you can install the resulting sl-modem-x.y.z*.deb with dpkg.
+
+ - Doing make-kpkg's job by hand, changing to /usr/src/modules/sl-modem and
+   executing:
+
+   debian/rules kdist KVERS=`uname -r` KSRC=/usr/src/kernel-headers-`uname -r`
+
+   This assumes that you are building a modules package for the currently
+   running kernel (uname -r) and the associated kernel-headers package is
+   installed (eg. kernel-headers-2.4.20-bf2.4).
+
+ - Changing to the /usr/src/modules/sl-modem/ directory and building as
+   the README file instructs using "make; make install". This will build
+   and install a module specific to the system you are building on and is
+   not under control of the packaging system.
+
+Why is sl-modem-source in non-free?
+-----------------------------------
+
+Because one part of the driver source is not available. Instead, a
+precompiled binary object is provided (probably to protect the
+Intellectual Property of the vendor). If you don't like it, feel free to
+use the ALSA driver which is based on the publicly available
+specification. Though, some features are not supported there (no
+ability to detect ring, speaker does not work, etc.).
+
+ -- Eduard Bloch <blade@debian.org>  Wed, 14 Apr 2004 11:23:41 +0200

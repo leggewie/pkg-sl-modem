@@ -1,0 +1,40 @@
+Source: sl-modem
+Section: non-free/misc
+Priority: optional
+Maintainer: Eduard Bloch <blade@debian.org>
+Build-Depends: debhelper (>=4), bzip2, libasound2-dev
+Standards-Version: 3.5.8
+
+Package: sl-modem-source
+Architecture: i386
+Depends: module-assistant, build-essential, debhelper
+Recommends: kernel-package
+Description: SmartLink software modem driver - module building source
+ This package contains source code for the low-level drivers for the
+ software modems produced by Smart Link Ltd. It supports PCI and USB models.
+ .
+ In addition to this package, you will need the package sl-modem-daemon
+ which implements the application part of the driver.
+ .
+ Module packages can be built for the custom kernel package either by hand or
+ using the module-assistant tool.
+
+Package: sl-modem-daemon
+Architecture: i386
+Depends: ${shlibs:Depends}, debconf, sl-modem-modules-new | sl-modem-source (>> 2.9.6-1) | kernel-image-2.6
+Provides: slmodem
+Conflicts: sl-modem-modules
+Description: SmartLink software modem daemon
+ The SmartLink modem daemon is the application part of the
+ driver for recent modems produced by Smart Link Ltd.
+ .
+ This package replaces (along with hardware access drivers) the old
+ driver generation (2.7.x) which consisted of kernel modules only.
+ .
+ It needs a kernel driver to access the hardware. This can be either
+ recent ALSA (shipped with a newer kernel (>=2.6.4) with Alsa support
+ and intel8x0m module) which is sufficient for basic operation and
+ data/Internet connection, or the SmartLink kernel driver which is
+ provided by separate packages which you can build using the source from
+ the sl-modem-source package. 
+

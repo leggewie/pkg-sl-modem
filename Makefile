@@ -13,11 +13,15 @@
 #
 ###########################################################################
 
-KERNEL_DIR:=/lib/modules/$(shell uname -r)/build
+KERNEL_DIR?=/lib/modules/$(shell uname -r)/build
 
 # tools
 INSTALL:=install
-
+# Definitions
+MODULES_DIR  = /lib/modules/$(KVERS)/misc
+MODEM_DEV   := ttySL0
+MODEM_LINK  := modem
+MODULES_CONF:= /etc/modules.conf
 all: modem drivers
 
 modem:

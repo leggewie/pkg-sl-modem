@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+if [ -x "/etc/init.d/sl-modem-daemon" ]; then
+	if [ -x /usr/sbin/invoke-rc.d ] ; then
+		invoke-rc.d sl-modem-daemon stop || true
+	else
+		/etc/init.d/sl-modem-daemon stop || true
+	fi
+fi
+#DEBHELPER#

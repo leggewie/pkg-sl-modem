@@ -1,0 +1,13 @@
+Source: sl-modem
+Section: misc
+Priority: optional
+Maintainer: Eduard Bloch <blade@debian.org>
+Standards-Version: 3.5.8
+
+Package: sl-modem-source
+Architecture: all
+Depends: make
+Description: Smart Link Soft Modem - driver building source
+ This package provides the source code for the sl-modem kernel modules.
+ The sl-modem package is also required in order to make use of these
+ modules. Kernel source is required to compile these modules.
