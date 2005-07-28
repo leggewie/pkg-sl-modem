@@ -71,7 +71,7 @@ const char *modem_default_dev_name = "/dev/slamr0";
 const char *modem_alsa_dev_name = "modem:1";
 unsigned int need_realtime = 1;
 unsigned int use_alsa = 0;
-const char *modem_group = "uucp";
+const char *modem_group = "dialout";
 mode_t modem_perm  = 0660;
 
 
@@ -105,7 +105,7 @@ static struct opt {
 	{'c',"country","default modem country name",MANDATORY,STRING,"USA"},
 	{ 0 ,"countrylist","show list of supported countries"},
 	{'a',"alsa","ALSA mode (see README for howto)"},
-	{'g',"group","Modem TTY group",MANDATORY,STRING,"uucp"},
+	{'g',"group","Modem TTY group",MANDATORY,STRING,"dialout"},
 	{'p',"perm","Modem TTY permission",MANDATORY,INTEGER,"0660"},
 	{'n',"nortpriority","run with regular priority"},
 	{'d',"debug","debug level",OPTIONAL,INTEGER,"0"},

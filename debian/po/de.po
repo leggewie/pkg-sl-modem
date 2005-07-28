@@ -11,12 +11,11 @@
 #
 #    Developers do not need to manually edit POT or PO files.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-29 19:29+0100\n"
+"POT-Creation-Date: 2005-07-28 12:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Eduard Bloch <blade@debian.org>\n"
 "Language-Team: Debian L10N German <debian-l10n-german@lists.debian.org>\n"

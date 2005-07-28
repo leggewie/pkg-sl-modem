@@ -8,6 +8,35 @@ daemon-stop () {
    fi
 }
 
+mkdev ()
+{
+    local cleanup majo
+
+    perms="660"
+    owner="root:dialout"
+
+    # look for nodes with the old major number, also whether the old files to
+    # exist at all
+    majo=`stat -c %t /dev/$1$2 2>/dev/null`
+
+    if test "$majo" = 212 || test "$majo" = 213 ; then
+        mv -f /dev/$1$2 /dev/$1$2.tmp
+        cleanup="$cleanup /dev/$1$2.tmp"
+        perms="--reference=/dev/$1$2.tmp"
+        owner="--reference=/dev/$1$2.tmp"
+    fi
+
+    if test -z "$majo" ; then
+        mknod /dev/$1$2 c $3 $2
+        chmod $perms /dev/$1$2
+        chown $perms /dev/$1$2
+    fi
+
+    rm -f $cleanup
+}
+
+   
+
 case "$1" in
    configure)
    # old DEVFS hack should be done by module post-install now
@@ -15,6 +44,12 @@ case "$1" in
 
    update-devfsd  2>/dev/null || true
    update-modules 2>/dev/null || true
+   
+   for x in 0 1 2 3; do
+      mkdev slamr $x 242
+      mkdev slusb $x 243
+   done
+
    for module in slamr slusb ; do
       if grep -q "$module" /proc/modules 2>/dev/null ; then
          daemon-stop

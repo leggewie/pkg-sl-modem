@@ -3,11 +3,11 @@ Section: non-free/misc
 Priority: optional
 Maintainer: Eduard Bloch <blade@debian.org>
 Build-Depends: debhelper (>=4), bzip2, libasound2-dev
-Standards-Version: 3.5.8
+Standards-Version: 3.6.2.1
 
 Package: sl-modem-source
 Architecture: i386
-Depends: module-assistant, build-essential, debhelper
+Depends: module-assistant, debhelper, bzip2, gcc-3.4
 Recommends: kernel-package
 Description: SmartLink software modem driver - module building source
  This package contains source code for the low-level drivers for the
@@ -21,7 +21,7 @@ Description: SmartLink software modem driver - module building source
 
 Package: sl-modem-daemon
 Architecture: i386
-Depends: ${shlibs:Depends}, debconf, sl-modem-modules-new | sl-modem-source (>> 2.9.6-1) | kernel-image-2.6
+Depends: ${shlibs:Depends}, debconf
 Provides: slmodem
 Conflicts: sl-modem-modules
 Description: SmartLink software modem daemon

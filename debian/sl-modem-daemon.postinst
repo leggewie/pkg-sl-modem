@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 . /usr/share/debconf/confmodule
 
@@ -17,25 +17,6 @@ if [ -x "/etc/init.d/sl-modem-daemon" ]; then
 	fi
 fi
 
-mkdev ()
-{
-   if test ! -e /dev/$1$2; then
-      mknod -m 660 /dev/$1$2 c $3 $2
-      chown root:dialout /dev/$1$2
-   fi
-}
-
-case "$1" in
-   configure)
-
-   for x in 0 1 2 3; do
-      mkdev slamr $x 212
-      mkdev slusb $x 213
-   done
-   ;;
-
-esac
-   
 #DEBHELPER#
 
 exit 0

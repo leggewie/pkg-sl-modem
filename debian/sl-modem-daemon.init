@@ -16,6 +16,8 @@ test -r /etc/default/slmodemd && . /etc/default/slmodemd
 # but most likely they are here
 test -r /etc/default/sl-modem-daemon && . /etc/default/sl-modem-daemon
 
+ALSADEVPREFIX=hw
+
 config() {
    if test "$DONTSTART" = 1 ; then
       test "$BEQUIET" = 1 || echo "Not starting $DESC (options not set in /etc/default/slmodemd)"
@@ -32,7 +34,7 @@ config() {
       AUTO=yes
       if test -e /proc/asound/Modem ; then
          # ALSA driver is loaded, use it
-         SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,hw:,`
+         SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,$ALSADEVPREFIX:,`
          ALSA=yes
       else
          # ALSA not loaded yet
@@ -50,7 +52,7 @@ config() {
                exit 1
             else
                # ALSA driver is loaded, use it
-               SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,hw:,`
+               SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,$ALSADEVPREFIX:,`
                ALSA=yes
                # if the kernel is too old, the warning will appear later
             fi
@@ -96,13 +98,19 @@ config() {
 
 start() {
    if [ "$ALSA" ] ; then
-      test -e /proc/asound/Modem || grep -q 'snd-intel8x0m' /proc/modules ||  { 
+      test -e /proc/asound/Modem || grep -q 'snd.intel8x0m' /proc/modules ||  { 
             echo -n "Loading ALSA modem driver into kernel ... " 
             $modprobe snd-intel8x0m && echo "done." ||  {
                echo "failed."
                exit -1
             }
       }
+      DEV_SND_FILE=/dev/snd/controlC${SLMODEMD_DEVICE##*:}
+      for start_reps in `seq 100` ; do
+	  test -r "$DEV_SND_FILE" && break
+	  : wait $start_reps for the kernel module to make the device $DEV_SND_FILE appear
+	  sleep 0.1
+      done
       echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
       start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- --alsa $OPTS
    else
@@ -113,9 +121,9 @@ start() {
             exit -1
          }
       }
-      if test "$SLMODEMD_DEVICE" && ! test -e /dev/$SLMODEMD_DEVICE ; then
-         mknod /dev/$SLMODEMD_DEVICE c 212 ${SLMODEMD_DEVICE#slamr}
-      fi
+#      if test "$SLMODEMD_DEVICE" && ! test -e /dev/$SLMODEMD_DEVICE ; then
+#         mknod /dev/$SLMODEMD_DEVICE c 212 ${SLMODEMD_DEVICE#slamr}
+#      fi
       echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
       start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- $OPTS
    fi
@@ -129,18 +137,49 @@ start() {
 
 stop() {
 	echo -n "Shutting down SmartLink Modem driver normally"
+  RETVAL=0
   if [ "`pidof $NAME`" ] ; then 
-     if start-stop-daemon --stop --quiet --pidfile $PIDFILE --exec $DAEMON ; then
+     if start-stop-daemon --stop --quiet --pidfile $PIDFILE --exec $DAEMON --retry 1 ; then
         echo .
      else
         echo " probably failed."
         echo "Trying it the hard way (send SIGKILL all $NAME processes): " 
-        killall -KILL $NAME || return 1
+        killall -KILL $NAME || RETVAL=1
      fi
   else
      echo " ... no $NAME daemon running."
   fi
-  return 0
+  test "$RETVAL" -ne 0 || rm -f "$PIDFILE"
+  ! grep -q 'snd.intel8x0m' /proc/modules || { 
+      echo -n "Unloading ALSA modem driver from kernel ... " 
+      "$modprobe" -r snd-intel8x0m && echo "done." || {
+	  echo "failed."
+	  RETVAL=1
+      }
+  }
+  ! grep -q 'slamr' /proc/modules || { 
+      echo -n "Unloading SmartLink Modem driver from kernel ... " 
+      "$modprobe" -r slamr && echo "done." || {
+	  echo "failed."
+	  RETVAL=1
+      }
+  }
+  return "$RETVAL"
+}
+
+status() {
+    echo -n "Status of $DESC: "
+    if [ ! -r "$PIDFILE" ]; then
+	echo "$NAME is not running."
+	exit 3
+    fi
+    if read pid < "$PIDFILE" && ps -p "$pid" > /dev/null 2>&1; then
+	echo "$NAME is running."
+	exit 0
+    else
+	echo "$NAME is not running but $PIDFILE exists."
+	exit 1
+    fi
 }
 
 # See how we were called.
@@ -163,13 +202,15 @@ case "$1" in
    start
    ;;
    stop)
-   config
-   stop && rm -f $PIDFILE
+   stop
    ;;
-   restart|reload)
+   restart|reload|force-reload)
+   stop
    config
-   stop && rm -f $PIDFILE
    start
+   ;;
+   status)
+   status
    ;;
    *)
    echo "Usage: /etc/init.d/$NAME {start|stop|restart}"

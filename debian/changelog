@@ -1,3 +1,24 @@
+sl-modem (2.9.9d-1) unstable; urgency=low
+
+  * New upstream release
+    + moves the device major numbers to the 24x range (closes: #264359)
+  * replaced the mkdev hacks in init script etc. with only one in the postinst
+    of modules that also fixes the major numbers of the device files. Also
+    make sure they don't make the script fail on insane /dev filesystems
+    (udev, closes: #297666)
+  * init script patch from Stephen Gildea <gildea@stop.mail-abuse.org> to
+    improve the start/stop behaviour and ALSA detection (closes: #312884)
+  * removed the dependency on recent modules or kernel. There are too many
+    ways to make the daemon work and a modern kernel (2.6.12) provides enough
+    support to make it work without special cludges using the packaging
+    system (closes: #319604)
+  * added bzip2 to dependencies (closes: #312152)
+  * Japanese translation by Hideki Yamane <henrich@samba.gr.jp>(closes: #281074)
+  * defaulting to gcc-3.3 for the daemon unless someone fixes the few errors
+  * various lintian fixes, removing the init script in postrm now (arrrg)
+
+ -- Eduard Bloch <blade@debian.org>  Thu, 28 Jul 2005 09:50:21 +0200
+
 sl-modem (2.9.9a-1) unstable; urgency=medium
 
   * New upstream release (linmodems fork with patches for kernel 2.6.10,

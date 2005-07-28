@@ -14,7 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sl-modem 2.9.6\n"
-"POT-Creation-Date: 2004-02-29 19:29+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-28 12:11+0200\n"
 "PO-Revision-Date: 2004-03-15 17:03+0100\n"
 "Last-Translator: Jean-Luc  Coulon (f5ibh) <jean-luc.coulon@wanadoo.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -31,7 +32,7 @@ msgstr "_list_"
 #. Type: select
 #. Description
 #: ../sl-modem-daemon.templates:5
-msgid "In which country is this modem located?"
+msgid "In which country is your modem located?"
 msgstr "Pays où se trouve le modem :"
 
 #. Type: select

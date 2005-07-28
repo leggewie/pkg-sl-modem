@@ -30,7 +30,7 @@ build-indep:
 build-arch: build-arch-stamp
 build-arch-stamp:
 	dh_testdir
-	cd modem ; $(MAKE) SUPPORT_ALSA=1
+	cd modem ; $(MAKE) SUPPORT_ALSA=1 CC=gcc-3.4
 	touch build-arch-stamp
 
 build: build-arch
@@ -97,7 +97,6 @@ binary-arch: build install
 	dh_installdeb -a
 #	dh_python -a
 #	dh_makeshlibs -a
-	dh_installdeb -a
 	dh_shlibdeps -a
 	dh_gencontrol -a
 	dh_md5sums -a
