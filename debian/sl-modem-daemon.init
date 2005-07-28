@@ -16,7 +16,7 @@ test -r /etc/default/slmodemd && . /etc/default/slmodemd
 # but most likely they are here
 test -r /etc/default/sl-modem-daemon && . /etc/default/sl-modem-daemon
 
-ALSADEVPREFIX=hw
+ALSADEVPREFIX=modem
 
 config() {
    if test "$DONTSTART" = 1 ; then

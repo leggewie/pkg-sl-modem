@@ -1,3 +1,12 @@
+sl-modem (2.9.9d-2) unstable; urgency=low
+
+  * changed the ALSA device name from hw: to modem: because weird device
+    driver using additional filters applied only then (closes: #320190).
+    In addition, set the build dependency on a recent libasound2 version to
+    enforce the upgrade.
+
+ -- Eduard Bloch <blade@debian.org>  Thu, 28 Jul 2005 12:15:58 +0200
+
 sl-modem (2.9.9d-1) unstable; urgency=low
 
   * New upstream release
