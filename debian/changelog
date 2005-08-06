@@ -1,3 +1,10 @@
+sl-modem (2.9.9d-5) unstable; urgency=low
+
+  * workaround in drivers/Makefile for a kernel 2.4 check accidentialy
+    matching 2.6.12.4 (closes: #322223)
+
+ -- Eduard Bloch <blade@debian.org>  Sat,  6 Aug 2005 20:38:12 +0200
+
 sl-modem (2.9.9d-4) unstable; urgency=low
 
   * the "Lesson I: never trust ALSA's procfs entries" release
