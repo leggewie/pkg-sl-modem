@@ -1,3 +1,13 @@
+sl-modem (2.9.9d-3) unstable; urgency=medium
+
+  * extended modprobe calls in the init script to try non-Intel drivers for
+    mainboard chipsets (closes: #320620)
+  * fixed a bashism in the init script
+  * removed the hard kernel-image-* dependency from the modules contol
+    file (closes: #321570)
+
+ -- Eduard Bloch <blade@debian.org>  Sat, 06 Aug 2005 15:23:13 +0200
+
 sl-modem (2.9.9d-2) unstable; urgency=low
 
   * changed the ALSA device name from hw: to modem: because weird device
@@ -87,7 +97,7 @@ sl-modem (2.9.7-1) unstable; urgency=low
 
   * New upstream release (closes: #249810)
   * modified the init script to be more smart on autodetection. The existance
-    of the ALSA driver is checked not only by looking at modules now 
+    of the ALSA driver is checked not only by looking at modules now
     (closes: #246950)
   * added dependency on kernel-image-2.6 in the hope that people will install
     a recent kernel (since versioned Provides: are not possible) as
@@ -147,7 +157,7 @@ sl-modem (2.9.6-2) unstable; urgency=low
 sl-modem (2.9.6-1) unstable; urgency=low
 
   * New upstream release (closes: #234010 and clarifies issues brought up by
-    license nit-pickers)  
+    license nit-pickers)
   * Installs the .ko files on linux 2.6.x (closes: #231204)
   * Hiding unhelpfull error messages - if they appear, the command was
     deliberate (closes: #232102)
@@ -217,7 +227,7 @@ sl-modem (2.7.14+2.7.10-2) unstable; urgency=low
 sl-modem (2.7.14+2.7.10-1) unstable; urgency=low
 
   * Merged version 2.7.10 into the package and implemented the selection of
-    the right source using the PCI Id table from linmodems.org people 
+    the right source using the PCI Id table from linmodems.org people
     (Closes: #197693)
 
  -- Eduard Bloch <blade@debian.org>  Sun, 31 Aug 2003 23:13:37 +0200

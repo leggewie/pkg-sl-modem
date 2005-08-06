@@ -17,6 +17,7 @@ test -r /etc/default/slmodemd && . /etc/default/slmodemd
 test -r /etc/default/sl-modem-daemon && . /etc/default/sl-modem-daemon
 
 ALSADEVPREFIX=modem
+driverlist="snd-intel8x0m snd-via82xx-modem snd-atiixp-modem"
 
 config() {
    if test "$DONTSTART" = 1 ; then
@@ -32,29 +33,37 @@ config() {
    
    if [ "`echo $SLMODEMD_DEVICE | grep auto`" ] ; then
       AUTO=yes
+      
       if test -e /proc/asound/Modem ; then
          # ALSA driver is loaded, use it
          SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,$ALSADEVPREFIX:,`
          ALSA=yes
-      else
-         # ALSA not loaded yet
+     else
+         # ALSA not loaded yet? No modem? No driver?
+
          if grep -q 'slamr\..*o' /lib/modules/`uname -r`/modules.dep ;
          then
             # we have the smartlink driver, use it and assume to have
             # one modem
             $modprobe slamr
             SLMODEMD_DEVICE=slamr0
-         else
+        else
             # or try to load alsa
-            $modprobe snd-intel8x0m
-            if [ $? != 0 ] ; then
-               echo Unable to detect the modem hardware.
-               exit 1
-            else
-               # ALSA driver is loaded, use it
-               SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,$ALSADEVPREFIX:,`
-               ALSA=yes
-               # if the kernel is too old, the warning will appear later
+            for x in $driverlist ; do $modprobe $x 2>/dev/null ; done
+
+            tried_to_load=1
+            
+            DEV_SND_FILE=/proc/asound/Modem
+            for start_reps in `seq 100` ; do
+                test -r "$DEV_SND_FILE" && break
+                : wait $start_reps for the kernel module to make the device $DEV_SND_FILE appear
+                sleep 0.1
+            done
+
+            if test -e /proc/asound/Modem ; then
+                # ALSA driver is loaded, use it
+                SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,$ALSADEVPREFIX:,`
+                ALSA=yes
             fi
          fi
       fi
@@ -62,20 +71,26 @@ config() {
 
    if [ "$ALSA" ] ; then
       OPTS="$OPTS $SLMODEMD_DEVICE"
-      if dpkg --compare-versions `uname -r` ge 2.6.4 ; then
-         # kernel ok, do final driver checks
 
-         # don't grep again if autodetection was already done
-         test "$AUTO" && return 0
+      if ! test -e /proc/asound/Modem ; then
 
-         if ! grep -q 'snd-intel8x0m.ko' /lib/modules/`uname -r`/modules.dep
-         then 
-            echo "Sorry, ALSA driver has been choosen by snd-intel8x0m module is not available."
-            exit 1
-         fi
-      else
-         echo "Sorry, ALSA driver choosen but your kernel is too old (<< 2.6.4)."
-         exit 1
+          # don't retry another time
+          if ! test "$tried_to_load" ; then
+
+              for x in $driverlist ; do $modprobe $x 2>/dev/null ; done
+
+              DEV_SND_FILE=/proc/asound/Modem
+              for start_reps in `seq 100` ; do
+                  test -r "$DEV_SND_FILE" && break
+                  : wait $start_reps for the kernel module to make the device $DEV_SND_FILE appear
+                  sleep 0.1
+              done
+          fi
+      fi
+
+      if ! test -e /proc/asound/Modem ; then
+          echo "Sorry, ALSA driver has been choosen by none of the drivers $driverlist could be loaded successfully."
+          exit 1
       fi
 
    else
@@ -98,19 +113,7 @@ config() {
 
 start() {
    if [ "$ALSA" ] ; then
-      test -e /proc/asound/Modem || grep -q 'snd.intel8x0m' /proc/modules ||  { 
-            echo -n "Loading ALSA modem driver into kernel ... " 
-            $modprobe snd-intel8x0m && echo "done." ||  {
-               echo "failed."
-               exit -1
-            }
-      }
-      DEV_SND_FILE=/dev/snd/controlC${SLMODEMD_DEVICE##*:}
-      for start_reps in `seq 100` ; do
-	  test -r "$DEV_SND_FILE" && break
-	  : wait $start_reps for the kernel module to make the device $DEV_SND_FILE appear
-	  sleep 0.1
-      done
+       # must be configured by the config rule above
       echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
       start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- --alsa $OPTS
    else
@@ -128,7 +131,7 @@ start() {
       start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- $OPTS
    fi
 	RETVAL=$?
-  if [ "$RETVAL" = 0 -a "$NOSYMLINK" != 1 ] ; then
+  if [ "$RETVAL" = 0 ] && [ "$NOSYMLINK" != 1 ] ; then
      echo "."
      echo "Creating /dev/modem symlink, pointing to: /dev/ttySL0."
      ln -sf ttySL0 /dev/modem
