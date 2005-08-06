@@ -19,6 +19,37 @@ test -r /etc/default/sl-modem-daemon && . /etc/default/sl-modem-daemon
 ALSADEVPREFIX=modem
 driverlist="snd-intel8x0m snd-via82xx-modem snd-atiixp-modem"
 
+# must match the names in /proc/modules with the underscores etc., includes slamr too
+unloadllist="snd_intel8x0m snd_via82xx_modem snd_atiixp_modem slamr"
+
+alsaload() {
+
+    unset line;
+
+    # first check to not do unneccessary modprobe calls. Some people even put
+    # it into the kernel image
+
+    if ! line=$(grep -i "\[Modem   " /proc/asound/cards 2>/dev/null) ; then
+        for x in $driverlist ; do $modprobe $x 2>/dev/null ; done
+
+        for start_reps in `seq 100` ; do
+            test -e /proc/asound/cards && line=$(grep -i "\[Modem   " -i /proc/asound/cards) && break
+            sleep 0.1
+        done
+    fi
+
+    if test "$line" ; then
+        # ALSA driver is loaded, use it
+
+        set $line
+        SLMODEMD_DEVICE=$ALSADEVPREFIX:$1
+        ALSA=yes
+        return 0
+    fi
+
+    return 1
+}
+
 config() {
    if test "$DONTSTART" = 1 ; then
       test "$BEQUIET" = 1 || echo "Not starting $DESC (options not set in /etc/default/slmodemd)"
@@ -32,66 +63,32 @@ config() {
    ALSA=`echo $SLMODEMD_DEVICE | grep :`
    
    if [ "`echo $SLMODEMD_DEVICE | grep auto`" ] ; then
-      AUTO=yes
-      
-      if test -e /proc/asound/Modem ; then
-         # ALSA driver is loaded, use it
-         SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,$ALSADEVPREFIX:,`
-         ALSA=yes
-     else
-         # ALSA not loaded yet? No modem? No driver?
 
-         if grep -q 'slamr\..*o' /lib/modules/`uname -r`/modules.dep ;
-         then
-            # we have the smartlink driver, use it and assume to have
-            # one modem
-            $modprobe slamr
-            SLMODEMD_DEVICE=slamr0
-        else
-            # or try to load alsa
-            for x in $driverlist ; do $modprobe $x 2>/dev/null ; done
-
-            tried_to_load=1
-            
-            DEV_SND_FILE=/proc/asound/Modem
-            for start_reps in `seq 100` ; do
-                test -r "$DEV_SND_FILE" && break
-                : wait $start_reps for the kernel module to make the device $DEV_SND_FILE appear
-                sleep 0.1
-            done
-
-            if test -e /proc/asound/Modem ; then
-                # ALSA driver is loaded, use it
-                SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,$ALSADEVPREFIX:,`
-                ALSA=yes
-            fi
-         fi
-      fi
+       # carefully look for signs of loaded drivers
+       if grep -i "\[Modem   " -i /proc/asound/cards ; then
+           # already loaded, just pick up the device there
+           alsaload;
+       else
+           # ALSA not loaded yet, try the smartlink driver first, then try ALSA
+           # though (forced loading)
+           if grep -q 'slamr\..*o' /lib/modules/`uname -r`/modules.dep ;
+           then
+               if $modprobe slamr ; then
+                   SLMODEMD_DEVICE=slamr0
+               else
+                   alsaload;
+               fi
+           else
+               alsaload;
+           fi
+       fi
    fi
 
    if [ "$ALSA" ] ; then
-      OPTS="$OPTS $SLMODEMD_DEVICE"
+       # either detected or choosed by user, the driver must already be loaded
+       # and the device name be picked up before
 
-      if ! test -e /proc/asound/Modem ; then
-
-          # don't retry another time
-          if ! test "$tried_to_load" ; then
-
-              for x in $driverlist ; do $modprobe $x 2>/dev/null ; done
-
-              DEV_SND_FILE=/proc/asound/Modem
-              for start_reps in `seq 100` ; do
-                  test -r "$DEV_SND_FILE" && break
-                  : wait $start_reps for the kernel module to make the device $DEV_SND_FILE appear
-                  sleep 0.1
-              done
-          fi
-      fi
-
-      if ! test -e /proc/asound/Modem ; then
-          echo "Sorry, ALSA driver has been choosen by none of the drivers $driverlist could be loaded successfully."
-          exit 1
-      fi
+       OPTS=" --alsa $OPTS $SLMODEMD_DEVICE"
 
    else
 
@@ -99,124 +96,91 @@ config() {
          OPTS="$OPTS /dev/$SLMODEMD_DEVICE"
       fi
 
-      # don't grep again if autodetection was already done
-      test "$AUTO" && return 0
-
-      if ! grep -q 'slamr\..*o' /lib/modules/`uname -r`/modules.dep
-      then 
-         echo "SmartLink modem driver not available for this Kernel. Please read README.Debian"
-         echo "or try to install the package sl-modem-modules-`uname -r`. Exiting..."
-         exit 1
+      # installed as module so just load it or bail out
+      if ! $modprobe slamr ; then
+          echo "SmartLink modem driver not available for this Kernel. Please read README.Debian"
+          echo "or try to install the package sl-modem-modules-`uname -r`. Exiting..."
+          exit 1
       fi
    fi
 }
 
 start() {
-   if [ "$ALSA" ] ; then
-       # must be configured by the config rule above
-      echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
-      start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- --alsa $OPTS
-   else
-      grep 'slamr' -q /proc/modules || { 
-         echo -n "Loading SmartLink Modem driver into kernel ... " 
-         $modprobe slamr && echo "done." || {
-            echo "failed."
-            exit -1
-         }
-      }
-#      if test "$SLMODEMD_DEVICE" && ! test -e /dev/$SLMODEMD_DEVICE ; then
-#         mknod /dev/$SLMODEMD_DEVICE c 212 ${SLMODEMD_DEVICE#slamr}
-#      fi
-      echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
-      start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- $OPTS
-   fi
-	RETVAL=$?
-  if [ "$RETVAL" = 0 ] && [ "$NOSYMLINK" != 1 ] ; then
-     echo "."
-     echo "Creating /dev/modem symlink, pointing to: /dev/ttySL0."
-     ln -sf ttySL0 /dev/modem
-  fi
+    
+    config
+
+    echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
+    start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- $OPTS
+    RETVAL=$?
+    if [ "$RETVAL" = 0 ] && [ "$NOSYMLINK" != 1 ] ; then
+        echo "."
+        echo "Creating /dev/modem symlink, pointing to: /dev/ttySL0."
+        ln -sf ttySL0 /dev/modem
+    fi
 }
 
 stop() {
-	echo -n "Shutting down SmartLink Modem driver normally"
-  RETVAL=0
-  if [ "`pidof $NAME`" ] ; then 
-     if start-stop-daemon --stop --quiet --pidfile $PIDFILE --exec $DAEMON --retry 1 ; then
-        echo .
-     else
-        echo " probably failed."
-        echo "Trying it the hard way (send SIGKILL all $NAME processes): " 
-        killall -KILL $NAME || RETVAL=1
-     fi
-  else
-     echo " ... no $NAME daemon running."
-  fi
-  test "$RETVAL" -ne 0 || rm -f "$PIDFILE"
-  ! grep -q 'snd.intel8x0m' /proc/modules || { 
-      echo -n "Unloading ALSA modem driver from kernel ... " 
-      "$modprobe" -r snd-intel8x0m && echo "done." || {
-	  echo "failed."
-	  RETVAL=1
-      }
-  }
-  ! grep -q 'slamr' /proc/modules || { 
-      echo -n "Unloading SmartLink Modem driver from kernel ... " 
-      "$modprobe" -r slamr && echo "done." || {
-	  echo "failed."
-	  RETVAL=1
-      }
-  }
-  return "$RETVAL"
+    echo -n "Shutting down SmartLink Modem driver normally"
+    RETVAL=0
+    if [ "`pidof $NAME`" ] ; then 
+        if start-stop-daemon --stop --quiet --pidfile $PIDFILE --exec $DAEMON --retry 1 ; then
+            echo .
+        else
+            echo " probably failed."
+            echo "Trying it the hard way (send SIGKILL all $NAME processes): " 
+            killall -KILL $NAME || RETVAL=1
+        fi
+    else
+        echo " ... no $NAME daemon running."
+    fi
+    test "$RETVAL" -ne 0 || rm -f "$PIDFILE"
+    echo -n "Unloading modem driver from kernel ... " 
+    msg="none found."
+    for x in $unloadllist ; do 
+        if grep -l -q "^$x " /proc/modules ; then
+            $modprobe -r $x 2>/dev/null && msg="$x." || msg="failed."
+        fi
+    done
+    echo $msg
 }
 
 status() {
     echo -n "Status of $DESC: "
     if [ ! -r "$PIDFILE" ]; then
-	echo "$NAME is not running."
-	exit 3
+        echo "$NAME is not running."
+        exit 3
     fi
     if read pid < "$PIDFILE" && ps -p "$pid" > /dev/null 2>&1; then
-	echo "$NAME is running."
-	exit 0
+        echo "$NAME is running."
+        exit 0
     else
-	echo "$NAME is not running but $PIDFILE exists."
-	exit 1
+        echo "$NAME is not running but $PIDFILE exists."
+        exit 1
     fi
 }
 
 # See how we were called.
 case "$1" in
-#   usbcheck)
-#   # test whether the init script is uptodate
-#   exit 0
-#   ;;
-#   usbstart)
-#   test -r /etc/default/slmodemd && . /etc/default/slmodemd
-#   test -r /etc/default/sl-modem-daemon && . /etc/default/sl-modem-daemon
-#   test "$2" && SLMODEMD_DEVICE="$2" || SLMODEMD_DEVICE=slusb0
-#   unset DONTSTART
-#   unset BEQUIET
-#   config
-#   start
-#   ;;
-   start)
-   config
-   start
-   ;;
-   stop)
-   stop
-   ;;
-   restart|reload|force-reload)
-   stop
-   config
-   start
-   ;;
-   status)
-   status
-   ;;
-   *)
-   echo "Usage: /etc/init.d/$NAME {start|stop|restart}"
-   exit 1
+    
+    start)
+    start
+    ;;
+    
+    stop)
+    stop
+    ;;
+    
+    restart|reload|force-reload)
+    stop
+    start
+    ;;
+    
+    status)
+    status
+    ;;
+
+    *)
+    echo "Usage: /etc/init.d/$NAME {start|stop|restart|status}"
+    exit 1
 esac
 

@@ -1,3 +1,14 @@
+sl-modem (2.9.9d-4) unstable; urgency=low
+
+  * the "Lesson I: never trust ALSA's procfs entries" release
+  * no longer relies on /proc/asound/[Mm]odem link, instead parses
+    /proc/asound/cards
+  * rewrote parts of the init script to put all recent extensions into a
+    proper control flow
+  * fixed a bashism in debian/sl-modem-daemon.postinst
+
+ -- Eduard Bloch <blade@debian.org>  Sat,  6 Aug 2005 17:01:07 +0200
+
 sl-modem (2.9.9d-3) unstable; urgency=medium
 
   * extended modprobe calls in the init script to try non-Intel drivers for
