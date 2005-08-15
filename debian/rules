@@ -30,7 +30,7 @@ build-indep:
 build-arch: build-arch-stamp
 build-arch-stamp:
 	dh_testdir
-	cd modem ; $(MAKE) SUPPORT_ALSA=1 CC=gcc-3.4
+	cd modem ; $(MAKE) SUPPORT_ALSA=1
 	touch build-arch-stamp
 
 build: build-arch

@@ -1598,10 +1598,11 @@ int  modem_set_mode(struct modem *m, enum MODEM_MODE mode)
 	return 0;
 }
 
+static int sregs_init(unsigned char sregs[]);
 
 int modem_reset(struct modem *m)
 {
-	static int sregs_init(unsigned char sregs[]);
+//	static int sregs_init(unsigned char sregs[]);
 	MODEM_DBG("modem reset...\n");
 	if(m->state != STATE_MODEM_IDLE)
 		modem_hup(m,1);

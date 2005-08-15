@@ -7,7 +7,7 @@ Standards-Version: 3.6.2.1
 
 Package: sl-modem-source
 Architecture: i386
-Depends: module-assistant, debhelper, bzip2, gcc-3.4
+Depends: module-assistant, debhelper, bzip2
 Recommends: kernel-package
 Description: SmartLink software modem driver - module building source
  This package contains source code for the low-level drivers for the

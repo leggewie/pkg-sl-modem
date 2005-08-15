@@ -1,3 +1,9 @@
+sl-modem (2.9.9d-6) unstable; urgency=low
+
+  * applied gcc-4.0 fixes from Sasha Khapyorsky, dropped gcc-3.4 workarounds
+
+ -- Eduard Bloch <blade@debian.org>  Mon, 15 Aug 2005 17:11:40 +0200
+
 sl-modem (2.9.9d-5) unstable; urgency=low
 
   * workaround in drivers/Makefile for a kernel 2.4 check accidentialy
