@@ -1,3 +1,15 @@
+sl-modem (2.9.9d-7) unstable; urgency=low
+
+  * added alternative debconf-2.0 dependency
+  * http://dev.gentoo.org/~genstef/files/slmodem-class-simple-to-class.diff
+    added with few modifications though does not solve #325799 yet
+  * added patch http://linmodems.technion.ac.il/archive-fifth/msg02217.html
+    which AFAICS basically ignores the PCI ID collision caused by the kernel
+    source bugs #303844 and #322028 (closes: #321061). Should be fixed in the
+    kernel, though.
+
+ -- Eduard Bloch <blade@debian.org>  Mon, 26 Sep 2005 23:59:25 +0200
+
 sl-modem (2.9.9d-6) unstable; urgency=low
 
   * applied gcc-4.0 fixes from Sasha Khapyorsky, dropped gcc-3.4 workarounds

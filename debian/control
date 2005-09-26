@@ -21,7 +21,7 @@ Description: SmartLink software modem driver - module building source
 
 Package: sl-modem-daemon
 Architecture: i386
-Depends: ${shlibs:Depends}, debconf
+Depends: ${shlibs:Depends}, debconf | debconf-2.0
 Provides: slmodem
 Conflicts: sl-modem-modules
 Description: SmartLink software modem daemon

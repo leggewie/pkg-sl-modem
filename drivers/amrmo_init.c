@@ -58,9 +58,6 @@
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,5,0)
 #define OLD_KERNEL 1
 #endif
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,10)
-#define pci_register_driver(drv) ( pci_register_driver(drv) ? 0 : -ENODEV )
-#endif
 
 #ifdef OLD_KERNEL
 #define iminor(i) MINOR((i)->i_rdev)
@@ -283,7 +280,19 @@ MODULE_DEVICE_TABLE (pci, amrmo_pci_tbl);
 
 static struct amrmo_struct *amrmo_table[MAXNUM] = {};
 #ifndef OLD_KERNEL
+#ifdef FOUND_CLASS_SIMPLE
+#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_simple_device_add(class, dev, device, fmt, rest)
+#define CLASS_DESTROY(class) class_simple_destroy(class)
+#define CLASS_DEVICE_DESTROY(class, dev) class_simple_device_remove(dev)
+#define CLASS_CREATE(owner, name) class_simple_create(owner, name)
 static struct class_simple *amrmo_class;
+#else
+#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_device_create(class, dev, device, fmt, rest)
+#define CLASS_DESTROY(class) class_destroy(class)
+#define CLASS_DEVICE_DESTROY(class, dev) class_device_destroy(class, dev)
+#define CLASS_CREATE(owner, name) class_create(owner, name)
+static struct class *amrmo_class;
+#endif
 #endif
 
 /*
@@ -629,7 +638,7 @@ static int __init amrmo_pci_probe(struct pci_dev *pci_dev, const struct pci_devi
 	}
 #endif
 #else
-	class_simple_device_add(amrmo_class, MKDEV(AMRMO_MAJOR, i), NULL, "slamr%d", i);
+	CLASS_DEVICE_CREATE(amrmo_class, MKDEV(AMRMO_MAJOR, i), NULL, "slamr%d", i);
 	devfs_mk_cdev(MKDEV(AMRMO_MAJOR,i), S_IFCHR|S_IRUSR|S_IWUSR, "slamr%d", i);
 #endif
 	return 0;
@@ -661,7 +670,7 @@ static void __exit amrmo_pci_remove(struct pci_dev *pci_dev)
 	}
 #endif
 #else
-	class_simple_device_remove(MKDEV(AMRMO_MAJOR, amrmo->num));
+	CLASS_DEVICE_DESTROY(amrmo_class, MKDEV(AMRMO_MAJOR, amrmo->num));
 	devfs_remove("slamr%d", amrmo->num);
 #endif
 	amrmo_table[amrmo->num] = NULL;
@@ -745,17 +754,21 @@ static int __init amrmo_init(void)
 	}
 
 #ifndef OLD_KERNEL
-	amrmo_class = class_simple_create(THIS_MODULE, "slamr");
+	amrmo_class = CLASS_CREATE(THIS_MODULE, "slamr");
 	if (IS_ERR(amrmo_class)) {
 		int err = PTR_ERR(amrmo_class);
 		printk(KERN_ERR "slamr: failure creating simple class, error %d\n", err);
 		return err;
 	}
 #endif
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,10)
+	if (!pci_register_driver(&amrmo_pci_driver)) {
+#else
 	if ((err = pci_register_driver(&amrmo_pci_driver)) < 0) {
+#endif
 		pci_unregister_driver(&amrmo_pci_driver);
 #ifndef OLD_KERNEL
-		class_simple_destroy(amrmo_class);
+		CLASS_DESTROY(amrmo_class);
 #endif
                 return err;
 	}
@@ -763,7 +776,7 @@ static int __init amrmo_init(void)
 	if(register_chrdev(AMRMO_MAJOR, "slamr", &amrmo_fops) < 0) {
 		pci_unregister_driver(&amrmo_pci_driver);
 #ifndef OLD_KERNEL
-		class_simple_destroy(amrmo_class);
+		CLASS_DESTROY(amrmo_class);
 #endif
 		return -ENOMEM;
 	}
@@ -777,7 +790,7 @@ static void __exit amrmo_exit(void)
 	unregister_chrdev(AMRMO_MAJOR,"slamr");
 	pci_unregister_driver(&amrmo_pci_driver);
 #ifndef OLD_KERNEL
-	class_simple_destroy(amrmo_class);
+	CLASS_DESTROY(amrmo_class);
 #endif
 }
 

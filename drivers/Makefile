@@ -18,7 +18,9 @@
 
 KERNEL_DIR:=/lib/modules/$(shell uname -r)/build
 
-EXTRA_CFLAGS = -I$(obj) -I$(obj)/../modem
+FOUND_CLASS_SIMPLE := $(shell grep -q 'class_simple_device_add' ${KERNEL_DIR}/include/linux/device.h 2> /dev/null && echo -DFOUND_CLASS_SIMPLE)
+
+EXTRA_CFLAGS = -I$(obj) -I$(obj)/../modem $(FOUND_CLASS_SIMPLE)
 
 obj-m := slamr.o slusb.o
 
@@ -69,7 +71,7 @@ obj:=.
 module-dir ?= ${DESTDIR}/lib/modules/$(KERNEL_VER)/misc
 
 
-CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB `test -f $(KERNEL_DIR)/include/linux/modversions.h && echo -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include`
+CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB `test -f $(KERNEL_DIR)/include/linux/modversions.h && echo -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include` $(FOUND_CLASS_SIMPLE)
 
 all: $(obj-m)
 
