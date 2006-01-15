@@ -1,3 +1,21 @@
+sl-modem (2.9.9d+e-pre2-1) unstable; urgency=low
+
+  * New upstream pre-release (closes: #327588)
+  * added sv.po from Daniel Nylander (closes: #330436)
+  * slmodemd.1 manpage from Erik Schanze (closes: #335369)
+  * defining URB_ASYNC_UNLINK if not set, needed by recent kernels
+  * applied patch for class/simple_class transition from Gentoo lists with
+    some fixes (closes: #325799)
+  * changed the MODULE_LICENSE string to "Dual BSD/GPL" since the license 
+    is actually a BSD license clone (closes: #327545)
+  * not including the old hotplug script, merged its code into the init script
+    and added an udev rules file to run it. Needs real testing with a
+    Smartlink USB modem which I do not have (closes: #338740)
+  * disabled the "PCI device grabbing warning" code which caused
+    OOpses on 2.6.15
+
+ -- Eduard Bloch <blade@debian.org>  Sun, 15 Jan 2006 14:49:45 +0100
+
 sl-modem (2.9.9d-7) unstable; urgency=low
 
   * added alternative debconf-2.0 dependency

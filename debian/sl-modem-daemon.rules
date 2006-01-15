@@ -1,0 +1,1 @@
+KERNEL=="slusb*", NAME="slusb*", GROUP="dialout", RUN+="/etc/init.d/sl-modem-daemon"

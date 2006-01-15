@@ -1,0 +1,57 @@
+.TH slmodemd "8" "October 23 2005" "2.9.9" "User Commands"
+.SH NAME
+slmodemd \- manual page for SmartLink Soft Modem daemon
+.SH SYNOPSIS
+.B slmodemd
+[\fIoption\fR...] [\fIdevice\fR]
+.SH DESCRIPTION
+This is Smart Link Soft Modem for Linux and provides
+full-featured 56K Voice Fax Modem.
+.P
+\fBdevice\fR name of modem device (default `/dev/slamr0')
+.TP
+\fB\-h\fR, \fB\-u\fR,\fB\-\-help\fR, \fB\-\-usage\fR
+usage info
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+show version and exit
+.TP
+\fB\-c\fR, \fB\-\-country\fR=\fIVAL\fR
+default modem country name (default `USA')
+.TP
+\fB\-\-countrylist\fR
+show list of supported countries
+.TP
+\fB\-a\fR, \fB\-\-alsa\fR
+ALSA mode (see README for howto)
+.TP
+\fB\-g\fR, \fB\-\-group\fR=\fIVAL\fR
+Modem TTY group (default `dialout')
+.TP
+\fB\-p\fR, \fB\-\-perm\fR=\fIVAL\fR
+Modem TTY permission (default `0660')
+.TP
+\fB\-r\fR, \fB\-\-ringdetector\fR
+with internal ring detector (software)
+.TP
+\fB\-n\fR, \fB\-\-nortpriority\fR
+run with regular priority
+.TP
+\fB\-d\fR, \fB\-\-debug\fR=\fIVAL\fR
+debug level, prints log mesages to stderr (0 \- 12, default `0')
+.TP
+\fB\-l\fR, \fB\-\-log\fR=\fIVAL\fR
+logging mode, prints log messages to log file (0 \- 12, default `5')
+.SH FILES
+.TP 
+\fB/etc/default/sl-modem-daemon\fR
+configuration file
+.TP
+\fB/etc/init.d/sl-modem-daemon\fR
+daemon start\-stop\-script
+.SH AUTHOR
+slmodend was written by Sasha K <sashak@smlink.com>.
+.PP
+This manual page was written by Erik Schanze <schanzi_@gmx.de>,
+for the Debian project (but may be used by others).
+

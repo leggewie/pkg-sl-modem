@@ -638,7 +638,7 @@ static int __init amrmo_pci_probe(struct pci_dev *pci_dev, const struct pci_devi
 	}
 #endif
 #else
-	CLASS_DEVICE_CREATE(amrmo_class, MKDEV(AMRMO_MAJOR, i), NULL, "slamr%d", i);
+	CLASS_DEVICE_CREATE(amrmo_class, MKDEV(AMRMO_MAJOR, i), &pci_dev->dev, "slamr%d", i);
 	devfs_mk_cdev(MKDEV(AMRMO_MAJOR,i), S_IFCHR|S_IRUSR|S_IWUSR, "slamr%d", i);
 #endif
 	return 0;
@@ -704,7 +704,8 @@ MODULE_PARM_DESC(debug,"debug level: 0-3 (default=0)");
 
 MODULE_AUTHOR("Smart Link Ltd.");
 MODULE_DESCRIPTION("SmartLink HAMR5600,SmartPCI56/561 based modem driver");
-MODULE_LICENSE("Smart Link Ltd.");
+//MODULE_LICENSE("Smart Link Ltd.");
+MODULE_LICENSE("Dual BSD/GPL");
 
 
 static int __init amrmo_init(void)
@@ -721,7 +722,7 @@ static int __init amrmo_init(void)
 	amrmo_debug_level = debug;
 
 	/* fix me: how to prevent modem cards grabing by
-	   serial driver? */
+	   serial driver?
 #ifdef OLD_KERNEL
 	pci_for_each_dev(dev) {
 #else
@@ -752,6 +753,7 @@ static int __init amrmo_init(void)
 #endif
 		}
 	}
+        */
 
 #ifndef OLD_KERNEL
 	amrmo_class = CLASS_CREATE(THIS_MODULE, "slamr");

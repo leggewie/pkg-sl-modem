@@ -106,8 +106,6 @@ config() {
 }
 
 start() {
-    
-    config
 
     echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
     start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- $OPTS
@@ -159,19 +157,43 @@ status() {
     fi
 }
 
-# See how we were called.
-case "$1" in
+# See how we were called. Consider udev action too.
+case "$1$ACTION" in
     
     start)
+    config
     start
     ;;
-    
-    stop)
+
+    add)
+    ALSA=""
+    # slusb via udev part
+    if [ "$DEVICE" ] ; then 
+       SLMODEMD_DEVICE="$DEVICE"
+    else
+       SLMODEMD_DEVICE="$DEVNAME"
+    fi
+
+    if [ -r "$SLMODEMD_DEVICE" ]
+    then
+       # check if $GROUP really exists
+       if getent group $GROUP > /dev/null; then
+          chmod 660 "$SLMODEMD_DEVICE"
+          chown root:$GROUP "$SLMODEMD_DEVICE"
+       fi
+    else
+       exit 1
+    fi
+    start
+    ;;
+
+    stop|remove)
     stop
     ;;
     
     restart|reload|force-reload)
     stop
+    config
     start
     ;;
     

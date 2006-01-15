@@ -276,6 +276,10 @@ static int dmabuf_copyin(struct dmabuf *db, void *buffer, unsigned int size)
 
 /* --------------------------------------------------------------------- */
 
+#ifndef URB_ASYNC_UNLINK
+#define URB_ASYNC_UNLINK 0
+#endif
+
 #define arrsize(a) (sizeof(a)/sizeof((a)[0]))
 
 #define NUM_OF_URBS(ch) (sizeof((ch)->urb)/sizeof((ch)->urb[0]))
@@ -1386,5 +1390,6 @@ module_exit(st7554_modem_exit);
 
 MODULE_AUTHOR("Smart Link Ltd.");
 MODULE_DESCRIPTION("ST7554 USB Smart Link Soft Modem driver.");
-MODULE_LICENSE("Smart Link Ltd.");
+//MODULE_LICENSE("Smart Link Ltd.");
+MODULE_LICENSE("Dual BSD/GPL");
 
