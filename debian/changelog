@@ -1,3 +1,12 @@
+sl-modem (2.9.9d+e-pre2-2) unstable; urgency=low
+
+  * added helper module from
+    http://phep2.technion.ac.il/linmodems/packages/smartlink/ungrab-winmodem.tar.gz
+    to tell the kernel to keep away from unsupported PCI id numbers, installed
+    with slamr and pre-installed via modprobe.d script
+
+ -- Eduard Bloch <blade@debian.org>  Sun, 15 Jan 2006 17:48:36 +0100
+
 sl-modem (2.9.9d+e-pre2-1) unstable; urgency=low
 
   * New upstream pre-release (closes: #327588)

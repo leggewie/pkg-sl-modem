@@ -58,7 +58,7 @@ install: build
 #	dh_installdirs -psl-modem-daemon
 
 	# Copy only the driver source to the proper location
-	tar -c --exclude ".svn" modem/*.h drivers patches | tar x -C debian/sl-modem-source/usr/src/modules/sl-modem/
+	tar -c --exclude ".svn" modem/*.h drivers patches ungrab-winmodem | tar x -C debian/sl-modem-source/usr/src/modules/sl-modem/
 	# Copy the needed debian/ pieces to the proper location
 	cd debian ; cp control compat *_KVERS_* *.modules.in rules changelog copyright sl-modem-source/usr/src/modules/sl-modem/debian
 	chmod -R a+r debian/sl-modem-source/
@@ -66,6 +66,7 @@ install: build
 	cp modem/slmodemd debian/sl-modem-daemon/usr/sbin/
 	cp debian/sl-modem-daemon.modutils debian/sl-modem-daemon/etc/modutils
 	cp debian/sl-modem-daemon.modutils debian/sl-modem-daemon/etc/modprobe.d
+	echo "install slamr modprobe --ignore-install ungrab-winmodem ;  modprobe --ignore-install slamr" >> debian/sl-modem-daemon/etc/modprobe.d/sl-modem-daemon.modutils
 	dh_installdocs -psl-modem-source debian/README.Debian README
 	dh_installdocs -psl-modem-daemon
 	dh_install
@@ -121,6 +122,10 @@ binary-modules:
 	if ! test -e drivers/Makefile ; then echo "Please update the package, extract the tarball!"; exit 1 ; fi
 	$(MAKE) -C drivers KERNEL_DIR=$(KSRC) KVERS=$(KVERS)
 	cp drivers/slusb.$ko drivers/slamr.$ko debian/$(PKGNAME)/lib/modules/$(KVERS)/misc
+ifeq ($k,k)
+	$(MAKE) -C ungrab-winmodem KERNEL_DIR=$(KSRC) KVERS=$(KVERS)
+	cp ungrab-winmodem/ungrab-winmodem.ko debian/$(PKGNAME)/lib/modules/$(KVERS)/misc
+endif
 	dh_installdocs
 	dh_installchangelogs
 	dh_compress
