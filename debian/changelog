@@ -1,3 +1,11 @@
+sl-modem (2.9.9d+e-pre2-3) unstable; urgency=medium
+
+  * changed NAME setting for slusb in udev rules
+  * fixed slamr class_device_create call (closes: #349305), thanks to
+    Gasper Zejn et al.
+
+ -- Eduard Bloch <blade@debian.org>  Tue, 07 Feb 2006 15:44:02 +0100
+
 sl-modem (2.9.9d+e-pre2-2) unstable; urgency=low
 
   * added helper module from

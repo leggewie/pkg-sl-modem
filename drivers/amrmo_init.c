@@ -287,7 +287,7 @@ static struct amrmo_struct *amrmo_table[MAXNUM] = {};
 #define CLASS_CREATE(owner, name) class_simple_create(owner, name)
 static struct class_simple *amrmo_class;
 #else
-#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_device_create(class, dev, device, fmt, rest)
+#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_device_create(class, NULL, dev, device, fmt, rest)
 #define CLASS_DESTROY(class) class_destroy(class)
 #define CLASS_DEVICE_DESTROY(class, dev) class_device_destroy(class, dev)
 #define CLASS_CREATE(owner, name) class_create(owner, name)

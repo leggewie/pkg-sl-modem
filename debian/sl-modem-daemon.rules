@@ -1,1 +1,2 @@
-KERNEL=="slusb*", NAME="slusb*", GROUP="dialout", RUN+="/etc/init.d/sl-modem-daemon"
+# start/stop the daemon when the USB modem is connected
+KERNEL=="slusb[0-9]*", GROUP="dialout", RUN+="/etc/init.d/sl-modem-daemon"
