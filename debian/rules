@@ -66,7 +66,7 @@ install: build
 	cp modem/slmodemd debian/sl-modem-daemon/usr/sbin/
 	cp debian/sl-modem-daemon.modutils debian/sl-modem-daemon/etc/modutils
 	cp debian/sl-modem-daemon.modutils debian/sl-modem-daemon/etc/modprobe.d
-	echo "install slamr modprobe --ignore-install ungrab-winmodem ;  modprobe --ignore-install slamr" >> debian/sl-modem-daemon/etc/modprobe.d/sl-modem-daemon.modutils
+	echo "install slamr modprobe --ignore-install ungrab-winmodem ;  modprobe --ignore-install slamr; test -e /dev/slamr0 || (/bin/mknod -m 660 /dev/slamr0 c 242 0 2>/dev/null && chgrp dialout /dev/slamr0) " >> debian/sl-modem-daemon/etc/modprobe.d/sl-modem-daemon.modutils
 	dh_installdocs -psl-modem-source debian/README.Debian README
 	dh_installdocs -psl-modem-daemon
 	dh_install

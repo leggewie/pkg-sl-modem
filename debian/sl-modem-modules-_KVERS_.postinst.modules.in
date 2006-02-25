@@ -27,9 +27,13 @@ mkdev ()
     fi
 
     if test -z "$majo" ; then
-        mknod /dev/$1$2 c $3 $2
-        chmod $perms /dev/$1$2
-        chown $perms /dev/$1$2
+        mknod -m $perms /dev/$1$2 c $3 $2
+        chown $owner /dev/$1$2
+    fi
+
+    # workaround for a mistake in old scripts
+    if test "`stat -c %u /dev/$1$2`" = 660 ; then
+       chown $owner /dev/$1$2
     fi
 
     rm -f $cleanup

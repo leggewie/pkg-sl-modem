@@ -1,3 +1,19 @@
+sl-modem (2.9.9d+e-pre2-4) unstable; urgency=medium
+
+  * replaced amrmo_init.c with the version from
+    http://linmodems.technion.ac.il/packages/smartlink/slmodem-2.9.11-20051101.tar.gz
+    which has basically the superset of our changes (plus two additional modem
+    IDs) but zeroes out the class* method calls since they are "protected" by
+    GPL-enforcing kernel macros now (closes: #354216)
+  * the above change effectively disables the udev functionality. Send your
+    complaints to kernel developers if you need it. Or suggest a better
+    solution. For now, a oneliner in /etc/modprobe.d/sl-modem-daemon.modutils
+    creates /dev/slamr0.
+  * workaround to fix device files that got the wrong owner (660 instead of
+    root) during the major number transition in July 2005
+
+ -- Eduard Bloch <blade@debian.org>  Sat, 25 Feb 2006 19:45:42 +0100
+
 sl-modem (2.9.9d+e-pre2-3) unstable; urgency=medium
 
   * changed NAME setting for slusb in udev rules

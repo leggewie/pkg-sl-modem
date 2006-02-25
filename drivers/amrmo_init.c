@@ -65,6 +65,15 @@
 #include <linux/device.h>
 #endif
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,13)
+#define class_simple_device_add(class, dev, addr, name, i)
+#define class_simple_device_remove(dev)
+#define class_simple_create(module, name) (struct class_simple *)(name)
+#define class_simple_destroy(class)
+#else
+#define pci_match_id(tbl, dev) pci_match_device(tbl, dev)
+#endif
+
 #include <modem_defs.h>
 
 #define AMRMO_MODULE_NAME "slamr"
@@ -134,6 +143,9 @@
 #define PCI_DEVICE_ID_SL2800			0x2800
 #define PCI_DEVICE_ID_SL1900			0x3052
 #define PCI_DEVICE_ID_ND92XPA                   0x8800 /* ND92XPA */
+
+#define PCI_VENDOR_ID_PCTEL                     0x134d
+#define PCI_DEVICE_ID_HSP1688                   0x2189
 
 enum {
 	ALS300_CARD = 1,
@@ -213,9 +225,11 @@ static const char *card_names[] = {
 
 
 static struct pci_device_id amrmo_pci_tbl [] __devinitdata = {
-	{PCI_VENDOR_ID_SMARTLINK_1, PCI_DEVICE_ID_SL1900,    /* 163c:3052 */
+	{PCI_VENDOR_ID_SMARTLINK_1, PCI_DEVICE_ID_SL1900,  /* 163c:3052 */
 	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1900_CARD},
-	{PCI_VENDOR_ID_SMARTLINK_2, PCI_DEVICE_ID_SL1900,    /* 10a5:3052 */
+	{PCI_VENDOR_ID_SMARTLINK_2, PCI_DEVICE_ID_SL1900,  /* 10a5:3052 */
+	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1900_CARD},
+	{PCI_VENDOR_ID_PCTEL, PCI_DEVICE_ID_HSP1688,       /* 134d:2189 */
 	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1900_CARD},
 	{PCI_VENDOR_ID_PHILIPS,  PCI_DEVICE_ID_UCB1500,    /* 1131:3400 */
 	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1500_CARD},
@@ -280,19 +294,7 @@ MODULE_DEVICE_TABLE (pci, amrmo_pci_tbl);
 
 static struct amrmo_struct *amrmo_table[MAXNUM] = {};
 #ifndef OLD_KERNEL
-#ifdef FOUND_CLASS_SIMPLE
-#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_simple_device_add(class, dev, device, fmt, rest)
-#define CLASS_DESTROY(class) class_simple_destroy(class)
-#define CLASS_DEVICE_DESTROY(class, dev) class_simple_device_remove(dev)
-#define CLASS_CREATE(owner, name) class_simple_create(owner, name)
 static struct class_simple *amrmo_class;
-#else
-#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_device_create(class, NULL, dev, device, fmt, rest)
-#define CLASS_DESTROY(class) class_destroy(class)
-#define CLASS_DEVICE_DESTROY(class, dev) class_device_destroy(class, dev)
-#define CLASS_CREATE(owner, name) class_create(owner, name)
-static struct class *amrmo_class;
-#endif
 #endif
 
 /*
@@ -638,7 +640,7 @@ static int __init amrmo_pci_probe(struct pci_dev *pci_dev, const struct pci_devi
 	}
 #endif
 #else
-	CLASS_DEVICE_CREATE(amrmo_class, MKDEV(AMRMO_MAJOR, i), &pci_dev->dev, "slamr%d", i);
+	class_simple_device_add(amrmo_class, MKDEV(AMRMO_MAJOR, i), NULL, "slamr%d", i);
 	devfs_mk_cdev(MKDEV(AMRMO_MAJOR,i), S_IFCHR|S_IRUSR|S_IWUSR, "slamr%d", i);
 #endif
 	return 0;
@@ -670,7 +672,7 @@ static void __exit amrmo_pci_remove(struct pci_dev *pci_dev)
 	}
 #endif
 #else
-	CLASS_DEVICE_DESTROY(amrmo_class, MKDEV(AMRMO_MAJOR, amrmo->num));
+	class_simple_device_remove(MKDEV(AMRMO_MAJOR, amrmo->num));
 	devfs_remove("slamr%d", amrmo->num);
 #endif
 	amrmo_table[amrmo->num] = NULL;
@@ -704,8 +706,7 @@ MODULE_PARM_DESC(debug,"debug level: 0-3 (default=0)");
 
 MODULE_AUTHOR("Smart Link Ltd.");
 MODULE_DESCRIPTION("SmartLink HAMR5600,SmartPCI56/561 based modem driver");
-//MODULE_LICENSE("Smart Link Ltd.");
-MODULE_LICENSE("Dual BSD/GPL");
+MODULE_LICENSE("Smart Link Ltd.");
 
 
 static int __init amrmo_init(void)
@@ -722,13 +723,13 @@ static int __init amrmo_init(void)
 	amrmo_debug_level = debug;
 
 	/* fix me: how to prevent modem cards grabing by
-	   serial driver?
+	   serial driver? */
 #ifdef OLD_KERNEL
 	pci_for_each_dev(dev) {
 #else
         while ((dev = pci_find_device(PCI_ANY_ID, PCI_ANY_ID, dev)) != NULL) {
 #endif
-		if(pci_match_device(amrmo_pci_tbl, dev) &&
+		if(pci_match_id(amrmo_pci_tbl, dev) &&
 		   pci_dev_driver(dev)) {
 #ifdef OLD_KERNEL
 			AMRMO_DBG("device %04x:%04x is used by %s: remove\n",
@@ -753,10 +754,9 @@ static int __init amrmo_init(void)
 #endif
 		}
 	}
-        */
 
 #ifndef OLD_KERNEL
-	amrmo_class = CLASS_CREATE(THIS_MODULE, "slamr");
+	amrmo_class = class_simple_create(THIS_MODULE, "slamr");
 	if (IS_ERR(amrmo_class)) {
 		int err = PTR_ERR(amrmo_class);
 		printk(KERN_ERR "slamr: failure creating simple class, error %d\n", err);
@@ -770,7 +770,7 @@ static int __init amrmo_init(void)
 #endif
 		pci_unregister_driver(&amrmo_pci_driver);
 #ifndef OLD_KERNEL
-		CLASS_DESTROY(amrmo_class);
+		class_simple_destroy(amrmo_class);
 #endif
                 return err;
 	}
@@ -778,7 +778,7 @@ static int __init amrmo_init(void)
 	if(register_chrdev(AMRMO_MAJOR, "slamr", &amrmo_fops) < 0) {
 		pci_unregister_driver(&amrmo_pci_driver);
 #ifndef OLD_KERNEL
-		CLASS_DESTROY(amrmo_class);
+		class_simple_destroy(amrmo_class);
 #endif
 		return -ENOMEM;
 	}
@@ -792,7 +792,7 @@ static void __exit amrmo_exit(void)
 	unregister_chrdev(AMRMO_MAJOR,"slamr");
 	pci_unregister_driver(&amrmo_pci_driver);
 #ifndef OLD_KERNEL
-	CLASS_DESTROY(amrmo_class);
+	class_simple_destroy(amrmo_class);
 #endif
 }
 
