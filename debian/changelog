@@ -1,3 +1,10 @@
+sl-modem (2.9.9d+e-pre2-5) unstable; urgency=low
+
+  * Fix for module compilation with 2.6.16, condition around line
+    drivers/st7554.c:1160 (closes: #358267)
+
+ -- Eduard Bloch <blade@debian.org>  Sun, 16 Apr 2006 08:23:47 +0200
+
 sl-modem (2.9.9d+e-pre2-4) unstable; urgency=medium
 
   * replaced amrmo_init.c with the version from

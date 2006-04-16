@@ -1157,7 +1157,10 @@ static struct usb_device_id st7554_ids [] = {
 MODULE_DEVICE_TABLE (usb, st7554_ids);
 
 static struct usb_driver st7554_usb_driver = {
+    /* EB: fix compilation, Sun, 16 Apr 2006 08:28:45 +0200 */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,16)
 	.owner =       THIS_MODULE,
+#endif
 	.name =	       "ST7554 USB Modem",
 	.probe =       st7554_probe,
 	.disconnect =  st7554_disconnect,
