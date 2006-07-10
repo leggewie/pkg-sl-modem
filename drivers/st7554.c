@@ -69,7 +69,11 @@
 #define USB_DBG_URB(fmt...) // USB_DBG(fmt)
 
 static int debug = 0;
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
+module_param(debug, int, 0444);
+#else
 MODULE_PARM(debug,"i");
+#endif
 MODULE_PARM_DESC(debug,"Debug level: 0-3 (default=0)");
 
 /* st7554 IDs */

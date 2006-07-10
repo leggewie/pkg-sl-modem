@@ -701,7 +701,11 @@ static struct pci_driver amrmo_pci_driver = {
  *  module stuff
  */
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
+module_param(debug, int, 0444);
+#else
 MODULE_PARM(debug,"i");
+#endif
 MODULE_PARM_DESC(debug,"debug level: 0-3 (default=0)");
 
 MODULE_AUTHOR("Smart Link Ltd.");

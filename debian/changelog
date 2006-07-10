@@ -1,3 +1,14 @@
+sl-modem (2.9.9d+e-pre2-6) unstable; urgency=low
+
+  * alternative MODULE_PARM function (module_param) used on 2.6.x kernels
+    (closes: #377561)
+  * removed executable bits from the udev rules file
+  * set a proper debconf dialog title, the old contents should actually be in
+    the text, updated de.po and half-updated those translation where basic
+    syntax was understandable
+
+ -- Eduard Bloch <blade@debian.org>  Mon, 10 Jul 2006 12:24:25 +0200
+
 sl-modem (2.9.9d+e-pre2-5) unstable; urgency=low
 
   * Fix for module compilation with 2.6.16, condition around line

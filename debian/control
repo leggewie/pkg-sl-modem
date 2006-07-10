@@ -3,7 +3,7 @@ Section: non-free/misc
 Priority: optional
 Maintainer: Eduard Bloch <blade@debian.org>
 Build-Depends: debhelper (>=4), bzip2, libasound2-dev (>> 1.0.6)
-Standards-Version: 3.6.2.1
+Standards-Version: 3.7.2
 
 Package: sl-modem-source
 Architecture: i386

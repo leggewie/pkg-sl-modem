@@ -13,30 +13,32 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sl-modem 2.9.9d-6\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-28 12:11+0200\n"
+"Report-Msgid-Bugs-To: blade@debian.org\n"
+"POT-Creation-Date: 2006-07-10 12:34+0200\n"
 "PO-Revision-Date: 2005-09-28 02:51-0700\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. Type: select
 #. Choices
-#: ../sl-modem-daemon.templates:3
+#: ../sl-modem-daemon.templates:1001
 msgid "_list_"
 msgstr "_lista_"
 
 #. Type: select
 #. Description
-#: ../sl-modem-daemon.templates:5
-msgid "In which country is your modem located?"
-msgstr "I vilket land finns du och ditt modem?"
+#: ../sl-modem-daemon.templates:1002
+msgid "Location of the modem"
+msgstr ""
 
 #. Type: select
 #. Description
-#: ../sl-modem-daemon.templates:5
-msgid "Please select the telephone system used in your country."
-msgstr "Vänligen välj det telefonsystem som används i ditt land."
-
+#: ../sl-modem-daemon.templates:1003
+msgid ""
+"In which country is your modem located? Please select the telephone system "
+"used in your country."
+msgstr "I vilket land finns du och ditt modem?"
+"Vänligen välj det telefonsystem som används i ditt land."
