@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sl-modem\n"
-"Report-Msgid-Bugs-To: blade@debian.org\n"
-"POT-Creation-Date: 2006-07-10 12:34+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-09-09 14:17-0600\n"
 "PO-Revision-Date: 2004-07-19 21:18+0200\n"
 "Last-Translator: Miroslav Jezbera <jezberam@phoenix.inf.upol.cz>\n"
 "Language-Team: Czech <provoz@debian.cz>\n"
@@ -33,13 +33,14 @@ msgstr "_list_"
 #. Description
 #: ../sl-modem-daemon.templates:1002
 msgid "Location of the modem"
-msgstr ""
+msgstr "Geografická poloha modemu"
 
 #. Type: select
 #. Description
-#: ../sl-modem-daemon.templates:1003
+#: ../sl-modem-daemon.templates:1002
 msgid ""
 "In which country is your modem located? Please select the telephone system "
 "used in your country."
-msgstr "Ve které zemi je tento modem pou¾íván? "
-"Vyberte prosím telefonní systém pou¾ívaný ve va¹í zemi."
+msgstr ""
+"Ve které zemi je tento modem pou¾íván? Vyberte prosím telefonní systém "
+"pou¾ívaný ve va¹í zemi."

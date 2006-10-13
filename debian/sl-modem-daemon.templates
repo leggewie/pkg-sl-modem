@@ -1,6 +1,9 @@
 Template: sl-modem-daemon/country
 Type: select
-_Choices: _list_
-Default: USA
-_Description: Location of the modem
+Choices: _list_
+_Default: USA
+# Translators: Enter the country (in uppercase and in English) where your
+# language is mostly spoken, for example FRANCE for French or GERMANY for
+# German
+_Description: Location of the modem:
  In which country is your modem located? Please select the telephone system used in your country.

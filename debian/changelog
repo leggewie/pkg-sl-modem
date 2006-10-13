@@ -1,3 +1,11 @@
+sl-modem (2.9.9d+e-pre2-7) unstable; urgency=low
+
+  * Fixes to build with kernel 2.6.18 (USB removal, closes: 390308)
+  * cs.po update (Miroslav Jezbera, closes: #389257)
+  * templates fixes, making country list translateable (closes: #377820)
+
+ -- Eduard Bloch <blade@debian.org>  Fri, 13 Oct 2006 19:06:44 +0200
+
 sl-modem (2.9.9d+e-pre2-6) unstable; urgency=low
 
   * alternative MODULE_PARM function (module_param) used on 2.6.x kernels

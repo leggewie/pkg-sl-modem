@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <linux/version.h>
+#include <linux/utsrelease.h>
 
 int main()
 {

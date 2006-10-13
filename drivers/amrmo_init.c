@@ -53,7 +53,9 @@
 #include <linux/poll.h>
 #include <linux/fs.h>
 #include <asm/uaccess.h>
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,17)
 #include <linux/devfs_fs_kernel.h>
+#endif
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,5,0)
 #define OLD_KERNEL 1
@@ -65,6 +67,7 @@
 #include <linux/device.h>
 #endif
 
+/* not allowed to use sysfs because interfaces are GPLed now */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,13)
 #define class_simple_device_add(class, dev, addr, name, i)
 #define class_simple_device_remove(dev)
@@ -641,7 +644,9 @@ static int __init amrmo_pci_probe(struct pci_dev *pci_dev, const struct pci_devi
 #endif
 #else
 	class_simple_device_add(amrmo_class, MKDEV(AMRMO_MAJOR, i), NULL, "slamr%d", i);
+#ifdef CONFIG_DEVFS_FS
 	devfs_mk_cdev(MKDEV(AMRMO_MAJOR,i), S_IFCHR|S_IRUSR|S_IWUSR, "slamr%d", i);
+#endif
 #endif
 	return 0;
 
@@ -673,7 +678,9 @@ static void __exit amrmo_pci_remove(struct pci_dev *pci_dev)
 #endif
 #else
 	class_simple_device_remove(MKDEV(AMRMO_MAJOR, amrmo->num));
+#ifdef CONFIG_DEVFS_FS
 	devfs_remove("slamr%d", amrmo->num);
+#endif
 #endif
 	amrmo_table[amrmo->num] = NULL;
 	amrmo_card_disable(amrmo->card);
