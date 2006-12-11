@@ -14,9 +14,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sl-modem 2.9.6\n"
-"Report-Msgid-Bugs-To: blade@debian.org\n"
-"POT-Creation-Date: 2006-07-10 12:34+0200\n"
-"PO-Revision-Date: 2004-03-15 17:03+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-10-19 01:50+0200\n"
+"PO-Revision-Date: 2006-11-26 13:18+0100\n"
 "Last-Translator: Jean-Luc  Coulon (f5ibh) <jean-luc.coulon@wanadoo.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -24,25 +24,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: select
-#. Choices
+#. Default
 #: ../sl-modem-daemon.templates:1001
-msgid "_list_"
-msgstr "_list_"
+msgid "USA"
+msgstr "FRANCE"
 
 #. Type: select
 #. Description
+#. Translators: Enter the country (in uppercase and in English) where your
+#. language is mostly spoken, for example FRANCE for French or GERMANY for
+#. German
 #: ../sl-modem-daemon.templates:1002
-msgid "Location of the modem"
-msgstr ""
+msgid "Location of the modem:"
+msgstr "Emplacement du modem :"
 
 #. Type: select
 #. Description
-#: ../sl-modem-daemon.templates:1003
-#, fuzzy
+#. Translators: Enter the country (in uppercase and in English) where your
+#. language is mostly spoken, for example FRANCE for French or GERMANY for
+#. German
+#: ../sl-modem-daemon.templates:1002
 msgid ""
 "In which country is your modem located? Please select the telephone system "
 "used in your country."
-msgstr "Veuillez choisir le système téléphonique en usage dans votre pays."
+msgstr ""
+"Veuillez indiquer le pays dans lequel se trouve votre modem. Vous devriez "
+"choisir le système téléphonique en usage dans votre pays."
 
-#~ msgid "In which country is your modem located?"
-#~ msgstr "Pays où se trouve le modem :"

@@ -14,33 +14,43 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: sl-modem 2.9.9-1\n"
+"Project-Id-Version: sl-modem 2.9.9d+e-pre2-7\n"
 "Report-Msgid-Bugs-To: blade@debian.org\n"
-"POT-Creation-Date: 2006-07-10 12:34+0200\n"
-"PO-Revision-Date: 2004-11-06 03:12+0900\n"
-"Last-Translator: Hideki Yamane <henrich@samba.gr.jp>\n"
+"POT-Creation-Date: 2006-11-24 14:33+0900\n"
+"PO-Revision-Date: 2006-11-24 14:20+0900\n"
+"Last-Translator: Hideki Yamane (Debian-JP) <henrich@debian.or.jp>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: select
-#. Choices
+#. Default
 #: ../sl-modem-daemon.templates:1001
-msgid "_list_"
-msgstr "_list_"
+msgid "USA"
+msgstr "JAPAN"
 
 #. Type: select
 #. Description
+#. Translators: Enter the country (in uppercase and in English) where your
+#. language is mostly spoken, for example FRANCE for French or GERMANY for
+#. German
 #: ../sl-modem-daemon.templates:1002
-msgid "Location of the modem"
-msgstr ""
+msgid "Location of the modem:"
+msgstr "ãƒ¢ãƒ‡ãƒ ã®è¨­ç½®å ´æ‰€:"
 
 #. Type: select
 #. Description
-#: ../sl-modem-daemon.templates:1003
+#. Translators: Enter the country (in uppercase and in English) where your
+#. language is mostly spoken, for example FRANCE for French or GERMANY for
+#. German
+#: ../sl-modem-daemon.templates:1002
 msgid ""
 "In which country is your modem located? Please select the telephone system "
 "used in your country."
-msgstr "¥â¥Ç¥à¤¬ÇÛÃÖ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ï¤É¤Î¹ñ¤Ç¤¹¤«? "
-"¤¢¤Ê¤¿¤Î¹ñ¤Ç»È¤ï¤ì¤Æ¤¤¤ëÄÌ¿®¥·¥¹¥Æ¥à¤òÁª¤Ó¤Ş¤¹¡£"
+msgstr ""
+"ã©ã®å›½ã«ãƒ¢ãƒ‡ãƒ ãŒè¨­ç½®ã•ã‚Œã¦ã„ã¾ã™ã‹? ã‚ãªãŸã®å›½ã§ä½¿ã‚ã‚Œã¦ã„ã‚‹é€šä¿¡ä¼šç¤¾ã‚’é¸ã‚“ã§"
+"ãã ã•ã„ã€‚"
+
+#~ msgid "_list_"
+#~ msgstr "_list_"

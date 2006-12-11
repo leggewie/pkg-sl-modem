@@ -1,3 +1,22 @@
+sl-modem (2.9.9d+e-pre2-8) unstable; urgency=medium
+
+  * removed the inclusion of config.h, deprecated and not available in kernel
+    2.6.19 (closes: #402488)
+  * updated of the French translation (closes: #401283) and Japanese
+    translation (closes: #400749)
+  * workaround for kernel-ver with pre-2.6.18 kernels (closes: #397406)
+  * using the name sl-modem-daemon in init script help (closes: #348976)
+  * Dropped the TROUBLESHOOTING section from README (the FAQ has not been
+    available anyway) and adapted the feedback section, mentioned the transfer
+    of the modem business to Conexant (closes: #321515)
+  * debug log file is not for end users. Users shall use -l <number>.
+    Dumping relevant data to debug log is OK, creating this in the local dir
+    is also OK. Made that clear in the help message.
+    (closes: #402705, #335370, #402704)
+  * added LSB info to init script
+
+ -- Eduard Bloch <blade@debian.org>  Mon, 11 Dec 2006 20:15:50 +0100
+
 sl-modem (2.9.9d+e-pre2-7) unstable; urgency=low
 
   * Fixes to build with kernel 2.6.18 (USB removal, closes: 390308)

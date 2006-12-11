@@ -111,7 +111,7 @@ static struct opt {
 	{'p',"perm","Modem TTY permission",MANDATORY,INTEGER,"0660"},
 	{'n',"nortpriority","run with regular priority"},
 	{'s',"shortbuffer","use short buffer (4 periods length)"},
-	{'d',"debug","debug level",OPTIONAL,INTEGER,"0"},
+	{'d',"debug","debug level (developers only, for ./sl...)",OPTIONAL,INTEGER,"0"},
 	{'l',"log","logging mode",OPTIONAL,INTEGER,"5"},
 	{}
 };

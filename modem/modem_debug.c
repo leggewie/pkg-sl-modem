@@ -57,11 +57,11 @@
 #include <modem.h>
 #include <modem_debug.h>
 
-unsigned int modem_debug_level;
-unsigned int modem_debug_logging;
-unsigned int dsplibs_debug_level;
+unsigned int modem_debug_level=0;
+unsigned int modem_debug_logging=0;
+unsigned int dsplibs_debug_level=0;
 
-static const char *modem_debug_logfile = "slmodem.log";
+static const char *modem_debug_logfile = "/var/log/slmodem.log";
 
 static int modem_log_fd;
 
