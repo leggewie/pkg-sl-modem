@@ -33,12 +33,14 @@ modem_test: modem_test.o modem_cmdline.o $(modem-objs) $(dp-objs) dsplibs.o $(sy
 
 #SUPPORT_ALSA:=1
 ifdef SUPPORT_ALSA
-slmodemd: -lasound
+# EB: cludge, expanded to the full lib path by make or so but that is wrong in multiarch builds where compiler/linker select the lib file
+#slmodemd: -lasound
+lflags:=-lasound
 CFLAGS+= -DSUPPORT_ALSA=1
 endif
 
 slmodemd modem_test:
-	$(CC) -o $@ $^
+	$(CC) -o $@ $^ $(lflags)
 
 clean:
 	$(RM) slmodemd modem_test modem_main.o modem_cmdline.o modem_test.o $(modem-objs) $(dp-objs) $(sysdep-objs)

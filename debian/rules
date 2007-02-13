@@ -30,7 +30,7 @@ build-indep:
 build-arch: build-arch-stamp
 build-arch-stamp:
 	dh_testdir
-	cd modem ; $(MAKE) SUPPORT_ALSA=1
+	cd modem ; $(MAKE) SUPPORT_ALSA=1 CC="gcc $(shell dpkg-architecture -ei386 || echo -m32)"
 	touch build-arch-stamp
 
 build: build-arch
@@ -72,37 +72,37 @@ install: build
 	dh_install
 
 binary-arch: build install
-	dh_testdir -a
-	dh_testroot -a
-	dh_installchangelogs -a Changes
+	dh_testdir -s
+	dh_testroot -s
+	dh_installchangelogs -s Changes
 	dh_installdirs -psl-modem-daemon /etc/udev/rules.d
 	install -m 644 debian/sl-modem-daemon.rules debian/sl-modem-daemon/etc/udev
 	dh_link -p sl-modem-daemon /etc/udev/sl-modem-daemon.rules /etc/udev/rules.d/030_sl-modem-daemon.rules
-	dh_installdocs -a
-	dh_installexamples -a
-#	dh_install -a
-#	dh_installmenu -a
-	dh_installdebconf -a
+	dh_installdocs -s
+	dh_installexamples -s
+#	dh_install -s
+#	dh_installmenu -s
+	dh_installdebconf -s
 	perl debian/setcountries.pl debian/sl-modem-daemon/DEBIAN/templates
-#	dh_installlogrotate -a
-#	dh_installemacsen -a
-#	dh_installpam -a
-#	dh_installmime -a
-	dh_installinit -a -n
-#	dh_installcron -a
-#	dh_installinfo -a
-	dh_installman -a debian/slmodemd.1
-	dh_link -a
-	dh_strip -a
-	dh_compress -a
-	dh_fixperms -a
-	dh_installdeb -a
-#	dh_python -a
-#	dh_makeshlibs -a
-	dh_shlibdeps -a
-	dh_gencontrol -a
-	dh_md5sums -a
-	dh_builddeb -a
+#	dh_installlogrotate -s
+#	dh_installemacsen -s
+#	dh_installpam -s
+#	dh_installmime -s
+	dh_installinit -s -n
+#	dh_installcron -s
+#	dh_installinfo -s
+	dh_installman -s debian/slmodemd.1
+	dh_link -s
+	dh_strip -s
+	dh_compress -s
+	dh_fixperms -s
+	dh_installdeb -s
+#	dh_python -s
+#	dh_makeshlibs -s
+	dh_shlibdeps -s
+	dh_gencontrol -s
+	dh_md5sums -s
+	dh_builddeb -s
 
 binary: binary-arch binary-indep
 
