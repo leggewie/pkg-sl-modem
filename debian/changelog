@@ -1,3 +1,11 @@
+sl-modem (2.9.9d+e-pre2-7etch1) testing-proposed-updates; urgency=low
+
+  * t-p-u upload only
+  * de.po updates by Helge Kreutzmann
+  * it.po (NEW) bei Luca Monducci
+
+ -- Eduard Bloch <blade@debian.org>  Mon,  5 Mar 2007 23:27:16 +0100
+
 sl-modem (2.9.9d+e-pre2-7) unstable; urgency=low
 
   * Fixes to build with kernel 2.6.18 (USB removal, closes: 390308)
