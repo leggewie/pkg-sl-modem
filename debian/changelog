@@ -1,3 +1,9 @@
+sl-modem (2.9.9d+e-pre2-7etch2) testing-proposed-updates; urgency=low
+
+  * Updated fr.po and jp.po taken from version 2.9.9d+e-pre2-8
+
+ -- Eduard Bloch <blade@debian.org>  Tue,  6 Mar 2007 23:12:49 +0100
+
 sl-modem (2.9.9d+e-pre2-7etch1) testing-proposed-updates; urgency=low
 
   * t-p-u upload only
