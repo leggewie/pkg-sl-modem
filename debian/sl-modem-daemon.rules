@@ -1,2 +1,5 @@
 # start/stop the daemon when the USB modem is connected
+#
+# this file does not need to be executable
+
 KERNEL=="slusb[0-9]*", GROUP="dialout", RUN+="/etc/init.d/sl-modem-daemon"

@@ -29,9 +29,8 @@ the SLMODEMD_DEVICE to the ALSA conventional device name ('hw:0' or
 Why is sl-modem-daemon in non-free?
 -----------------------------------
 
-Because one part of the driver source is not available. Instead, a
-precompiled binary object is provided (probably to protect the
-Intellectual Property of the vendor). If you don't like it, feel free to
-buy a conventional external modem.
+Because one part of the source is not available. Instead, a precompiled binary
+object is provided (probably to protect the Intellectual Property of the
+vendor). If you don't like it, feel free to buy a conventional external modem.
 
- -- Eduard Bloch <blade@debian.org> -- Fri, 21 May 2004 13:47:06 +0200
+ -- Eduard Bloch <blade@debian.org> -- Fri, 13 Apr 2007 18:51:51 +0200

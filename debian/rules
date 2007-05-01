@@ -75,9 +75,9 @@ binary-arch: build install
 	dh_testdir -s
 	dh_testroot -s
 	dh_installchangelogs -s Changes
-	dh_installdirs -psl-modem-daemon /etc/udev/rules.d
-	install -m 644 debian/sl-modem-daemon.rules debian/sl-modem-daemon/etc/udev
-	dh_link -p sl-modem-daemon /etc/udev/sl-modem-daemon.rules /etc/udev/rules.d/030_sl-modem-daemon.rules
+	#dh_installdirs -psl-modem-daemon /etc/udev/rules.d
+	#install -m 644 debian/sl-modem-daemon.rules debian/sl-modem-daemon/etc/udev
+	#dh_link -p sl-modem-daemon /etc/udev/sl-modem-daemon.rules /etc/udev/rules.d/030_sl-modem-daemon.rules
 	dh_installdocs -s
 	dh_installexamples -s
 #	dh_install -s
@@ -91,7 +91,7 @@ binary-arch: build install
 	dh_installinit -s -n
 #	dh_installcron -s
 #	dh_installinfo -s
-	dh_installman -s debian/slmodemd.1
+	dh_installman -p sl-modem-daemon debian/slmodemd.8
 	dh_link -s
 	dh_strip -s
 	dh_compress -s

@@ -4,9 +4,21 @@
 
 db_get sl-modem-daemon/country || true
 
+if md5sum /etc/udev/sl-modem-daemon.rules | grep -q d7b43944a05a562714ad31b509a3d5f4 ; then
+    rm /etc/udev/sl-modem-daemon.rules
+fi
+
+if test -L /etc/udev/rules.d/030_sl-modem-daemon.rules ; then
+    rm /etc/udev/rules.d/030_sl-modem-daemon.rules
+fi
+
 if test -n "$RET" ; then
    perl -pe "s,^SLMODEMD_COUNTRY.*,SLMODEMD_COUNTRY=$RET," -i /etc/default/sl-modem-daemon
 fi
+
+adduser --system --home / --no-create-home --group \
+  --gecos 'Smart Link Modem Server' --force-badname \
+  Slmodemd
 
 if [ -x "/etc/init.d/sl-modem-daemon" ]; then
 	update-rc.d sl-modem-daemon defaults 12 >/dev/null

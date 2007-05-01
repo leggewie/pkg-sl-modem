@@ -1,3 +1,19 @@
+sl-modem (2.9.9d+e-pre2-10) unstable; urgency=low
+
+  * Merge with 2.9.9d+e-pre2-7etch2 (closes: #411395, #412120)
+  * explicite Build-Dep on gcc-4.1-multilib [amd64]
+  * Installing slmodemd(8) manpage into sl-modem-daemon and conflicting with
+    previous versions of sl-modem-source (closes: #420796)
+  * removing sl-modem-daemon.rules after a checksum check. They are not used
+    anymore by the Debian package's source after sysfs/udev features have been
+    disabled. Send thanks to GPL symbol "protection" lovers (closes: #418919)
+  * slmodemd privilege dropping patch (Ian Jackson, Ubuntu, closes: #415569),
+    also added adduser to dependencies
+  * suppressing modprobe messages caused by expected failures while probing
+    driver availability and a better info message on amd64.
+
+ -- Eduard Bloch <blade@debian.org>  Tue, 01 May 2007 12:00:06 +0200
+
 sl-modem (2.9.9d+e-pre2-9) unstable; urgency=low
 
   * amd64 support, making a biarch build with lib32 package versions
@@ -21,8 +37,23 @@ sl-modem (2.9.9d+e-pre2-8) unstable; urgency=medium
     is also OK. Made that clear in the help message.
     (closes: #402705, #335370, #402704)
   * added LSB info to init script
+  * not including 2.9.9d+e-pre2-7etch* changes
 
  -- Eduard Bloch <blade@debian.org>  Mon, 11 Dec 2006 20:15:50 +0100
+
+sl-modem (2.9.9d+e-pre2-7etch2) testing-proposed-updates; urgency=low
+
+  * Updated fr.po and jp.po taken from version 2.9.9d+e-pre2-8
+
+ -- Eduard Bloch <blade@debian.org>  Tue,  6 Mar 2007 23:12:49 +0100
+
+sl-modem (2.9.9d+e-pre2-7etch1) testing-proposed-updates; urgency=low
+
+  * t-p-u upload only
+  * de.po updates by Helge Kreutzmann
+  * it.po (NEW) bei Luca Monducci
+
+ -- Eduard Bloch <blade@debian.org>  Mon,  5 Mar 2007 23:27:16 +0100
 
 sl-modem (2.9.9d+e-pre2-7) unstable; urgency=low
 
