@@ -84,10 +84,10 @@ config() {
            # though (forced loading)
            if grep -q 'slamr\..*o' /lib/modules/`uname -r`/modules.dep ;
            then
-               if $modprobe slamr 2>&1 | grep -v not.found ; then
-                   SLMODEMD_DEVICE=slamr0
-               else
+               if $modprobe slamr 2>&1 | grep -q not.found ; then
                    alsaload;
+               else
+                   SLMODEMD_DEVICE=slamr0
                fi
            else
                alsaload;
@@ -115,7 +115,7 @@ config() {
       fi
 
       # installed as module so just load it or bail out
-      if ! $modprobe slamr  2>&1 | grep -v not.found ; then
+      if $modprobe slamr 2>&1 | grep -q not.found ; then
           echo "SmartLink modem driver not available for this Kernel. Please read README.Debian"
           echo "or try to install the package sl-modem-modules-`uname -r`. Exiting..."
           exit 1
