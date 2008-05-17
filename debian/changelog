@@ -1,3 +1,18 @@
+sl-modem (2.9.9d+e-pre2-11.1) unstable; urgency=low
+
+  * Non-maintainer upload to fix pending l10n issues.
+  * Debconf translations:
+    - Portuguese. Closes: #435298
+    - Galician. Closes: #481803
+    - Russian. Closes: #482080
+    - Basque. Closes: #482340
+    - Czech. Closes: #482434
+    - Finnish. Closes: #482437
+  * [Lintian] Run debconf-updatepo in the clean target
+  * [Lintian] No longer ignore erros from "make clean"
+
+ -- Christian Perrier <bubulle@debian.org>  Sat, 17 May 2008 14:47:32 +0200
+
 sl-modem (2.9.9d+e-pre2-11) unstable; urgency=high
 
   * Working around broken "grep -v" return code in the init script (bug#454690)

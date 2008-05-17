@@ -1,33 +1,27 @@
+# translation of sl-modem-templates.po to Euskara
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 #
-#    Translators, if you are not familiar with the PO format, gettext
-#    documentation is worth reading, especially sections dedicated to
-#    this format, e.g. by running:
-#         info -n '(gettext)PO Files'
-#         info -n '(gettext)Header Entry'
-#
-#    Some information specific to po-debconf are available at
-#            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-#
-#    Developers do not need to manually edit POT or PO files.
-#
+# xabier bilbao <xabidu@gmail.com>, 2008.
+# Piarres Beobide <pi@beobide.net>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: sl-modem\n"
+"Project-Id-Version: xd-sl-modem-templates\n"
 "Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
 "POT-Creation-Date: 2008-05-17 14:53+0200\n"
-"PO-Revision-Date: 2008-05-22 18:07+0200\n"
-"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
-"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
+"PO-Revision-Date: 2008-05-21 22:05+0200\n"
+"Last-Translator: Piarres Beobide <pi@beobide.net>\n"
+"Language-Team: Euskara <debian-l10n-basque@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. Type: select
 #. Default
 #: ../sl-modem-daemon.templates:1001
 msgid "USA"
-msgstr "USA"
+msgstr "SPAIN"
 
 #. Type: select
 #. Description
@@ -36,7 +30,7 @@ msgstr "USA"
 #. German
 #: ../sl-modem-daemon.templates:1002
 msgid "Location of the modem:"
-msgstr "Geografická poloha modemu:"
+msgstr "Modemaren kokalekua:"
 
 #. Type: select
 #. Description
@@ -48,8 +42,5 @@ msgid ""
 "In which country is your modem located? Please select the telephone system "
 "used in your country."
 msgstr ""
-"Ve které zemi je tento modem používán? Vyberte prosím telefonní systém "
-"používaný ve vaší zemi."
-
-#~ msgid "_list_"
-#~ msgstr "_list_"
+"Zein herrialdetan dago kokatua zure modema? Mesedez hautatu zure herrialdean "
+"erabiltzen den telefono-sistema."

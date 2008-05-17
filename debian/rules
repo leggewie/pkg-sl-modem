@@ -42,7 +42,7 @@ clean:
 	rm -f build-arch-stamp build-indep-stamp configure-stamp
 
 	# Add here commands to clean up after the build process.
-	-$(MAKE) clean SUPPORT_ALSA=1
+	[ ! -f Makefile ] || $(MAKE) clean SUPPORT_ALSA=1
 	-cd modem; $(MAKE) clean SUPPORT_ALSA=1
 	dh_clean
 
