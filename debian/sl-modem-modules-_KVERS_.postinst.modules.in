@@ -46,6 +46,7 @@ case "$1" in
    # old DEVFS hack should be done by module post-install now
    # test -c /dev/ttySL0 || mknod -m 666 /dev/ttySL0 c 212 0 || true
 
+   depmod _KVERS_
    update-devfsd  2>/dev/null || true
    update-modules 2>/dev/null || true
    

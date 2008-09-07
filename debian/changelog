@@ -1,3 +1,13 @@
+sl-modem (2.9.9d+e-pre2-12) unstable; urgency=medium
+
+  * Orphaning package
+  * Fixed build on recent kernels, patch from Benh (closes: #475205)
+  * Calling depmod in postinst of the module package (closes: #465544)
+  * New translation: Spanish (closes: #498034)
+  * Translation update: Swedish (closes: #488182)
+
+ -- Eduard Bloch <blade@debian.org>  Sun, 07 Sep 2008 23:00:06 +0200
+
 sl-modem (2.9.9d+e-pre2-11.1) unstable; urgency=low
 
   * Non-maintainer upload to fix pending l10n issues.

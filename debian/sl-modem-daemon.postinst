@@ -4,7 +4,7 @@
 
 db_get sl-modem-daemon/country || true
 
-if md5sum /etc/udev/sl-modem-daemon.rules | grep -q d7b43944a05a562714ad31b509a3d5f4 ; then
+if test -r /etc/udev/sl-modem-daemon.rules && md5sum /etc/udev/sl-modem-daemon.rules | grep -q d7b43944a05a562714ad31b509a3d5f4 ; then
     rm /etc/udev/sl-modem-daemon.rules
 fi
 

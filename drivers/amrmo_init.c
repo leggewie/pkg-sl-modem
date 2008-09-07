@@ -503,7 +503,7 @@ static void amrmo_pci_interrupt(int irq, void *dev_id, struct pt_regs *regs)
 	amrmo_card_interrupt(amrmo->card);
 }
 #else
-static irqreturn_t amrmo_pci_interrupt(int irq, void *dev_id, struct pt_regs *regs)
+static irqreturn_t amrmo_pci_interrupt(int irq, void *dev_id)
 {
         struct amrmo_struct *amrmo = (struct amrmo_struct *)dev_id;
 	amrmo_card_interrupt(amrmo->card);
@@ -587,7 +587,7 @@ static int __init amrmo_pci_probe(struct pci_dev *pci_dev, const struct pci_devi
 		}
 	}
 
-        ret = request_irq(amrmo->irq, &amrmo_pci_interrupt,SA_SHIRQ,
+        ret = request_irq(amrmo->irq, &amrmo_pci_interrupt,IRQF_SHARED,
 			  amrmo->name,amrmo);
 	if(ret) {
 		printk(KERN_ERR "slamr: failed request_irq\n");

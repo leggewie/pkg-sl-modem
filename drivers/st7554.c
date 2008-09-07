@@ -418,7 +418,7 @@ static int mo_init (struct st7554_state *s)
 /* ----------------------------------------------------------------------- */
 
 
-static void st7554_interrupt(struct urb *urb, struct pt_regs* regs)
+static void st7554_interrupt(struct urb *urb)
 {
 	struct st7554_state *s = urb->context;
 	u32 *status = urb->transfer_buffer;
@@ -459,7 +459,7 @@ static void st7554_interrupt(struct urb *urb, struct pt_regs* regs)
 /* --------------------------------------------------------------------- */
 
 
-static void mo_complete(struct urb *u, struct pt_regs* regs)
+static void mo_complete(struct urb *u)
 {
 	struct st7554_state *s = u->context;
 	struct dmabuf *db = &s->mo.dma;
@@ -518,14 +518,14 @@ static void mo_complete(struct urb *u, struct pt_regs* regs)
 }
 
 
-static void mo_startup_complete(struct urb *u, struct pt_regs* regs)
+static void mo_startup_complete(struct urb *u)
 {
 	struct st7554_state *s = u->context;
 	USB_DBG("mo_startup_complete %d: %d: sent %d.\n",
 		MO_URB_NO(s,u), u->start_frame, u->actual_length);
 	FILL_DESC_OUT(s,&s->mo,u,BYTES_IN_FRAMES(s,DESCFRAMES));
 	u->complete = mo_complete;
-	mo_complete(u,regs);
+	mo_complete(u);
 	complete(&s->start_comp);
 }
 
@@ -533,7 +533,7 @@ static void mo_startup_complete(struct urb *u, struct pt_regs* regs)
 /* ----------------------------------------------------------------------- */
 
 
-static void mi_complete(struct urb *u, struct pt_regs* regs)
+static void mi_complete(struct urb *u)
 {
 	struct st7554_state *s = u->context;
 	struct urb *next;
@@ -578,7 +578,7 @@ static void mi_complete(struct urb *u, struct pt_regs* regs)
 }
 
 
-static void mi_startup_complete(struct urb *u, struct pt_regs* regs)
+static void mi_startup_complete(struct urb *u)
 {
 	struct st7554_state *s = u->context;
 	struct usb_iso_packet_descriptor *p;
