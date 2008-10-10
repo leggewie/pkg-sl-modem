@@ -1,7 +1,7 @@
 Template: sl-modem-daemon/country
 Type: select
 Choices: _list_
-_Default: USA
+_Default: USA [ Enter the country (in uppercase and in English) where your language is mostly spoken, for example FRANCE for French ]
 # Translators: Enter the country (in uppercase and in English) where your
 # language is mostly spoken, for example FRANCE for French or GERMANY for
 # German

@@ -1,0 +1,56 @@
+Cleanup to not loose the user-specified version string and blindly try include 
+modversions.h
+Index: slmodem-2.9.11-20080817/Makefile
+===================================================================
+--- slmodem-2.9.11-20080817.orig/Makefile	2008-03-29 14:04:16.000000000 +0200
++++ slmodem-2.9.11-20080817/Makefile	2008-09-17 15:15:36.000000000 +0200
+@@ -13,11 +13,15 @@
+ #
+ ###########################################################################
+ 
+-KERNEL_DIR:=/lib/modules/$(shell uname -r)/build
++KERNEL_DIR?=/lib/modules/$(shell uname -r)/build
+ 
+ # tools
+ INSTALL:=install
+-
++# Definitions
++MODULES_DIR  = /lib/modules/$(KVERS)/misc
++MODEM_DEV   := ttySL0
++MODEM_LINK  := modem
++MODULES_CONF:= /etc/modules.conf
+ all: modem
+ 
+ modem:
+Index: slmodem-2.9.11-20080817/drivers/Makefile
+===================================================================
+--- slmodem-2.9.11-20080817.orig/drivers/Makefile	2008-08-18 05:43:44.000000000 +0300
++++ slmodem-2.9.11-20080817/drivers/Makefile	2008-09-17 15:15:36.000000000 +0200
+@@ -39,8 +39,14 @@
+ ifndef KERNELRELEASE
+ ifndef KERNEL_VER
+ 
++
++KVERS?=$(shell ./kernel-ver)
++
++
++
+ all install uninstall: kernel-ver
+-	$(MAKE) $@ KERNEL_VER=$(shell ./kernel-ver)
++	$(MAKE) $@ KERNEL_VER=$(KVERS)
++#	$(MAKE) $@ KERNEL_VER=$(shell ./kernel-ver)
+ 
+ install: install-devices
+ uninstall: remove-devices
+@@ -74,9 +80,9 @@
+ 
+ slusb-objs:= old_st7554.o
+ obj:=.
+-module-dir:=${DESTDIR}/lib/modules/$(KERNEL_VER)/misc
++module-dir ?= ${DESTDIR}/lib/modules/$(KERNEL_VER)/misc
+ 
+-CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include
++CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB `test -f $(KERNEL_DIR)/include/linux/modversions.h && echo -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include`
+ 
+ all: $(obj-m)
+ 

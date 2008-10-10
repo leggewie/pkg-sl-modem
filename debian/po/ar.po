@@ -1,18 +1,20 @@
-# Galician translation of sl-modem's debconf templates
-# This file is distributed under the same license as the sl-modem package.
-# Jacobo Tarrio <jtarrio@debian.org>, 2008.
+# translation of ar.po to Arabic
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 #
+# Ossama M. Khayat <okhayat@yahoo.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: sl-modem\n"
+"Project-Id-Version: ar\n"
 "Report-Msgid-Bugs-To: Source: sl-modem@packages.debian.org\n"
 "POT-Creation-Date: 2008-09-18 13:59+0200\n"
-"PO-Revision-Date: 2008-05-18 17:33+0100\n"
-"Last-Translator: Jacobo Tarrio <jtarrio@debian.org>\n"
-"Language-Team: Galician <proxecto@trasno.net>\n"
+"PO-Revision-Date: 2008-10-05 16:08+0300\n"
+"Last-Translator: Ossama M. Khayat <okhayat@yahoo.com>\n"
+"Language-Team: Arabic <support@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. Type: select
 #. Default
@@ -20,7 +22,7 @@ msgstr ""
 msgid ""
 "USA [ Enter the country (in uppercase and in English) where your language is "
 "mostly spoken, for example FRANCE for French ]"
-msgstr "SPAIN"
+msgstr "KUWAIT"
 
 #. Type: select
 #. Description
@@ -29,7 +31,7 @@ msgstr "SPAIN"
 #. German
 #: ../sl-modem-daemon.templates:1002
 msgid "Location of the modem:"
-msgstr "Ubicación do módem:"
+msgstr "موضع المودم:"
 
 #. Type: select
 #. Description
@@ -41,8 +43,6 @@ msgid ""
 "In which country is your modem located? Please select the telephone system "
 "used in your country."
 msgstr ""
-"¿En que país está situado o seu módem? Escolla o sistema telefónico "
-"empregado no seu país."
+"في أي دولة يوجد جهاز المودم خاصتك؟ رجاء اختر نظام الهاتف "
+"المستخدم في دولتك."
 
-#~ msgid "USA"
-#~ msgstr "SPAIN"

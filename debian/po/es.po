@@ -1,6 +1,3 @@
-                                                                     
-                                                                     
-                                             
 # Traduccion al español de sl-modem
 # Copyright (C) 2008 Software in the Public Interest
 # This file is distributed under the same license as the sl-modem package.
@@ -11,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9d+e-pre2-11\n"
-"Report-Msgid-Bugs-To: blade@debian.org\n"
-"POT-Creation-Date: 2007-12-19 04:46+0100\n"
+"Report-Msgid-Bugs-To: Source: sl-modem@packages.debian.org\n"
+"POT-Creation-Date: 2008-09-18 13:59+0200\n"
 "PO-Revision-Date: 2008-09-19 03:13+0200\n"
 "Last-Translator: Maximiliano Marin Bustos <maxmarin@gmail.com>\n"
 "Language-Team: Debian Spanish <debian-l10n-es@lists.debian.org>\n"
@@ -24,7 +21,9 @@ msgstr ""
 #. Type: select
 #. Default
 #: ../sl-modem-daemon.templates:1001
-msgid "USA"
+msgid ""
+"USA [ Enter the country (in uppercase and in English) where your language is "
+"mostly spoken, for example FRANCE for French ]"
 msgstr "SPAIN"
 
 #. Type: select
@@ -45,4 +44,9 @@ msgstr "Ubicación del módem:"
 msgid ""
 "In which country is your modem located? Please select the telephone system "
 "used in your country."
-msgstr "¿En qué país se encuentra instalado su módem? Por favor, seleccione el sistema telefónico utilizado en su país."
+msgstr ""
+"¿En qué país se encuentra instalado su módem? Por favor, seleccione el "
+"sistema telefónico utilizado en su país."
+
+#~ msgid "USA"
+#~ msgstr "SPAIN"

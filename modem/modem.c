@@ -1696,7 +1696,6 @@ int  modem_set_mode(struct modem *m, enum MODEM_MODE mode)
 	return 0;
 }
 
-static int sregs_init(unsigned char sregs[]);
 
 int modem_reset(struct modem *m)
 {

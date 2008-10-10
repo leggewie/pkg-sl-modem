@@ -1,9 +1,10 @@
 Source: sl-modem
 Section: non-free/misc
 Priority: optional
-Maintainer: Debian QA Group <packages@qa.debian.org>
-Build-Depends: debhelper (>=4), bzip2, libasound2-dev (>> 1.0.6) [i386], lib32asound2-dev [amd64], libc6-dev-i386 [amd64] | lib32c-dev [amd64], gcc-multilib [amd64], po-debconf
-Standards-Version: 3.7.2
+Maintainer: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
+Uploaders: Maurizio Avogadro <mavoga@gmail.com>
+Build-Depends: debhelper (>=4), bzip2, libasound2-dev (>> 1.0.6) [i386], lib32asound2-dev [amd64], quilt (>= 0.40), libc6-dev-i386 [amd64] | lib32c-dev [amd64], gcc-multilib [amd64], po-debconf
+Standards-Version: 3.8.0
 
 Package: sl-modem-source
 Architecture: i386

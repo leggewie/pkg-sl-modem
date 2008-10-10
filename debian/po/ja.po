@@ -14,10 +14,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: sl-modem 2.9.9d+e-pre2-7\n"
-"Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
-"POT-Creation-Date: 2008-05-17 14:53+0200\n"
-"PO-Revision-Date: 2006-11-24 14:20+0900\n"
+"Project-Id-Version: 2.9.11~20080817-1~intrepid4\n"
+"Report-Msgid-Bugs-To: Source: sl-modem@packages.debian.org\n"
+"POT-Creation-Date: 2008-09-18 13:59+0200\n"
+"PO-Revision-Date: 2008-10-08 12:20+0900\n"
 "Last-Translator: Hideki Yamane (Debian-JP) <henrich@debian.or.jp>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,8 +27,12 @@ msgstr ""
 #. Type: select
 #. Default
 #: ../sl-modem-daemon.templates:1001
-msgid "USA"
-msgstr "JAPAN"
+msgid ""
+"USA [ Enter the country (in uppercase and in English) where your language is "
+"mostly spoken, for example FRANCE for French ]"
+msgstr ""
+"JAPAN [ 例えばフランス語の場合は FRANCE というように、良く話されている言語 の国を "
+"(英語、アルファベット大文字で) 入力してください ]"
 
 #. Type: select
 #. Description
@@ -52,5 +56,4 @@ msgstr ""
 "どの国にモデムが設置されていますか? あなたの国で使われている通信会社を選んで"
 "ください。"
 
-#~ msgid "_list_"
-#~ msgstr "_list_"
+

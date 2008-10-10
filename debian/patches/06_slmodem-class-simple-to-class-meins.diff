@@ -1,0 +1,102 @@
+Index: slmodem-2.9.11-20080817/drivers/st7554.c
+===================================================================
+--- slmodem-2.9.11-20080817.orig/drivers/st7554.c	2008-09-17 15:18:14.000000000 +0200
++++ slmodem-2.9.11-20080817/drivers/st7554.c	2008-09-17 15:24:12.000000000 +0200
+@@ -213,7 +213,21 @@
+ 
+ 
+ static struct st7554_state *st7554_table[MAX_MODEMS] = {};
++#ifdef FOUND_CLASS_SIMPLE
++#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_simple_device_add(class, dev, device, fmt, rest)
++#define CLASS_DESTROY(class) class_simple_destroy(class)
++#define CLASS_DEVICE_DESTROY(class, dev) class_simple_device_remove(dev)
++#define CLASS_CREATE(owner, name) class_simple_create(owner, name)
+ static struct class_simple *st7554_class;
++#else
++#include <linux/moduleparam.h>
++
++#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_device_create(class, dev, device, fmt, rest)
++#define CLASS_DESTROY(class) class_destroy(class)
++#define CLASS_DEVICE_DESTROY(class, dev) class_device_destroy(class, dev)
++#define CLASS_CREATE(owner, name) class_create(owner, name)
++static struct class *st7554_class;
++#endif
+ 
+ static DECLARE_MUTEX(open_sem);
+ 
+@@ -1315,7 +1329,7 @@
+ 	}
+ 
+ 	usb_set_intfdata(interface, s );
+-	class_simple_device_add(st7554_class, MKDEV(243, i), NULL, "slusb%d", i);
++	CLASS_DEVICE_CREATE(st7554_class, MKDEV(243, i), NULL, "slusb%d", i);
+ 
+ 	USB_INFO(KERN_INFO "slusb: slusb%d is found.\n", s->minor);
+ 
+@@ -1343,7 +1357,7 @@
+                 return;
+         }
+ 
+-	class_simple_device_remove(MKDEV(243, s->minor));
++	CLASS_DEVICE_DESTROY(st7554_class, MKDEV(243, s->minor));
+ 
+ 	st7554_stop(s);
+ 	down(&open_sem);
+@@ -1376,7 +1390,7 @@
+ 	int ret;
+ 	USB_INFO ("ST7554 USB Modem.\n");
+ 
+-	st7554_class = class_simple_create(THIS_MODULE, "slusb");
++	st7554_class = CLASS_CREATE(THIS_MODULE, "slusb");
+ 	if (IS_ERR(st7554_class)) {
+ 		ret = PTR_ERR(st7554_class);
+ 		USB_ERR("st7554_modem_init: failed to create sysfs class, error %d\n", ret);
+@@ -1386,13 +1400,13 @@
+ 	ret = usb_register(&st7554_usb_driver);
+ 	if ( ret ) {
+ 		USB_ERR ("st7554_modem_init: cannot register usb device.\n");
+-		class_simple_destroy(st7554_class);
++		CLASS_DESTROY(st7554_class);
+ 		return ret;
+ 	}
+ 
+ 	if(register_chrdev(243, "slusb", &st7554_fops) < 0) {
+ 		usb_deregister(&st7554_usb_driver);
+-		class_simple_destroy(st7554_class);
++		CLASS_DESTROY(st7554_class);
+ 		return -ENOMEM;
+ 	}
+ 	return 0;
+@@ -1404,7 +1418,7 @@
+ 	USB_DBG ("st7554: exit...\n");
+ 	unregister_chrdev(243,"slusb");
+ 	usb_deregister(&st7554_usb_driver);
+-	class_simple_destroy(st7554_class);
++	CLASS_DESTROY(st7554_class);
+ }
+ 
+ 
+Index: slmodem-2.9.11-20080817/drivers/Makefile
+===================================================================
+--- slmodem-2.9.11-20080817.orig/drivers/Makefile	2008-09-17 15:17:56.000000000 +0200
++++ slmodem-2.9.11-20080817/drivers/Makefile	2008-09-17 15:24:12.000000000 +0200
+@@ -21,7 +21,9 @@
+ # slusb support ends at 2.6.24
+ AGE:=$(shell if [ "$(SUBLEVEL)" -gt 24 ] ;then echo NEW;fi)
+ 
+-EXTRA_CFLAGS = -I$(obj) -I$(obj)/../modem
++FOUND_CLASS_SIMPLE := $(shell grep -q 'class_simple_device_add' ${KERNEL_DIR}/include/linux/device.h 2> /dev/null && echo -DFOUND_CLASS_SIMPLE)
++
++EXTRA_CFLAGS = -I$(obj) -I$(obj)/../modem $(FOUND_CLASS_SIMPLE)
+ 
+ ARCH64:=$(shell uname -m | sed -e '/amd64/s//x86_64/' | grep -c x86_64)
+ 
+@@ -82,7 +84,7 @@
+ obj:=.
+ module-dir ?= ${DESTDIR}/lib/modules/$(KERNEL_VER)/misc
+ 
+-CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB `test -f $(KERNEL_DIR)/include/linux/modversions.h && echo -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include`
++CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB `test -f $(KERNEL_DIR)/include/linux/modversions.h && echo -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include` $(FOUND_CLASS_SIMPLE)
+ 
+ all: $(obj-m)
+ 

@@ -1,3 +1,78 @@
+sl-modem (2.9.11~20080817-1) unstable; urgency=medium
+
+  * New upstream release. (Closes: #354908, #489289, #457637, LP: #144090, #269855)
+  * Adopting sl-modem. (Closes: #471888)
+  * Removed the following patches since they are applied upstream:
+    + patch to define URB_ASYNC_UNLINK if not set
+    + patch that adds alternative MODULE_PARM function (module_param)
+    + patch removing the inclusion of config.h
+    + patch making a biarch build with lib32 package versions
+    + patches fixing buils with kernel versions 2.6.16, 2.6.18 and 2.6.26
+  * Remove cmd.patch and pcireg.patch as they are applied upstream.
+  * Used quilt patch system.
+    + Moved slmodem-class-simple-to-class-meins.diff to debian/patches/
+    + 01_Makefile.diff: Makefile cleanup to not loose the user-specified
+      kernel version string.
+    + modem_group.diff: set the default device group to "dialout".
+    + 02_dial_string_size.diff: enlarge dial string buffer to 128 bytes
+    + 03_Makefile_2.6.12.4.diff: workaround in drivers/Makefile for a kernel
+      2.4 check accidentialy matching 2.6.12.4.
+    + 04_sregs_init.diff
+    + 05_st7554_license.diff: changed the MODULE_LICENSE string to
+      "Dual BSD/GPL" since the license is actually a BSD license clone.
+    + 06_slmodem-class-simple-to-class-meins.diff: patch for
+      class/simple_class transition.
+    + 08_ungrab_winmodem.diff: helper module to tell the kernel to keep away
+      from unsupported PCI id numbers.
+    + 10_drop_privileges.diff: slmodemd privilege dropping patch.
+    + 11_logfile.diff: place debug log in /var/log/slmodem.log.
+    + kernel-ver.diff: workaround for pre-2.6.18 kernels.
+    + README.diff: Dropped the TROUBLESHOOTING section from README and adapted
+      the feedback section, mentioned the transfer of the modem business to
+      Conexant.
+    + debug_level.diff: debug log file is not for end users. Users shall use
+      -l <number>.
+  * Added fortify_source.diff patch to fix FTBFS with -D_FORTIFY_SOURCE=2 
+    compile flag.
+  * Synch'ed ungrab-winmodem.c from 
+    http://linmodems.technion.ac.il/packages/smartlink/ungrab-winmodem-20080126.tar.gz.
+  * Remove debian/control.backup* as I don't see any use for them.
+  * Update Standards-Version to 3.8.0.
+  * Added watch file.
+  * debian/rules: slusb support ends at 2.6.24, hence add a check for kernel
+    sublevel, to prevent the attempt to install non-existing slusb.ko. Thanks
+    to Maurizio Avogadro for the suggestion.
+  * Translation updates: Swedish, German, Basque, French, Italian, Czech,
+    Portuguese, Finnish, Japanese and Russian (Closes: #501038, #501043,
+    #501065, #501102, #501108, #501213, #501225, #501701, #501632, #501593).
+  * New translation: Arabic (Closes: #501196).
+  * debian/control: Added Maurizio Avogadro to Uploaders field.
+  * debian/sl-modem-daemon.init: changes from Ubuntu
+    + sl-modem-daemon initscript waits for aplay (from alsa-utils) to report
+      the card, as it appears in /proc/asound/cards before it is actually
+      available to slmodemd. This extra check defeats this race.
+    + Remove hard and soft ulimits for locked-in-core memory. This daemon
+      unfortunately needs quite a bit of memory and it needs to be in core
+      because it's doing the real-time modem DSP. This deals with LP: #144468
+      and probably other bugs too.
+
+  [Maurizio Avogadro]
+  * debian/rules: removed code to append extra lines to modprobe.d file, since
+    they are statically appended in debian/sl-modem-daemon.modutils.
+  * The init script can now modprobe even if the slamr module has been
+    blacklisted.
+  * Modified 11_logfile.diff: Fixed the log path as the slmodemd daemon runs 
+    as unprivileged user and didn't have write permissions on /var/log.
+  * Added class_device.diff patch: since 2.6.25 class_device_add() and 
+    class_device_destroy() has been renamed, modified st7554.c accordingly.
+  * Removed obsolete /etc/modutils file.
+  * Small enhancements to the modprobe.d file:
+    + verify device permissions on module install
+    + modprobe cleans /dev on module remove
+  * Added some troubleshooting info to README.Debian.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sat, 10 Oct 2008 17:32:22 +0200
+
 sl-modem (2.9.9d+e-pre2-12) unstable; urgency=medium
 
   * Orphaning package

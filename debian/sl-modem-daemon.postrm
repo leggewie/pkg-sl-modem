@@ -2,9 +2,10 @@
 
 case "$1" in
     purge)
-	update-rc.d -f sl-modem-daemon remove > /dev/null 2>&1
-	
-	;;
+      update-rc.d -f sl-modem-daemon remove > /dev/null 2>&1
+      # Remove log directory
+      rm -rf /var/log/slmodemd
+    ;;
 esac
 
 #DEBHELPER#

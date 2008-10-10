@@ -52,3 +52,22 @@ specification. Though, some features are not supported there (no
 ability to detect ring, speaker does not work, etc.).
 
  -- Eduard Bloch <blade@debian.org>  Wed, 14 Apr 2004 11:23:41 +0200
+
+Troubleshooting
+---------------
+
+If the modem seems to respond to AT commands but fails to connect, the reason
+could be that ACPI disabled its interrupt during the boot process. Try to look
+in your dmesg: if you'll find a line like this
+
+ACPI: PCI interrupt for device 0000:00:1f.6 disabled
+
+verify with lspci -n that the device matches your modem. If it matches you're
+very likely experiencing this issue: the kernel has loaded the slamr module at
+boot, before the interrupt was disabled.
+
+A workaround consists in blacklisting the slamr module - please see
+modprobe.conf (5) - thus avoiding automatic module load at boot: the
+initscript will care module loading later.
+
+ -- Maurizio Avogadro <mavoga@gmail.com>  Fri, 03 Oct 2008 15:23:53 +0100

@@ -1,0 +1,60 @@
+Index: slmodem-2.9.11-20080817/modem/modem_main.c
+===================================================================
+--- slmodem-2.9.11-20080817.orig/modem/modem_main.c	2008-09-18 08:19:43.000000000 +0200
++++ slmodem-2.9.11-20080817/modem/modem_main.c	2008-09-18 08:20:24.000000000 +0200
+@@ -57,6 +57,7 @@
+ #include <signal.h>
+ #include <limits.h>
+ #include <grp.h>
++#include <pwd.h>
+ 
+ #ifdef SUPPORT_ALSA
+ #define ALSA_PCM_NEW_HW_PARAMS_API 1
+@@ -76,6 +77,8 @@
+ #define DBG(fmt,args...) dprintf("main: " fmt, ##args)
+ 
+ 
++#define SLMODEMD_USER "Slmodemd"
++
+ #define CLOSE_COUNT_MAX 100
+ 
+ 
+@@ -936,6 +939,7 @@
+ 	struct modem *m;
+ 	int pty;
+ 	int ret = 0;
++	struct passwd *pwd;
+ 
+ 	modem_debug_init(basename(dev_name));
+ 
+@@ -984,6 +988,30 @@
+ 	signal(SIGINT, mark_termination);
+ 	signal(SIGTERM, mark_termination);
+ 
++#ifdef SLMODEMD_USER
++	pwd = getpwnam(SLMODEMD_USER);
++	if (!pwd) {
++		ERR("getpwnam " SLMODEMD_USER ": %s\n",strerror(errno));
++		exit(-1);
++	}
++
++	ret = (setgroups(1,&pwd->pw_gid) ||
++	       setgid(pwd->pw_gid) ||
++	       setuid(pwd->pw_uid));
++	if (ret) {
++		ERR("setgroups or setgid %ld or setuid %ld failed: %s\n",
++		    (long)pwd->pw_gid,(long)pwd->pw_uid,strerror(errno));
++		exit(-1);
++	}
++
++	if (setuid(0) != -1) {
++		ERR("setuid 0 succeeded after dropping privileges!\n");
++		exit(-1);
++	}
++	DBG("dropped privileges to %ld.%ld\n",
++	    (long)pwd->pw_gid,(long)pwd->pw_uid);
++#endif
++
+ 	INFO("Use `%s' as modem device, Ctrl+C for termination.\n",
+ 	     *link_name ? link_name : m->pty_name);
+ 

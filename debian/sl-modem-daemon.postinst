@@ -2,9 +2,15 @@
 
 . /usr/share/debconf/confmodule
 
+# Reset country setting
 db_get sl-modem-daemon/country || true
 
-if test -r /etc/udev/sl-modem-daemon.rules && md5sum /etc/udev/sl-modem-daemon.rules | grep -q d7b43944a05a562714ad31b509a3d5f4 ; then
+if test -n "$RET" ; then
+   perl -pe "s,^SLMODEMD_COUNTRY.*,SLMODEMD_COUNTRY=$RET," -i /etc/default/sl-modem-daemon
+fi
+
+# We don't use udev anymore, let's get rid of the old rules
+if test -r /etc/udev/sl-modem-daemon.rules; then
     rm /etc/udev/sl-modem-daemon.rules
 fi
 
@@ -12,13 +18,21 @@ if test -L /etc/udev/rules.d/030_sl-modem-daemon.rules ; then
     rm /etc/udev/rules.d/030_sl-modem-daemon.rules
 fi
 
-if test -n "$RET" ; then
-   perl -pe "s,^SLMODEMD_COUNTRY.*,SLMODEMD_COUNTRY=$RET," -i /etc/default/sl-modem-daemon
-fi
+# Remove old modutils file
+test -r /etc/modutils/sl-modem-daemon.modutils && rm /etc/modutils/sl-modem-daemon.modutils
 
-adduser --system --home / --no-create-home --group \
-  --gecos 'Smart Link Modem Server' --force-badname \
-  Slmodemd
+case "$1" in
+    configure)
+
+      # Create the log directory with right permissions
+      install -d -oSlmodemd -gadm -m0750 /var/log/slmodemd
+  
+      # Create user and group
+      adduser --system --home / --no-create-home --group \
+        --gecos 'Smart Link Modem Server' --force-badname \
+        Slmodemd
+	  ;;
+esac
 
 if [ -x "/etc/init.d/sl-modem-daemon" ]; then
 	update-rc.d sl-modem-daemon defaults 12 >/dev/null

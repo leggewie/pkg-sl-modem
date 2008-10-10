@@ -1,0 +1,15 @@
+01_Makefile.diff
+modem_group.diff
+02_dial_string_size.diff
+03_Makefile_2.6.12.4.diff
+04_sregs_init.diff
+05_st7554_license.diff
+06_slmodem-class-simple-to-class-meins.diff
+08_ungrab_winmodem.diff
+10_drop_privileges.diff
+11_logfile.diff
+kernel-ver.diff
+README.diff
+debug_level.diff
+fortify_source.diff
+class_device.diff

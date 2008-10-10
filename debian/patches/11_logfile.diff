@@ -1,0 +1,12 @@
+
+--- sl-modem-2.9.10+2.9.9d+e-pre2.orig/modem/modem_debug.c
++++ sl-modem-2.9.10+2.9.9d+e-pre2/modem/modem_debug.c
+@@ -61,7 +61,7 @@
+ unsigned int modem_debug_logging;
+ unsigned int dsplibs_debug_level;
+ 
+-static const char *modem_debug_logfile = "slmodem.log";
++static const char *modem_debug_logfile = "/var/log/slmodemd/slmodem.log";
+ 
+ static int modem_log_fd;
+ 

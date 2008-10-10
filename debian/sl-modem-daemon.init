@@ -44,7 +44,7 @@ alsaload() {
         for x in $driverlist ; do $modprobe $x 2>/dev/null ; done
 
         for start_reps in `seq 100` ; do
-            test -e /proc/asound/cards && line=$(grep -i "\[Modem   " -i /proc/asound/cards) && break
+            test -e /proc/asound/cards && line=$(grep -i "\[Modem   " -i /proc/asound/cards) && (aplay -l | egrep '^card [0-9]*\: Modem ' >/dev/null) && break
             sleep 0.1
         done
     fi
@@ -115,7 +115,7 @@ config() {
       fi
 
       # installed as module so just load it or bail out
-      if $modprobe slamr 2>&1 | grep -q not.found ; then
+      if MODPROBE_OPTIONS="" $modprobe slamr 2>&1 | grep -q not.found ; then
           echo "SmartLink modem driver not available for this Kernel. Please read README.Debian"
           echo "or try to install the package sl-modem-modules-`uname -r`. Exiting..."
           exit 1
@@ -126,6 +126,7 @@ config() {
 start() {
 
     echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
+    ulimit -Hl unlimited; ulimit -Sl unlimited
     start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- $OPTS
     RETVAL=$?
     if [ "$RETVAL" = 0 ] && [ "$NOSYMLINK" != 1 ] ; then

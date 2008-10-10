@@ -1,0 +1,16 @@
+
+--- sl-modem-2.9.9d+e-pre2.orig/modem/modem_debug.c	2008-09-17 10:43:09.000000000 +0200
++++ sl-modem-2.9.9d+e-pre2/modem/modem_debug.c	2008-09-17 10:18:39.000000000 +0200
+@@ -57,9 +57,9 @@
+ #include <modem.h>
+ #include <modem_debug.h>
+ 
+-unsigned int modem_debug_level;
+-unsigned int modem_debug_logging;
+-unsigned int dsplibs_debug_level;
++unsigned int modem_debug_level=0;
++unsigned int modem_debug_logging=0;
++unsigned int dsplibs_debug_level=0;
+ 
+ static const char *modem_debug_logfile = "/var/log/slmodemd/slmodem.log";
+ 

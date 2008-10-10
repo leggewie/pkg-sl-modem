@@ -1,0 +1,13 @@
+Index: slmodem-2.9.11-20080817/drivers/Makefile
+===================================================================
+--- slmodem-2.9.11-20080817.orig/drivers/Makefile	2008-09-17 15:15:36.000000000 +0200
++++ slmodem-2.9.11-20080817/drivers/Makefile	2008-09-17 15:17:56.000000000 +0200
+@@ -76,7 +76,7 @@
+ 	    $(RM) ${DESTDIR}/dev/slusb$(minor) ; ) echo -n
+ 
+ else
+-ifeq ($(findstring 2.4,$(KERNEL_VER)),2.4)
++ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/linux/version.h),)
+ 
+ slusb-objs:= old_st7554.o
+ obj:=.

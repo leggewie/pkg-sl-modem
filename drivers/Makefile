@@ -21,9 +21,7 @@ SUBLEVEL:=$(shell echo $(KERNEL_DIR) | cut -d. -f3 | cut -d. -f1 | cut -d-  -f1)
 # slusb support ends at 2.6.24
 AGE:=$(shell if [ "$(SUBLEVEL)" -gt 24 ] ;then echo NEW;fi)
 
-FOUND_CLASS_SIMPLE := $(shell grep -q 'class_simple_device_add' ${KERNEL_DIR}/include/linux/device.h 2> /dev/null && echo -DFOUND_CLASS_SIMPLE)
-
-EXTRA_CFLAGS = -I$(obj) -I$(obj)/../modem $(FOUND_CLASS_SIMPLE)
+EXTRA_CFLAGS = -I$(obj) -I$(obj)/../modem
 
 ARCH64:=$(shell uname -m | sed -e '/amd64/s//x86_64/' | grep -c x86_64)
 
@@ -41,14 +39,8 @@ slusb-objs:= st7554.o
 ifndef KERNELRELEASE
 ifndef KERNEL_VER
 
-
-KVERS?=$(shell ./kernel-ver)
-
-
-
 all install uninstall: kernel-ver
-	$(MAKE) $@ KERNEL_VER=$(KVERS)
-#	$(MAKE) $@ KERNEL_VER=$(shell ./kernel-ver)
+	$(MAKE) $@ KERNEL_VER=$(shell ./kernel-ver)
 
 install: install-devices
 uninstall: remove-devices
@@ -78,15 +70,13 @@ remove-devices:
 	    $(RM) ${DESTDIR}/dev/slusb$(minor) ; ) echo -n
 
 else
-
-ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/linux/utsrelease.h $(KERNEL_DIR)/include/linux/version.h 2>/dev/null),)
+ifeq ($(findstring 2.4,$(KERNEL_VER)),2.4)
 
 slusb-objs:= old_st7554.o
 obj:=.
-module-dir ?= ${DESTDIR}/lib/modules/$(KERNEL_VER)/misc
+module-dir:=${DESTDIR}/lib/modules/$(KERNEL_VER)/misc
 
-
-CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB `test -f $(KERNEL_DIR)/include/linux/modversions.h && echo -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include` $(FOUND_CLASS_SIMPLE)
+CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include
 
 all: $(obj-m)
 

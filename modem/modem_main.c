@@ -57,7 +57,6 @@
 #include <signal.h>
 #include <limits.h>
 #include <grp.h>
-#include <pwd.h>
 
 #ifdef SUPPORT_ALSA
 #define ALSA_PCM_NEW_HW_PARAMS_API 1
@@ -76,8 +75,6 @@
 
 #define DBG(fmt,args...) dprintf("main: " fmt, ##args)
 
-
-#define SLMODEMD_USER "Slmodemd"
 
 #define CLOSE_COUNT_MAX 100
 
@@ -939,7 +936,6 @@ int modem_main(const char *dev_name)
 	struct modem *m;
 	int pty;
 	int ret = 0;
-	struct passwd *pwd;
 
 	modem_debug_init(basename(dev_name));
 
@@ -987,30 +983,6 @@ int modem_main(const char *dev_name)
 
 	signal(SIGINT, mark_termination);
 	signal(SIGTERM, mark_termination);
-
-#ifdef SLMODEMD_USER
-	pwd = getpwnam(SLMODEMD_USER);
-	if (!pwd) {
-		ERR("getpwnam " SLMODEMD_USER ": %s\n",strerror(errno));
-		exit(-1);
-	}
-
-	ret = (setgroups(1,&pwd->pw_gid) ||
-	       setgid(pwd->pw_gid) ||
-	       setuid(pwd->pw_uid));
-	if (ret) {
-		ERR("setgroups or setgid %ld or setuid %ld failed: %s\n",
-		    (long)pwd->pw_gid,(long)pwd->pw_uid,strerror(errno));
-		exit(-1);
-	}
-
-	if (setuid(0) != -1) {
-		ERR("setuid 0 succeeded after dropping privileges!\n");
-		exit(-1);
-	}
-	DBG("dropped privileges to %ld.%ld\n",
-	    (long)pwd->pw_gid,(long)pwd->pw_uid);
-#endif
 
 	INFO("Use `%s' as modem device, Ctrl+C for termination.\n",
 	     *link_name ? link_name : m->pty_name);
