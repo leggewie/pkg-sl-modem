@@ -1,0 +1,21 @@
+#!/bin/sh
+set -e
+
+CVERSION=$(dpkg-query -W -f='${Version}' sl-modem-source | sed -e 's/\(.*\)-.*/\1/')
+
+#DEBHELPER#
+
+case "$1" in
+  configure)
+    if [ -x /usr/sbin/dkms ]; then
+      echo "Adding Module to DKMS build system"
+      dkms add -m sl-modem -v $CVERSION > /dev/null
+      echo "Doing initial module build"
+      dkms build -m sl-modem -v $CVERSION > /dev/null
+      echo "Installing initial module"
+      dkms install -m sl-modem -v $CVERSION --force > /dev/null
+      echo "Done."
+    fi
+  ;;
+esac
+

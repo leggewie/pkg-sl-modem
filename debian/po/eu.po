@@ -1,21 +1,21 @@
-# translation of sl-modem-templates.po to Euskara
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# translation of sl-modem-eu.po to Euskara
 # xabier bilbao <xabidu@gmail.com>, 2008.
-# Piarres Beobide <pi@beobide.net>, 2008.
+# Piarres Beobide <pi@beobide.net>, 2008, 2009.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the sl-modem package.
 msgid ""
 msgstr ""
-"Project-Id-Version: xd-sl-modem-templates\n"
-"Report-Msgid-Bugs-To: Source: sl-modem@packages.debian.org\n"
-"POT-Creation-Date: 2008-09-18 13:59+0200\n"
-"PO-Revision-Date: 2008-10-03 19:37+0200\n"
+"Project-Id-Version: sl-modem-eu\n"
+"Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
+"POT-Creation-Date: 2009-01-28 06:51+0200\n"
+"PO-Revision-Date: 2009-01-28 14:50+0100\n"
 "Last-Translator: Piarres Beobide <pi@beobide.net>\n"
-"Language-Team: debian-l19n-basque@lists.debian.org\n"
+"Language-Team: Euskara <debian-l10n-basque@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.2-rc1\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. Type: select
 #. Default
@@ -40,12 +40,13 @@ msgstr "Modemaren kokalekua:"
 #. language is mostly spoken, for example FRANCE for French or GERMANY for
 #. German
 #: ../sl-modem-daemon.templates:1002
+#| msgid ""
+#| "In which country is your modem located? Please select the telephone "
+#| "system used in your country."
 msgid ""
-"In which country is your modem located? Please select the telephone system "
-"used in your country."
+"Indicate the country in which your modem is located. Please select the  "
+"telephone system used in your country."
 msgstr ""
-"Zein herrialdetan dago kokatua zure modema? Mesedez hautatu zure herrialdean "
+"Zehaztu modem-a kokaturik dagoen estatua. Mesedez hautatu zure estatuan "
 "erabiltzen den telefono-sistema."
 
-#~ msgid "USA"
-#~ msgstr "SPAIN"

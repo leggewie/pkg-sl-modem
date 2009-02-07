@@ -6,6 +6,11 @@ Please see README for a description of the sl-modem software.
 The Debian sl-modem source package provides the package sl-modem-source, which
 provides the source for the kernel modules
 
+If your system got DKMS, then the final modules from sl-modem-source are 
+automatically built and there is no need to go in the following section.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sat, 21 Oct 2008 17:32:22 +0200
+
 To get the final modules from sl-modem-source, follow these instructions:
 
 a) First, update the local source directory. If you use

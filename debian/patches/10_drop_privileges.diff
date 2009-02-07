@@ -1,3 +1,4 @@
+slmodemd privilege dropping patch.
 Index: slmodem-2.9.11-20080817/modem/modem_main.c
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/modem/modem_main.c	2008-09-18 08:19:43.000000000 +0200

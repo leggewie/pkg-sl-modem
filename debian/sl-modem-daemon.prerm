@@ -7,4 +7,10 @@ if [ -x "/etc/init.d/sl-modem-daemon" ]; then
 		/etc/init.d/sl-modem-daemon stop || true
 	fi
 fi
+
+case "$1" in
+  remove)
+    rm -rf /var/lib/slmodem
+  ;;
+esac
 #DEBHELPER#

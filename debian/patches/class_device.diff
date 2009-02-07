@@ -1,3 +1,5 @@
+Since 2.6.25 class_device_add() and class_device_destroy() has been renamed, 
+modified st7554.c accordingly.
 Index: slmodem-2.9.11-20080817/drivers/st7554.c
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/drivers/st7554.c	2008-10-04 01:02:35.000000000 +0200

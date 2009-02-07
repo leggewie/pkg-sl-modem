@@ -15,8 +15,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.11~20080817-1~intrepid4\n"
-"Report-Msgid-Bugs-To: Source: sl-modem@packages.debian.org\n"
-"POT-Creation-Date: 2008-09-18 13:59+0200\n"
+"Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
+"POT-Creation-Date: 2009-01-28 06:51+0200\n"
 "PO-Revision-Date: 2008-10-08 12:20+0900\n"
 "Last-Translator: Hideki Yamane (Debian-JP) <henrich@debian.or.jp>\n"
 "Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
@@ -31,8 +31,8 @@ msgid ""
 "USA [ Enter the country (in uppercase and in English) where your language is "
 "mostly spoken, for example FRANCE for French ]"
 msgstr ""
-"JAPAN [ 例えばフランス語の場合は FRANCE というように、良く話されている言語 の国を "
-"(英語、アルファベット大文字で) 入力してください ]"
+"JAPAN [ 例えばフランス語の場合は FRANCE というように、良く話されている言語 の"
+"国を (英語、アルファベット大文字で) 入力してください ]"
 
 #. Type: select
 #. Description
@@ -49,11 +49,13 @@ msgstr "モデムの設置場所:"
 #. language is mostly spoken, for example FRANCE for French or GERMANY for
 #. German
 #: ../sl-modem-daemon.templates:1002
+#, fuzzy
+#| msgid ""
+#| "In which country is your modem located? Please select the telephone "
+#| "system used in your country."
 msgid ""
-"In which country is your modem located? Please select the telephone system "
-"used in your country."
+"Indicate the country in which your modem is located. Please select the  "
+"telephone system used in your country."
 msgstr ""
 "どの国にモデムが設置されていますか? あなたの国で使われている通信会社を選んで"
 "ください。"
-
-

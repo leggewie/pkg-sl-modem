@@ -1,3 +1,5 @@
+Changed the MODULE_LICENSE string to "Dual BSD/GPL" since the license is
+actually a BSD license clone.
 Index: slmodem-2.9.11-20080817/drivers/st7554.c
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/drivers/st7554.c	2008-04-18 04:56:46.000000000 +0200

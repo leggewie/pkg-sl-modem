@@ -1,4 +1,4 @@
-
+Helper module to tell the kernel to keep away from unsupported PCI id numbers.
 Index: slmodem-2.9.11-20080817/ungrab-winmodem/Readme.txt
 ===================================================================
 --- /dev/null	1970-01-01 00:00:00.000000000 +0000

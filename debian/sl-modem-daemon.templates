@@ -6,4 +6,5 @@ _Default: USA [ Enter the country (in uppercase and in English) where your langu
 # language is mostly spoken, for example FRANCE for French or GERMANY for
 # German
 _Description: Location of the modem:
- In which country is your modem located? Please select the telephone system used in your country.
+ Indicate the country in which your modem is located. Please select the 
+ telephone system used in your country.

@@ -1,14 +1,15 @@
 # Italian (it) translation of debconf templates for sl-modem
 # Copyright (C) 2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the sl-modem package.
-# Luca Monducci <luca.mo@tiscali.it>, 2007, 2008.
+# Luca Monducci <luca.mo@tiscali.it>, 2007 - 2009.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: sl-modem 2.9.11~20080817-1~intrepid4 italian debconf templates\n"
-"Report-Msgid-Bugs-To: Source: sl-modem@packages.debian.org\n"
-"POT-Creation-Date: 2008-09-18 13:59+0200\n"
-"PO-Revision-Date: 2008-10-03 20:10+0200\n"
+"Project-Id-Version: sl-modem 2.9.11~20080817-2 italian debconf "
+"templates\n"
+"Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
+"POT-Creation-Date: 2009-01-28 06:51+0200\n"
+"PO-Revision-Date: 2009-01-31 14:52+0100\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
 "Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +31,7 @@ msgstr "ITALY"
 #. German
 #: ../sl-modem-daemon.templates:1002
 msgid "Location of the modem:"
-msgstr "Localizzazione del modem:"
+msgstr "Ubicazione del modem:"
 
 #. Type: select
 #. Description
@@ -39,11 +40,8 @@ msgstr "Localizzazione del modem:"
 #. German
 #: ../sl-modem-daemon.templates:1002
 msgid ""
-"In which country is your modem located? Please select the telephone system "
-"used in your country."
+"Indicate the country in which your modem is located. Please select the  "
+"telephone system used in your country."
 msgstr ""
-"In quale paese è localizzato il modem? Indicare il sistema telefonico usato "
-"nel proprio paese."
-
-#~ msgid "USA"
-#~ msgstr "ITALY"
+"Inserire in quale paese è situato il modem. Scegliere il sistema telefonico "
+"usato nel proprio paese."

@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sl-modem\n"
-"Report-Msgid-Bugs-To: Source: sl-modem@packages.debian.org\n"
-"POT-Creation-Date: 2008-09-18 13:59+0200\n"
+"Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
+"POT-Creation-Date: 2009-01-28 06:51+0200\n"
 "PO-Revision-Date: 2004-03-30 13:11+0200\n"
 "Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -46,9 +46,13 @@ msgstr ""
 #. language is mostly spoken, for example FRANCE for French or GERMANY for
 #. German
 #: ../sl-modem-daemon.templates:1002
+#, fuzzy
+#| msgid ""
+#| "In which country is your modem located? Please select the telephone "
+#| "system used in your country."
 msgid ""
-"In which country is your modem located? Please select the telephone system "
-"used in your country."
+"Indicate the country in which your modem is located. Please select the  "
+"telephone system used in your country."
 msgstr ""
 "I hvilket land er dette modem placeret? Vælg telefonsystemet brugt i dit "
 "land."

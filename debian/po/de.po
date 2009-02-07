@@ -3,16 +3,17 @@
 # Copyright (C) Helge Kreutzmann <debian@helgefjell.de>, 2007, 2008.
 # This file is distributed under the same license as the caudium package.
 #
+# Thomas Mueller <thomas_mueller_ffb@online,de>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: sl-modem 2.9.11~20080817-1~intrepid4\n"
+"Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
-"POT-Creation-Date: 2008-09-18 13:59+0200\n"
-"PO-Revision-Date: 2008-10-04 09:27+0200\n"
-"Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
-"Language-Team: German <debian-l10n-german@lists.debian.org>\n"
+"POT-Creation-Date: 2009-01-28 06:51+0200\n"
+"PO-Revision-Date: 2009-01-28 10:20+0100\n"
+"Last-Translator: Thomas Mueller <thomas_mueller_ffb@online,de>\n"
+"Language-Team: deutsch <debian-l10n-german@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: select
@@ -21,7 +22,9 @@ msgstr ""
 msgid ""
 "USA [ Enter the country (in uppercase and in English) where your language is "
 "mostly spoken, for example FRANCE for French ]"
-msgstr "GERMANY"
+msgstr ""
+"GERMANY [ Geben Sie den Namen des Landes ein (in Großbuchstaben und auf Englisch), "
+"in dem Ihre Sprache hauptsächlich gesprochen wird. Z.B. GERMANY für Deutsch."
 
 #. Type: select
 #. Description
@@ -39,11 +42,9 @@ msgstr "Standort des Modems:"
 #. German
 #: ../sl-modem-daemon.templates:1002
 msgid ""
-"In which country is your modem located? Please select the telephone system "
-"used in your country."
+"Indicate the country in which your modem is located. Please select the  "
+"telephone system used in your country."
 msgstr ""
-"In welchem Land befindet sich Ihr Modem? Bitte wählen Sie das Telefon-System "
-"Ihres Landes aus."
+"Geben Sie an, in welchem Land sich Ihr Modem befindet. Bitte wählen Sie "
+"das Telefon-System Ihres Landes aus."
 
-#~ msgid "USA"
-#~ msgstr "GERMANY"

@@ -1,26 +1,19 @@
+# Translation of sl-modem debconf templates to French
+# Copyright (c) 2008 Jean-Luc Coulon (f5ibh) <jean-luc.coulon@wanadoo.fr>
+# This file is distributed under the same licence as the sl-modem package.
 #
-#    Translators, if you are not familiar with the PO format, gettext
-#    documentation is worth reading, especially sections dedicated to
-#    this format, e.g. by running:
-#         info -n '(gettext)PO Files'
-#         info -n '(gettext)Header Entry'
-#
-#    Some information specific to po-debconf are available at
-#            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-#
-#    Developers do not need to manually edit POT or PO files.
+# Jean-Luc Coulon (f5ibh) <jean-luc.coulon@wanadoo.fr>, 2009.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: sl-modem 2.9.6\n"
-"Report-Msgid-Bugs-To: Source: sl-modem@packages.debian.org\n"
-"POT-Creation-Date: 2008-09-18 13:59+0200\n"
-"PO-Revision-Date: 2006-11-26 13:18+0100\n"
+"Project-Id-Version: sl-modem 2.9.11\n"
+"Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
+"POT-Creation-Date: 2009-01-28 06:51+0200\n"
+"PO-Revision-Date: 2009-02-06 16:49+0100\n"
 "Last-Translator: Jean-Luc  Coulon (f5ibh) <jean-luc.coulon@wanadoo.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Type: select
@@ -38,7 +31,7 @@ msgstr "FRANCE"
 #. German
 #: ../sl-modem-daemon.templates:1002
 msgid "Location of the modem:"
-msgstr "Emplacement du modem :"
+msgstr "Emplacement du modemÂ :"
 
 #. Type: select
 #. Description
@@ -46,12 +39,13 @@ msgstr "Emplacement du modem :"
 #. language is mostly spoken, for example FRANCE for French or GERMANY for
 #. German
 #: ../sl-modem-daemon.templates:1002
+#| msgid ""
+#| "In which country is your modem located? Please select the telephone "
+#| "system used in your country."
 msgid ""
-"In which country is your modem located? Please select the telephone system "
-"used in your country."
+"Indicate the country in which your modem is located. Please select the  "
+"telephone system used in your country."
 msgstr ""
 "Veuillez indiquer le pays dans lequel se trouve votre modem. Vous devriez "
-"choisir le système téléphonique en usage dans votre pays."
+"choisir le systÃ¨me tÃ©lÃ©phonique en usage dans votre pays."
 
-#~ msgid "USA"
-#~ msgstr "FRANCE"

@@ -1,21 +1,22 @@
 # translation of ru.po to Russian
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the sl-modem package.
 #
 # Yuri Kozlov <kozlov.y@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: sl-modem 2.9.11~20080817-1~intrepid4\n"
-"Report-Msgid-Bugs-To: Source: sl-modem@packages.debian.org\n"
-"POT-Creation-Date: 2008-09-18 13:59+0200\n"
-"PO-Revision-Date: 2008-10-05 21:40+0400\n"
-"Last-Translator: Yuri Kozlov <kozlov.y@gmail.com>\n"
+"Project-Id-Version: sl-modem 2.9.11~20080817-2\n"
+"Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
+"POT-Creation-Date: 2009-01-28 06:51+0200\n"
+"PO-Revision-Date: 2009-01-29 19:31+0300\n"
+"Last-Translator: Sergey Alyoshin <alyoshin.s@gmail.com>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Type: select
 #. Default
@@ -40,10 +41,12 @@ msgstr "Местонахождение модема:"
 #. language is mostly spoken, for example FRANCE for French or GERMANY for
 #. German
 #: ../sl-modem-daemon.templates:1002
+#| msgid ""
+#| "In which country is your modem located? Please select the telephone "
+#| "system used in your country."
 msgid ""
-"In which country is your modem located? Please select the telephone system "
-"used in your country."
+"Indicate the country in which your modem is located. Please select the  "
+"telephone system used in your country."
 msgstr ""
-"В какой стране находится модем? Укажите систему телефонии, используемую в "
-"вашей стране."
-
+"Указывает страну, в которой находится модем. Выберите систему телефонии, "
+"используемую в вашей стране."

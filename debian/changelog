@@ -1,3 +1,33 @@
+sl-modem (2.9.11~20080817-2) unstable; urgency=low
+
+  * Modified home dir of Slmodemd to /var/log/slmodemd. (Closes: #507340)
+  * Added support for DKMS:
+    + debian/control: added dkms to sl-modem-source's Recommends field.
+    + debian/control: updated long description for sl-modem-source.
+    + Added debian/dkms.conf.in.
+    + debian/rules: copy dkms.conf.in to
+      debian/sl-modem-source/usr/src/modules/sl-modem/dkms.conf
+    + Added sl-modem-source.prerm and sl-modem-source.postinst
+  * debian/postinst: create /var/lib/slmodem with proper permissions. (Closes: 
+    #421867)
+  * debian/prerm: remove /var/lib/slmodem on uninstall.
+  * debian/control:
+    + Add ${misc:Depends} to Depends field for sl-modem-daemon and 
+      sl-modem-source.
+    + Add quilt to sl-modem-source's Depends field. (Closes: #512332)
+    + Added Homepage field.
+  * Added descriptions to patch files.
+  * Remove 04_sregs_init.diff patch as it turned to be obsoleted since 
+    2.9.9e-pre1a.
+  * Added set -e to maintainer scripts.
+  * sl-modem-daemon.templates: changed the extended description.
+  * Translation updates: Arabic, Basque, Russian, Swedish, Italian, Czech, 
+    German, Portuguese, French, Spanish (Closes: #513326, #513378, #513603, 
+    #513333, #513704, #513713, #513966, #514280, #514355).
+  * Added translations: Vietnamese, Slovak (Closes: #513802, #514387).
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sun,  7 Feb 2009 19:22:44 +0200
+
 sl-modem (2.9.11~20080817-1) unstable; urgency=medium
 
   * New upstream release. (Closes: #354908, #489289, #457637, LP: #144090, #269855)
@@ -32,9 +62,9 @@ sl-modem (2.9.11~20080817-1) unstable; urgency=medium
       Conexant.
     + debug_level.diff: debug log file is not for end users. Users shall use
       -l <number>.
-  * Added fortify_source.diff patch to fix FTBFS with -D_FORTIFY_SOURCE=2 
+  * Added fortify_source.diff patch to fix FTBFS with -D_FORTIFY_SOURCE=2
     compile flag.
-  * Synch'ed ungrab-winmodem.c from 
+  * Synch'ed ungrab-winmodem.c from
     http://linmodems.technion.ac.il/packages/smartlink/ungrab-winmodem-20080126.tar.gz.
   * Remove debian/control.backup* as I don't see any use for them.
   * Update Standards-Version to 3.8.0.
@@ -61,9 +91,9 @@ sl-modem (2.9.11~20080817-1) unstable; urgency=medium
     they are statically appended in debian/sl-modem-daemon.modutils.
   * The init script can now modprobe even if the slamr module has been
     blacklisted.
-  * Modified 11_logfile.diff: Fixed the log path as the slmodemd daemon runs 
+  * Modified 11_logfile.diff: Fixed the log path as the slmodemd daemon runs
     as unprivileged user and didn't have write permissions on /var/log.
-  * Added class_device.diff patch: since 2.6.25 class_device_add() and 
+  * Added class_device.diff patch: since 2.6.25 class_device_add() and
     class_device_destroy() has been renamed, modified st7554.c accordingly.
   * Removed obsolete /etc/modutils file.
   * Small enhancements to the modprobe.d file:
@@ -229,7 +259,7 @@ sl-modem (2.9.9d+e-pre2-1) unstable; urgency=low
   * defining URB_ASYNC_UNLINK if not set, needed by recent kernels
   * applied patch for class/simple_class transition from Gentoo lists with
     some fixes (closes: #325799)
-  * changed the MODULE_LICENSE string to "Dual BSD/GPL" since the license 
+  * changed the MODULE_LICENSE string to "Dual BSD/GPL" since the license
     is actually a BSD license clone (closes: #327545)
   * not including the old hotplug script, merged its code into the init script
     and added an udev rules file to run it. Needs real testing with a

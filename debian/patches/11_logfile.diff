@@ -1,4 +1,4 @@
-
+Place debug log in /var/log/slmodem.log.
 --- sl-modem-2.9.10+2.9.9d+e-pre2.orig/modem/modem_debug.c
 +++ sl-modem-2.9.10+2.9.9d+e-pre2/modem/modem_debug.c
 @@ -61,7 +61,7 @@

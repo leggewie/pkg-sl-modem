@@ -1,4 +1,4 @@
-
+Workaround for pre-2.6.18 kernels.
 Index: slmodem-2.9.11-20080817/drivers/Makefile
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/drivers/Makefile	2008-09-18 05:35:21.000000000 +0200
