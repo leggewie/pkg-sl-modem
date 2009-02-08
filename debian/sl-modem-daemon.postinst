@@ -25,16 +25,16 @@ test -r /etc/modutils/sl-modem-daemon.modutils && rm /etc/modutils/sl-modem-daem
 case "$1" in
     configure)
 
+      # Create user and group
+      adduser --system --home /var/log/slmodemd --no-create-home --group \
+        --gecos 'Smart Link Modem Server' --force-badname \
+        Slmodemd
+
       # Create the data directory with right permissions
       install -d -oSlmodemd -gadm -m0755 /var/lib/slmodem
 
       # Create the log directory with right permissions
       install -d -oSlmodemd -gadm -m0750 /var/log/slmodemd
-  
-      # Create user and group
-      adduser --system --home /var/log/slmodemd --no-create-home --group \
-        --gecos 'Smart Link Modem Server' --force-badname \
-        Slmodemd
 
       # Older versions of sl-modem used to set home dir of Slmoded to /, so we 
       # fix that during upgrade:

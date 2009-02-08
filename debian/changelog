@@ -1,3 +1,10 @@
+sl-modem (2.9.11~20080817-3) unstable; urgency=low
+
+  * debian/sl-modem-daemon.postinst: moved line to add Slmodemd user to be 
+    before lines that install directories for that user. (Closes: #514699)
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sun,  8 Feb 2009 19:22:44 +0200
+
 sl-modem (2.9.11~20080817-2) unstable; urgency=low
 
   * Modified home dir of Slmodemd to /var/log/slmodemd. (Closes: #507340)
