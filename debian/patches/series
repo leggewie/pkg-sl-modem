@@ -12,3 +12,5 @@ README.diff
 debug_level.diff
 fortify_source.diff
 class_device.diff
+12_ulimit_warn.diff
+13_slusb.diff

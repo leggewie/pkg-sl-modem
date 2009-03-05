@@ -1,4 +1,5 @@
 Set the default device group to "dialout".
+By: Eduard Bloch <blade@debian.org>
 Index: slmodem-2.9.11-20080817/modem/modem_cmdline.c
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/modem/modem_cmdline.c	2008-03-29 14:04:16.000000000 +0200

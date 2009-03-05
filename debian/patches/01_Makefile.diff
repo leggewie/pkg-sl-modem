@@ -1,5 +1,6 @@
 Cleanup to not loose the user-specified version string and blindly try include 
 modversions.h
+By: Eduard Bloch <blade@debian.org>
 Index: slmodem-2.9.11-20080817/Makefile
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/Makefile	2008-03-29 14:04:16.000000000 +0200

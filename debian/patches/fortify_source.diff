@@ -1,4 +1,5 @@
 Fix FTBFS with -D_FORTIFY_SOURCE=2 compile flag.
+By: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
 Index: slmodem-2.9.11-20080817/modem/modem_datafile.c
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/modem/modem_datafile.c	2008-09-21 10:47:22.000000000 +0200

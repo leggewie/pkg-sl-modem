@@ -1,6 +1,7 @@
 Enlarge dial string buffer to 128 bytes. Some dial strings that include calling
 card numbers can be longer than the previously allowed 32 characters, causing
 them to be truncated.
+By: karlheg@pdx.edu
 Index: slmodem-2.9.11-20080817/modem/modem.h
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/modem/modem.h	2008-03-29 14:04:16.000000000 +0200

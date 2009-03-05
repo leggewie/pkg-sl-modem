@@ -1,5 +1,6 @@
 Dropped the TROUBLESHOOTING section from README and adapted the feedback
 section, mentioned the transfer of the modem business to Conexant.
+By: Eduard Bloch <blade@debian.org>
 Index: slmodem-2.9.11-20080817/README
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/README	2008-09-18 08:38:11.000000000 +0200

@@ -1,4 +1,5 @@
 Workaround in drivers/Makefile for a kernel 2.4 check accidentialy matching 2.6.12.4.
+By: Eduard Bloch <blade@debian.org>
 Index: slmodem-2.9.11-20080817/drivers/Makefile
 ===================================================================
 --- slmodem-2.9.11-20080817.orig/drivers/Makefile	2008-09-17 15:15:36.000000000 +0200

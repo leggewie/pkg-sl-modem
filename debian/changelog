@@ -1,3 +1,29 @@
+sl-modem (2.9.11~20080817-4) unstable; urgency=low
+
+  * Added libc6-dev to sl-modem-source's Depends: field.
+  * debian/patches/*.diff: add contributor info.
+  * debian/sl-modem-daemon.init (change from Ubuntu): Also check for modems
+    which are subdevices, and thus only expose themselves in "aplay -l", not
+    in /proc/asound/cards. Thanks to Peteris Krisjanis for the patch! (Closes:
+    #517055).
+  * Added 12_ulimit_warn.diff from Corey Hickey, that checks the current limit
+    and makes slmodemd warn & die if the limit is judged to be too low (< 8
+    MB). (Closes: #511996)
+  * Added 13_slusb.diff patch to enable support for slusb module.
+  * debian/dkms.conf.in:
+    + Added USB=1 in make[0] field to enable compilation of slusb module.
+    + Added fields for slusb module.
+  * debian/sl-modem-daemon.config: use set -e instead of passing -e to the 
+    shell on the #! line.
+  * Provide pm-utils hook script to restart slmodem daemon on resume:
+    + Added debian/15sl-modem-daemon
+    + debian/rules: install debian/15sl-modem-daemon in 
+      /usr/lib/pm-utils/sleep.d
+    Based on patches submitted by: Julien Valroff <julien@kirya.net>, "Tim 
+    Dijkstra \(tdykstra\)" <tim@famdijkstra.org> (Closes: #411851).
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Thu,  5 Mar 2009 19:22:44 +0200
+
 sl-modem (2.9.11~20080817-3) unstable; urgency=low
 
   * debian/sl-modem-daemon.postinst: moved line to add Slmodemd user to be 
