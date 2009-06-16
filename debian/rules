@@ -26,11 +26,6 @@ endif
 
 export KVERS
 
-k = $(shell echo $(KVERS) | grep -q ^2.6 && echo k)
-
-SUBLEVEL := $(shell echo $(KVERS) | cut -d. -f3 | cut -d. -f1 | cut -d-  -f1)
-AGE := $(shell if [ "$(SUBLEVEL)" -gt 24 ] ;then echo NEW;fi)
-
 CVERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut -d- -f1)
 
 
@@ -61,21 +56,15 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
-	# Create the directories to install the source into
-#	dh_installdirs -psl-modem-source  usr/src/modules/sl-modem/latest usr/src/modules/sl-modem/debian
-#	dh_installdirs -psl-modem-daemon
+	mkdir -p debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)
 
 	# Copy only the driver source to the proper location
-	tar -c --exclude ".svn" modem/*.h drivers patches ungrab-winmodem | tar x -C debian/sl-modem-source/usr/src/modules/sl-modem/
-	cp -r debian/sl-modem-source/usr/src/modules/sl-modem/ debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)
-	rmdir debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)/debian
+	tar -c --exclude ".svn" modem/*.h drivers patches ungrab-winmodem | tar x -C debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)
 	sed -e "s/#VERSION#/$(CVERSION)/g" debian/dkms.conf.in > debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)/dkms.conf
-	# Copy the needed debian/ pieces to the proper location
-	cd debian ; cp control compat *_KVERS_* *.modules.in rules changelog copyright sl-modem-source/usr/src/modules/sl-modem/debian
 	chmod -R a+r debian/sl-modem-source/
-	cd debian/sl-modem-source/usr/src && tar c modules | bzip2 -9 > sl-modem.tar.bz2 && rm -rf modules
+
 	cp modem/slmodemd debian/sl-modem-daemon/usr/sbin/
-	cp debian/sl-modem-daemon.modutils debian/sl-modem-daemon/etc/modprobe.d
+	cp debian/sl-modem.conf debian/sl-modem-daemon/etc/modprobe.d
 	install -D -m 0755 debian/15sl-modem-daemon debian/sl-modem-daemon/usr/lib/pm-utils/sleep.d/15sl-modem-daemon
 	dh_installdocs -psl-modem-source debian/README.Debian README
 	dh_installdocs -psl-modem-daemon
@@ -88,24 +77,15 @@ binary-arch: build install
 	dh_installdocs -s
 	dh_installexamples -s
 #	dh_install -s
-#	dh_installmenu -s
 	dh_installdebconf -s
 	perl debian/setcountries.pl debian/sl-modem-daemon/DEBIAN/templates
-#	dh_installlogrotate -s
-#	dh_installemacsen -s
-#	dh_installpam -s
-#	dh_installmime -s
 	dh_installinit -s -n
-#	dh_installcron -s
-#	dh_installinfo -s
 	dh_installman -p sl-modem-daemon debian/slmodemd.8
 	dh_link -s
 	dh_strip -s
 	dh_compress -s
 	dh_fixperms -s
 	dh_installdeb -s
-#	dh_python -s
-#	dh_makeshlibs -s
 	dh_shlibdeps -s
 	dh_gencontrol -s
 	dh_md5sums -s
@@ -113,42 +93,4 @@ binary-arch: build install
 
 binary: binary-arch binary-indep
 
-
-# prefix of the target package name
-PACKAGE=sl-modem-modules
-# modifieable for experiments or debugging m-a
-MA_DIR ?= /usr/share/modass
-# load generic variable handling
--include $(MA_DIR)/include/generic.make
-# load default rules
--include $(MA_DIR)/include/common-rules.make
-
-binary-modules:
-	dh_clean -k
-	dh_installdirs lib/modules/$(KVERS)/misc
-	if ! test -e drivers/Makefile ; then echo "Please update the package, extract the tarball!"; exit 1 ; fi
-	$(MAKE) -C drivers KERNEL_DIR=$(KSRC) KVERS=$(KVERS)
-	cp drivers/slamr.$ko debian/$(PKGNAME)/lib/modules/$(KVERS)/misc
-ifneq ($(AGE), NEW)
-	# slusb support ends at 2.6.24
-	cp drivers/slusb.$ko debian/$(PKGNAME)/lib/modules/$(KVERS)/misc
-endif
-ifeq ($k,k)
-	$(MAKE) -C ungrab-winmodem KERNEL_DIR=$(KSRC) KVERS=$(KVERS)
-	cp ungrab-winmodem/ungrab-winmodem.ko debian/$(PKGNAME)/lib/modules/$(KVERS)/misc
-endif
-	dh_installdocs
-	dh_installchangelogs
-	dh_compress
-	dh_fixperms
-	dh_installdeb
-	dh_gencontrol -- -v$(VERSION)
-	dh_md5sums
-	dh_builddeb --destdir=$(DEB_DESTDIR)
-
-kdist_clean: clean
-	$(MAKE) -C drivers clean
-
-kdist_config: prep-deb-files
-
-.PHONY: build clean binary-indep binary-arch binary install configure binary-modules kdist kdist_config kdist_image kdist_clean configure
+.PHONY: build clean binary-indep binary-arch binary install configure

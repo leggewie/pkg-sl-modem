@@ -1,3 +1,42 @@
+sl-modem (2.9.11~20080817-5) unstable; urgency=low
+
+  * Remove support for module-assistant
+    + debian/rules:
+      - Remove binary-modules, kdist_clean & kdist_config targets and the
+        variables/includes associated with them (including AGE, k & SUBLEVEL
+        variables).
+      - Remove kdist & kdist_image from .PHONY
+      - Remove lines that create/install /usr/src/sl-modem.tar.bz2 from
+        install target.
+    + debian/control for sl-modem-source target:
+      - Remove module-assistant, debhelper, bzip2, quilt from Depends field.
+      - Remove mention of module-assistant from extended description.
+      - Added: Provides: sl-modem-modules, sl-modem-modules-new
+    + sl-modem-daemon.README.Debian: Remove mention of module-assistant.
+    + debian/README.Debian:
+      - Removed mention of module-assistant & make-kpkg.
+      - Rephrased the paragraph about manual building of modules.
+    + Merge sl-modem-modules-_KVERS_.postinst.modules.in into
+      sl-modem-source.postinst:
+      - Use invoke-rc.d instead of directly running sl-modem-daemon init
+        script.
+      - Remove sl-modem-modules-_KVERS_.postinst.modules.in
+      - Comment the calling of mkdev
+      - Create device nodes using MAKEDEV (commented now)
+      - Renamed daemon-stop function to daemon_stop to remove bashism.
+    + Remove sl-modem-source.dirs
+  * Removed debian/hotplug
+  * debian/rules: Remove commented lines
+  * Removed debian/control.modules.in
+  * Updated Japanese translation (Closes: #518603).
+  * Rename sl-modem-daemon.modutils to sl-modem.conf (Closes: #519672).
+  * Merge changes from Ubuntu:
+    + debian/patches/autoload.diff: Patch drivers to export the right aliases
+      for auto-load on open.
+    + Hence remove alias lines from sl-modem.conf.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sat, 17 Mar 2009 05:50:33 +0200
+
 sl-modem (2.9.11~20080817-4) unstable; urgency=low
 
   * Added libc6-dev to sl-modem-source's Depends: field.

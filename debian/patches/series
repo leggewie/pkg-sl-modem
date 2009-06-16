@@ -14,3 +14,5 @@ fortify_source.diff
 class_device.diff
 12_ulimit_warn.diff
 13_slusb.diff
+autoload.diff
+udev_support.diff

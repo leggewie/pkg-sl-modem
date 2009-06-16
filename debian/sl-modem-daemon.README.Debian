@@ -13,9 +13,7 @@ available modem(compatbile). If you wish to specify the device manually,
 edit the config file.
 
 To use SmartLink modules, create the drivers package using the separate
-sl-modem-source package (see its README.Debian for details). Usually,
-you can simply run "m-a a-i sl-modem" if module-assistant is installed
-on your system.
+sl-modem-source package (see its README.Debian for details).
 
 When done, use "dpkg-reconfigure sl-modem-daemon -plow" to choose your
 contry or edit the file /etc/defaults/sl-modem-daemon manually.
