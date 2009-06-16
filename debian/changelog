@@ -1,5 +1,11 @@
-sl-modem (2.9.11~20080817-5) unstable; urgency=low
+sl-modem (2.9.11~20090222-1) unstable; urgency=low
 
+  * New upstream release.
+  * Refreshed patch: 01_Makefile.diff
+  * Removed patches that were merged upstream: 02_dial_string_size.diff,
+    03_Makefile_2.6.12.4.diff, 05_st7554_license.diff, README.diff,
+    06_slmodem-class-simple-to-class-meins.diff, kernel-ver.diff,
+    fortify_source.diff, class_device.diff
   * Remove support for module-assistant
     + debian/rules:
       - Remove binary-modules, kdist_clean & kdist_config targets and the
@@ -30,12 +36,13 @@ sl-modem (2.9.11~20080817-5) unstable; urgency=low
   * Removed debian/control.modules.in
   * Updated Japanese translation (Closes: #518603).
   * Rename sl-modem-daemon.modutils to sl-modem.conf (Closes: #519672).
+  * debian/copyright: converted to machine readable format.
   * Merge changes from Ubuntu:
     + debian/patches/autoload.diff: Patch drivers to export the right aliases
       for auto-load on open.
     + Hence remove alias lines from sl-modem.conf.
 
- -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sat, 17 Mar 2009 05:50:33 +0200
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Thu,  1 May 2009 19:22:44 +0200
 
 sl-modem (2.9.11~20080817-4) unstable; urgency=low
 
