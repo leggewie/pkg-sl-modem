@@ -41,8 +41,9 @@ sl-modem (2.9.11~20090222-1) unstable; urgency=low
     + debian/patches/autoload.diff: Patch drivers to export the right aliases
       for auto-load on open.
     + Hence remove alias lines from sl-modem.conf.
+  * debian/control: Added Vcs-* fields.
 
- -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Thu,  1 May 2009 19:22:44 +0200
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Thu, 16 Jun 2009 19:22:44 +0200
 
 sl-modem (2.9.11~20080817-4) unstable; urgency=low
 

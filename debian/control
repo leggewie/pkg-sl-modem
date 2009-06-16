@@ -6,6 +6,8 @@ Uploaders: Maurizio Avogadro <mavoga@gmail.com>
 Build-Depends: debhelper (>=4), bzip2, libasound2-dev (>> 1.0.6) [i386], lib32asound2-dev [amd64], quilt (>= 0.40), libc6-dev-i386 [amd64] | lib32c-dev [amd64], gcc-multilib [amd64], po-debconf
 Standards-Version: 3.8.0
 Homepage: http://linmodems.technion.ac.il/packages/smartlink/
+Vcs-Git: git://git.debian.org/git/collab-maint/sl-modem.git
+Vcs-Browser: http://git.debian.org/?p=collab-maint/sl-modem.git
 
 Package: sl-modem-source
 Architecture: i386
