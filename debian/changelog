@@ -27,12 +27,13 @@ sl-modem (2.9.11~20090222-1) unstable; urgency=low
       - Use invoke-rc.d instead of directly running sl-modem-daemon init
         script.
       - Remove sl-modem-modules-_KVERS_.postinst.modules.in
-      - Comment the calling of mkdev
-      - Create device nodes using MAKEDEV (commented now)
+      - Removed code that creates slamr and slusb devices.
       - Renamed daemon-stop function to daemon_stop to remove bashism.
     + Remove sl-modem-source.dirs
   * Removed debian/hotplug
-  * debian/rules: Remove commented lines
+  * debian/rules:
+    + Remove commented lines
+    + Replaced dh_clean -k with dh_prep
   * Removed debian/control.modules.in
   * Updated Japanese translation (Closes: #518603).
   * Rename sl-modem-daemon.modutils to sl-modem.conf (Closes: #519672).
@@ -41,9 +42,13 @@ sl-modem (2.9.11~20090222-1) unstable; urgency=low
     + debian/patches/autoload.diff: Patch drivers to export the right aliases
       for auto-load on open.
     + Hence remove alias lines from sl-modem.conf.
-  * debian/control: Added Vcs-* fields.
+  * debian/control:
+    + Added Vcs-* fields.
+    + Bump Standards-Version to 3.8.2, no changes needed
+  * debian/compat, debian/control: Upgraded to debhelper 7
+  * Added debian/sl-modem-source.lintian-overrides
 
- -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Thu, 16 Jun 2009 19:22:44 +0200
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Wed, 24 Jun 2009 21:40:12 +0300
 
 sl-modem (2.9.11~20080817-4) unstable; urgency=low
 
