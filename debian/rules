@@ -53,7 +53,7 @@ install: DH_OPTIONS=
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	dh_installdirs
 
 	mkdir -p debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)
