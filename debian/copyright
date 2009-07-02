@@ -1,5 +1,6 @@
 This package was debianized by Eduard Bloch <blade@debian.org> on
 Sun, 16 Mar 2003 16:37:46 +0100.
+
 Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat
 Upstream-Name: slmodem
 Upstream-Maintainer: Marvin Stodolsky <marvin.stodolsky@gmail.com>
@@ -8,14 +9,16 @@ Upstream-Source: http://linmodems.technion.ac.il/packages/smartlink/
 Files: debian/*
 Author: Eduard Bloch <blade@debian.org>
 Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users@users.sourceforge.net>
+Author: Maurizio Avogadro <mavoga@gmail.com>
 Copyright: Copyright © 2008-2009, أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users@users.sourceforge.net>
+Copyright: Copyright © 2008-2009, Maurizio Avogadro <mavoga@gmail.com>
 License: BSD-C3
 
 Files: *
 Author: Sasha Khapyorsky (sashak@smlink.com)
 Author: Seva (seva@smlink.com)
 Author: Alex Raer
-Copyright: Copyright © 1987-2009, Smart Link Ltd.
+Copyright: Copyright © 2002, Smart Link Ltd.
 License: BSD-C3
 
 License: BSD-C3
