@@ -1,2 +1,3 @@
 modem/slmodemd usr/sbin/
 debian/sl-modem.conf etc/modprobe.d
+debian/15sl-modem-daemon usr/lib/pm-utils/sleep.d/15sl-modem-daemon

@@ -34,6 +34,10 @@ build-arch: build-arch-stamp
 build-arch-stamp: patch
 	dh_testdir
 	cd modem ; $(MAKE) SUPPORT_ALSA=1 CC="gcc $(shell dpkg-architecture -ei386 || echo -m32)"
+
+	# Make 15sl-modem-daemon executable before install:
+	chmod +x debian/15sl-modem-daemon
+
 	touch build-arch-stamp
 
 build: build-arch
@@ -63,7 +67,6 @@ install: build
 	sed -e "s/#VERSION#/$(CVERSION)/g" debian/dkms.conf.in > debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)/dkms.conf
 	chmod -R a+r debian/sl-modem-source/
 
-	install -D -m 0755 debian/15sl-modem-daemon debian/sl-modem-daemon/usr/lib/pm-utils/sleep.d/15sl-modem-daemon
 	dh_install
 
 binary-arch: build install
