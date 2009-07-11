@@ -63,8 +63,6 @@ install: build
 	sed -e "s/#VERSION#/$(CVERSION)/g" debian/dkms.conf.in > debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)/dkms.conf
 	chmod -R a+r debian/sl-modem-source/
 
-	cp modem/slmodemd debian/sl-modem-daemon/usr/sbin/
-	cp debian/sl-modem.conf debian/sl-modem-daemon/etc/modprobe.d
 	install -D -m 0755 debian/15sl-modem-daemon debian/sl-modem-daemon/usr/lib/pm-utils/sleep.d/15sl-modem-daemon
 	dh_install
 
