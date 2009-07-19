@@ -1,65 +1,19 @@
 #!/usr/bin/make -f
-# Sample debian/rules that uses debhelper. 
-# GNU copyright 1997 by Joey Hess.
-#
-# This version is for a hypothetical package that can build a kernel modules
-# architecture-dependant package via make-kpkg, as well as an
-# architecture-independent module source package, and other packages
-# either dep/indep for things like common files or userspace components
-# needed for the kernel modules.
-
-# Uncomment this to turn on verbose mode. 
-#export DH_VERBOSE=1
-
-include /usr/share/quilt/quilt.make
-
-CFLAGS = -Wall -g
-
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-else
-	CFLAGS += -O2
-endif
-ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
-	INSTALL_PROGRAM += -s
-endif
 
 export KVERS
 
 CVERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut -d- -f1)
 
+%:
+	dh $@ --with quilt
 
-build-indep:
-build-arch: build-arch-stamp
-build-arch-stamp: patch
-	dh_testdir
-	cd modem ; $(MAKE) SUPPORT_ALSA=1 CC="gcc $(shell dpkg-architecture -ei386 || echo -m32)"
+override_dh_auto_build:
+	$(MAKE) SUPPORT_ALSA=1 CC="gcc $(shell dpkg-architecture -ei386 || echo -m32)"
 
 	# Make 15sl-modem-daemon executable before install:
 	chmod +x debian/15sl-modem-daemon
 
-	touch build-arch-stamp
-
-build: build-arch
-configure:
-
-clean: unpatch
-	dh_testdir
-	dh_testroot
-	rm -f build-arch-stamp build-indep-stamp configure-stamp
-
-	# Add here commands to clean up after the build process.
-	[ ! -f Makefile ] || $(MAKE) clean SUPPORT_ALSA=1
-	-cd modem; $(MAKE) clean SUPPORT_ALSA=1
-	dh_clean
-
-install: DH_OPTIONS=
-install: build
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_installdirs
-
+override_dh_auto_install:
 	mkdir -p debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)
 
 	# Copy only the driver source to the proper location
@@ -67,29 +21,12 @@ install: build
 	sed -e "s/#VERSION#/$(CVERSION)/g" debian/dkms.conf.in > debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)/dkms.conf
 	chmod -R a+r debian/sl-modem-source/
 
-	dh_install
+override_dh_installchangelogs:
+	dh_installchangelogs Changes
 
-binary-arch: build install
-	dh_testdir -s
-	dh_testroot -s
-	dh_installchangelogs -s Changes
-	dh_installdocs -s
-	dh_installexamples -s
-#	dh_install -s
-	dh_installdebconf -s
+override_dh_installdebconf:
+	dh_installdebconf
 	perl debian/setcountries.pl debian/sl-modem-daemon/DEBIAN/templates
-	dh_installinit -s -n
-	dh_installman -p sl-modem-daemon debian/slmodemd.8
-	dh_link -s
-	dh_strip -s
-	dh_compress -s
-	dh_fixperms -s
-	dh_installdeb -s
-	dh_shlibdeps -s
-	dh_gencontrol -s
-	dh_md5sums -s
-	dh_builddeb -s
 
-binary: binary-arch binary-indep
-
-.PHONY: build clean binary-indep binary-arch binary install configure
+override_dh_installinit:
+	dh_installinit -n

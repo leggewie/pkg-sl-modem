@@ -1,4 +1,4 @@
-sl-modem (2.9.11~20090222-1) unstable; urgency=low
+sl-modem (2.9.11~20090222-1) UNRELEASED; urgency=low
 
   * New upstream release.
   * Refreshed patch: 01_Makefile.diff
@@ -11,7 +11,6 @@ sl-modem (2.9.11~20090222-1) unstable; urgency=low
       - Remove binary-modules, kdist_clean & kdist_config targets and the
         variables/includes associated with them (including AGE, k & SUBLEVEL
         variables).
-      - Remove kdist & kdist_image from .PHONY
       - Remove lines that create/install /usr/src/sl-modem.tar.bz2 from
         install target.
     + debian/control for sl-modem-source target:
@@ -31,9 +30,7 @@ sl-modem (2.9.11~20090222-1) unstable; urgency=low
       - Renamed daemon-stop function to daemon_stop to remove bashism.
     + Remove sl-modem-source.dirs
   * Removed debian/hotplug
-  * debian/rules:
-    + Remove commented lines
-    + Replaced dh_clean -k with dh_prep
+  * debian/rules: simplified rules file
   * Removed debian/control.modules.in
   * Updated Japanese translation (Closes: #518603).
   * Rename sl-modem-daemon.modutils to sl-modem.conf (Closes: #519672).
@@ -45,10 +42,13 @@ sl-modem (2.9.11~20090222-1) unstable; urgency=low
   * debian/control:
     + Added Vcs-* fields.
     + Bump Standards-Version to 3.8.2, no changes needed
+    + Build-Depend on debhelper >= 7.0.50~ to support override targets.
+    + Build-Depend on quilt >= 7.0.50~ to support dh --with quilt
   * debian/compat, debian/control: Upgraded to debhelper 7
-  * Added debian/sl-modem-source.lintian-overrides
+  * Added debian/sl-modem-source.lintian-overrides and 
+    debian/sl-modem-daemon.manpages
 
- -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Wed, 24 Jun 2009 21:40:12 +0300
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sun, 19 Jul 2009 13:51:53 +0300
 
 sl-modem (2.9.11~20080817-4) unstable; urgency=low
 
