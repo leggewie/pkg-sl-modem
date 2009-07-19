@@ -1,4 +1,4 @@
-sl-modem (2.9.11~20090222-1) UNRELEASED; urgency=low
+sl-modem (2.9.11~20090222-1) unstable; urgency=low
 
   * New upstream release.
   * Refreshed patch: 01_Makefile.diff
