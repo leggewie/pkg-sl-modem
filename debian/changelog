@@ -45,8 +45,9 @@ sl-modem (2.9.11~20090222-1) UNRELEASED; urgency=low
     + Build-Depend on debhelper >= 7.0.50~ to support override targets.
     + Build-Depend on quilt >= 7.0.50~ to support dh --with quilt
   * debian/compat, debian/control: Upgraded to debhelper 7
-  * Added debian/sl-modem-source.lintian-overrides and 
-    debian/sl-modem-daemon.manpages
+  * debian/sl-modem.conf: add entries for slusb loading.
+  * Added debian/sl-modem-source.lintian-overrides,
+    debian/sl-modem-daemon.manpages and debian/NEWS
 
  -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sun, 19 Jul 2009 13:51:53 +0300
 
