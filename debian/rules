@@ -30,3 +30,6 @@ override_dh_installdebconf:
 
 override_dh_installinit:
 	dh_installinit -n
+
+override_dh_installmodules:
+	dh_installmodules --name=sl-modem
