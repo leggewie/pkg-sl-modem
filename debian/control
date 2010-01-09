@@ -37,7 +37,7 @@ Description: SmartLink software modem daemon
  driver generation (2.7.x) which consisted of kernel modules only.
  .
  It needs a kernel driver to access the hardware. This can be either
- recent ALSA (shipped with a newer kernel (>=2.6.4) with Alsa support
+ recent ALSA (shipped with a newer kernel (>=2.6.4) with ALSA support
  and intel8x0m module) which is sufficient for basic operation and
  data/Internet connection, or the SmartLink kernel driver which is
  provided by separate packages which you can build using the source from
