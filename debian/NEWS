@@ -1,10 +1,11 @@
 sl-modem (2.9.11~20090222-1) unstable; urgency=low
 
-  * Starting with this version, module-assistant support has been removed.
-    Building of slamr and slusb modules can either be done automatically using
-    DKMS, or done manually.
-  * Also slamr and slusb devices nodes are not created during package install.
-    They are created automatically when the respective module is loaded. Yet 
-    this works only for one modem on the machine.
+  Starting with this version, module-assistant support has been removed.
+  Building of slamr and slusb modules can either be done automatically using
+  DKMS, or done manually.
+
+  Also slamr and slusb devices nodes are not created during package install.
+  They are created automatically when the respective module is loaded. Yet
+  this works only for one modem on the machine.
 
  -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sun, 19 Jul 2009 17:25:48 +0300
