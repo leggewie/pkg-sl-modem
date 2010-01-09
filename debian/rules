@@ -5,7 +5,7 @@ export KVERS
 CVERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut -d- -f1)
 
 %:
-	dh $@ --with quilt
+	dh $@
 
 override_dh_auto_build:
 	$(MAKE) SUPPORT_ALSA=1 CC="gcc $(shell dpkg-architecture -ei386 || echo -m32)"
