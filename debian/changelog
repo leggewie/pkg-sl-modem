@@ -1,3 +1,25 @@
+sl-modem (2.9.11~20090222-2) unstable; urgency=low
+
+  * Switch to 3.0 (quilt) source format.
+  * Removed debian/sl-modem-daemon.dirs
+  * Added debian/sl-modem-daemon.preinst to remove obsolete
+    sl-modem-daemon.modutils conf file. (from Ubuntu although for a different
+    purpose)
+  * Added debian/sl-modem-daemon.lintian-overrides
+  * Install sl-modem.conf using dh_installmodules
+  * debian/dkms.conf.in: Use 'cd' instead of popd & pushd
+  * debian/control:
+    + s/Alsa/ALSA in extended description.
+    + Bumped Standards-Version to 3.8.3
+  * Added 2.6.31.diff patch to fix FTBFS with kernels >= 2.6.31
+    (Closes: #563823)
+  * debian/sl-modem-daemon.init:
+    + Added $remote_fs to Required-Start & Required-Stop
+    + Added sl-modem-daemon to Provides
+  * debian/NEWS: Use regular paragraphs rather than asterisks.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sat, 09 Jan 2010 20:18:53 +0200
+
 sl-modem (2.9.11~20090222-1) unstable; urgency=low
 
   * New upstream release.
