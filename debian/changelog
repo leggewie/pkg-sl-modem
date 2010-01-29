@@ -1,3 +1,37 @@
+sl-modem (2.9.11~20080817-3ubuntu4) lucid; urgency=low
+
+  * Drop kernel-package recommends to a suggests so that kernel-package can be
+    dropped to universe.
+
+ -- Mathias Gug <mathiaz@ubuntu.com>  Thu, 28 Jan 2010 19:11:46 -0500
+
+sl-modem (2.9.11~20080817-3ubuntu3) karmic; urgency=low
+
+  * Remove bashism from DKMS script (LP: #429071)
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sun, 13 Sep 2009 23:13:35 +0200
+
+sl-modem (2.9.11~20080817-3ubuntu2) jaunty; urgency=low
+
+  * debian/patches/autoload.diff: Patch drivers to export the right aliases
+    for auto-load on open.
+  * debian/sl-modem-daemon.modutils: so we don't need this file anymore, the
+    rest is done by udev anyway
+  * debian/rules: so we don't need to install the modprobe.d file
+  * debian/sl-modem-daemon.dirs: so we don't need the directory
+  * debian/sl-modem-daemon.preinst: so remove the file on upgrade
+
+ -- Scott James Remnant <scott@ubuntu.com>  Thu, 05 Mar 2009 20:27:30 +0000
+
+sl-modem (2.9.11~20080817-3ubuntu1) jaunty; urgency=low
+
+  * debian/sl-modem-daemon.init: Also check for modems which are
+    subdevices, and thus only expose themselves in "aplay -l", not in
+    /proc/asound/cards. Thanks to Peteris Krisjanis for the patch! 
+    (LP: #298424)
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 25 Feb 2009 12:11:03 +0100
+
 sl-modem (2.9.11~20080817-3) unstable; urgency=low
 
   * debian/sl-modem-daemon.postinst: moved line to add Slmodemd user to be 

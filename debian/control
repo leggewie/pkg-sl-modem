@@ -1,7 +1,8 @@
 Source: sl-modem
 Section: non-free/misc
 Priority: optional
-Maintainer: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
+Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
+XSBC-Original-Maintainer: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
 Uploaders: Maurizio Avogadro <mavoga@gmail.com>
 Build-Depends: debhelper (>=4), bzip2, libasound2-dev (>> 1.0.6) [i386], lib32asound2-dev [amd64], quilt (>= 0.40), libc6-dev-i386 [amd64] | lib32c-dev [amd64], gcc-multilib [amd64], po-debconf
 Standards-Version: 3.8.0
@@ -10,7 +11,8 @@ Homepage: http://linmodems.technion.ac.il/packages/smartlink/
 Package: sl-modem-source
 Architecture: i386
 Depends: ${misc:Depends}, module-assistant, debhelper, bzip2, quilt
-Recommends: kernel-package, dkms, linux-headers-2.6-486 | linux-headers-generic | linux-headers
+Recommends: dkms, linux-headers-2.6-486 | linux-headers-generic | linux-headers
+Suggests: kernel-package
 Description: SmartLink software modem driver - module building source
  This package contains source code for the low-level drivers for the
  software modems produced by Smart Link Ltd. It supports PCI and USB models.

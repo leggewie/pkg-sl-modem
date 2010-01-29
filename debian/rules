@@ -75,7 +75,6 @@ install: build
 	chmod -R a+r debian/sl-modem-source/
 	cd debian/sl-modem-source/usr/src && tar c modules | bzip2 -9 > sl-modem.tar.bz2 && rm -rf modules
 	cp modem/slmodemd debian/sl-modem-daemon/usr/sbin/
-	cp debian/sl-modem-daemon.modutils debian/sl-modem-daemon/etc/modprobe.d
 	dh_installdocs -psl-modem-source debian/README.Debian README
 	dh_installdocs -psl-modem-daemon
 	dh_install

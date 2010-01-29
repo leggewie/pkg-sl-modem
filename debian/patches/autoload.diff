@@ -1,0 +1,32 @@
+Index: sl-modem-2.9.11~20080817/drivers/old_st7554.c
+===================================================================
+--- sl-modem-2.9.11~20080817.orig/drivers/old_st7554.c	2009-03-05 20:24:32.000000000 +0000
++++ sl-modem-2.9.11~20080817/drivers/old_st7554.c	2009-03-05 20:26:28.000000000 +0000
+@@ -1386,4 +1386,5 @@
+ MODULE_AUTHOR("Smart Link Ltd.");
+ MODULE_DESCRIPTION("ST7554 USB Smart Link Soft Modem driver.");
+ MODULE_LICENSE("Smart Link Ltd.");
++MODULE_ALIAS_CHARDEV_MAJOR(MY_MAJOR);
+ 
+Index: sl-modem-2.9.11~20080817/drivers/st7554.c
+===================================================================
+--- sl-modem-2.9.11~20080817.orig/drivers/st7554.c	2009-03-05 20:24:35.000000000 +0000
++++ sl-modem-2.9.11~20080817/drivers/st7554.c	2009-03-05 20:26:15.000000000 +0000
+@@ -1434,4 +1434,5 @@
+ MODULE_DESCRIPTION("ST7554 USB Smart Link Soft Modem driver.");
+ //MODULE_LICENSE("Smart Link Ltd.");
+ MODULE_LICENSE("Dual BSD/GPL");
++MODULE_ALIAS_CHARDEV_MAJOR(243);
+ 
+Index: sl-modem-2.9.11~20080817/drivers/amrmo_init.c
+===================================================================
+--- sl-modem-2.9.11~20080817.orig/drivers/amrmo_init.c	2009-03-05 20:27:09.000000000 +0000
++++ sl-modem-2.9.11~20080817/drivers/amrmo_init.c	2009-03-05 20:26:54.000000000 +0000
+@@ -733,6 +733,7 @@
+ MODULE_AUTHOR("Smart Link Ltd.");
+ MODULE_DESCRIPTION("SmartLink HAMR5600,SmartPCI56/561 based modem driver");
+ MODULE_LICENSE("Smart Link Ltd.");
++MODULE_ALIAS_CHARDEV_MAJOR(AMRMO_MAJOR);
+ 
+ 
+ static int __init amrmo_init(void)

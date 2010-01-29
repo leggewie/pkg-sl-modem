@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = install ] || [ "$1" = upgrade ]; then
+	if [ -e "/etc/modprobe.d/sl-modem-daemon.modutils" ]; then
+		if [ "`md5sum \"/etc/modprobe.d/sl-modem-daemon.modutils\" | sed -e \"s/ .*//\"`" = \
+		     "`dpkg-query -W -f='${Conffiles}' sl-modem-daemon | sed -n -e \"\\\\' /etc/modprobe.d/sl-modem-daemon.modutils's/.* //p\"`" ]
+		then
+			rm -f "/etc/modprobe.d/sl-modem-daemon.modutils"
+		fi
+	fi
+fi
+
+#DEBHELPER#

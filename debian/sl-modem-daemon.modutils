@@ -1,5 +1,0 @@
-alias char-major-243 slusb
-alias char-major-242 slamr
-
-install slamr /sbin/modprobe -qb ungrab-winmodem; /sbin/modprobe --ignore-install slamr; test -e /dev/slamr0 && (chmod 660 /dev/slamr0 && chgrp dialout /dev/slamr0) || (/bin/mknod -m 660 /dev/slamr0 c 242 0 2>/dev/null && chgrp dialout /dev/slamr0)
-remove slamr /sbin/modprobe --remove --ignore-remove slamr; test -e /dev/slamr0 && /bin/rm -f /dev/slamr0 2>/dev/null

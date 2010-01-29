@@ -12,3 +12,4 @@ README.diff
 debug_level.diff
 fortify_source.diff
 class_device.diff
+autoload.diff

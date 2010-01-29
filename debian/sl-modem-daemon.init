@@ -35,24 +35,45 @@ unloadllist="snd_intel8x0m snd_via82xx_modem snd_atiixp_modem slamr"
 
 alsaload() {
 
-    unset line;
+    unset aplay_grep_line;
+    unset proc_grep;
 
-    # first check to not do unneccessary modprobe calls. Some people even put
-    # it into the kernel image
+    # first check for situation when there is modem subdevice (aplay -l output have "(M|m)odem" string, and /proc/asound/cards doesn't).
+    # this one doesn't need modprobe (modem is part of sound card chip)
 
-    if ! line=$(grep -i "\[Modem   " /proc/asound/cards 2>/dev/null) ; then
-        for x in $driverlist ; do $modprobe $x 2>/dev/null ; done
+    if ! proc_grep=$(grep -i "\[Modem   " /proc/asound/cards) ; then
+    # if there is aplay output, get card and device numbers and form SLMODEMD_DEVICE as hw:a,b
+        if aplay_grep=$(aplay -l | egrep '^card [0-9].*(M|m)odem') ; then
+            aplay_grep_line=$(echo "$aplay_grep" | sed -r 's/^card ([[:digit:]]+).*device ([[:digit:]]+).*$/\1 \2/')
 
-        for start_reps in `seq 100` ; do
-            test -e /proc/asound/cards && line=$(grep -i "\[Modem   " -i /proc/asound/cards) && (aplay -l | egrep '^card [0-9]*\: Modem ' >/dev/null) && break
-            sleep 0.1
-        done
+            # Let's configure subdevice
+            if [ -n "$aplay_grep_line" ] ; then
+                set $aplay_grep_line
+                # This one needs hw as prefix
+                ALSADEVPREFIX="hw"
+                SLMODEMD_DEVICE="$ALSADEVPREFIX:$1,$2"
+                ALSA=yes
+                return 0
+            fi
+       # if there is no aplay and proc output, try to modprobe and then check for modem cards again
+        else
+            # first check to not do unneccessary modprobe calls. Some people even put
+            # it into the kernel image
+
+            for x in $driverlist ; do $modprobe $x 2>/dev/null ; done
+
+            for start_reps in `seq 100` ; do
+                test -e /proc/asound/cards && proc_grep=$(grep -i "\[Modem   " -i /proc/asound/cards) && (aplay -l | egrep '^card [0-9]*\: Modem ' >/dev/null) && break
+                sleep 0.1
+            done
+
+        fi
     fi
-
-    if test "$line" ; then
+	
+    # if we got proc_grep (already existed or from previous if), let's use it to form SLMODEMD_DEVICE as modem:a
+    if [ -n "$proc_grep" ] ; then
         # ALSA driver is loaded, use it
-
-        set $line
+        set $proc_grep
         SLMODEMD_DEVICE=$ALSADEVPREFIX:$1
         ALSA=yes
         return 0
