@@ -57,7 +57,7 @@
 
 #define MODEM_AUTHOR "Smart Link Ltd."
 #define MODEM_NAME "SmartLink Soft Modem"
-#define MODEM_VERSION "2.9.9"
+#define MODEM_VERSION "2.9.9d"
 #define MODEM_DATE __DATE__" "__TIME__
 
 /* event mask */

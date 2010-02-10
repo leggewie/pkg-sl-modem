@@ -42,7 +42,7 @@ slmodemd modem_test:
 
 clean:
 	$(RM) slmodemd modem_test modem_main.o modem_cmdline.o modem_test.o $(modem-objs) $(dp-objs) $(sysdep-objs)
-	$(RM) *~
+	$(RM) *~ *.orig *.rej
 
 .PHONY: all dep generic-dep clean clean-build-profile
 

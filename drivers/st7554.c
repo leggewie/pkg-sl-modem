@@ -1080,12 +1080,6 @@ static void print_all_regs(struct st7554_state *s) {
 
 #define SET_REG(s,reg,val) { ret = s->set_reg(s,reg,val); if (ret < 0) { USB_ERR("st7554: failed to set reg %x.\n", reg); ; return ret;} }
 
-#define CLEAR_ENDPOINT(s,pipe) { \
-     if (usb_endpoint_halted(s->usbdev, usb_pipeendpoint(pipe), usb_pipeout(pipe))) {   \
-       USB_DBG("st7554_init: pipe %d is halted. clear...\n", usb_pipeendpoint(pipe));  \
-       if (!(ret=usb_clear_halt(s->usbdev, pipe))) return ret;}}
-
-
 
 static int st7554_init  (struct st7554_state *s)
 {
@@ -1109,8 +1103,8 @@ static int st7554_init  (struct st7554_state *s)
 	SET_REG(s, ST7554_GPIO_INV, 0);
 
 	/* clear usb ep */
-	CLEAR_ENDPOINT(s, s->mi.pipe);
-	CLEAR_ENDPOINT(s, s->mo.pipe);
+	usb_clear_halt(s->usbdev, s->mi.pipe);
+	usb_clear_halt(s->usbdev, s->mo.pipe);
 
 	return 0;
 }
@@ -1277,8 +1271,8 @@ static int st7554_probe(struct usb_interface *interface,
 	}
 
 	usb_set_intfdata(interface, s );
-	class_simple_device_add(st7554_class, MKDEV(213, i), NULL, "slusb%d", i);
-	devfs_mk_cdev(MKDEV(213,i),S_IFCHR|S_IRUSR|S_IWUSR,"slusb%d",i);
+	class_simple_device_add(st7554_class, MKDEV(243, i), NULL, "slusb%d", i);
+	devfs_mk_cdev(MKDEV(243,i),S_IFCHR|S_IRUSR|S_IWUSR,"slusb%d",i);
 
 	USB_INFO(KERN_INFO "slusb: slusb%d is found.\n", s->minor);
 
@@ -1306,7 +1300,7 @@ static void st7554_disconnect(struct usb_interface *interface)
                 return;
         }
 
-	class_simple_device_remove(MKDEV(213, s->minor));
+	class_simple_device_remove(MKDEV(243, s->minor));
  	devfs_remove("slusb%d",s->minor);
 
 	st7554_stop(s);
@@ -1354,7 +1348,7 @@ static int __init st7554_modem_init(void)
 		return ret;
 	}
 
-	if(register_chrdev(213, "slusb", &st7554_fops) < 0) {
+	if(register_chrdev(243, "slusb", &st7554_fops) < 0) {
 		usb_deregister(&st7554_usb_driver);
 		class_simple_destroy(st7554_class);
 		return -ENOMEM;
@@ -1366,7 +1360,7 @@ static int __init st7554_modem_init(void)
 static void __exit st7554_modem_exit(void)
 {
 	USB_DBG ("st7554: exit...\n");
-	unregister_chrdev(213,"slusb");
+	unregister_chrdev(243,"slusb");
 	usb_deregister(&st7554_usb_driver);
 	class_simple_destroy(st7554_class);
 }

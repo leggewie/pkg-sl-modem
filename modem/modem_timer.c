@@ -156,21 +156,21 @@ int timer_add(struct timer *t)
 int timer_del(struct timer *t)
 {
 	sigset_t set, old_set;
-	struct timer *p, *prev;
+	struct timer *p, **prev;
 	sigemptyset(&set);
 	sigaddset(&set,SIGALRM);
 	sigprocmask(SIG_BLOCK,&set,&old_set);
 	if(t->added) {
 		p = timer_list.list;
-		prev = (struct timer *)&timer_list;
+		prev = &timer_list.list;
 		while(p) {
 			if(p == t) {
-				prev->next = t->next;
+				*prev = t->next;
 				t->next = NULL;
 				t->added = 0;
 				break;
 			}
-			prev = p;
+			prev = &((*prev)->next);
 			p = p->next;
 		}
 	}

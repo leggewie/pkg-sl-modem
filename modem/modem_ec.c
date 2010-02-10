@@ -684,7 +684,7 @@ static void t401_timeout(struct modem *m)
 	m->bit_timer_func = t401_timeout;
 }
 
-#if 1 //T403_IMPLEMENTED
+#if T403_IMPLEMENTED
 static void t403_timeout(struct lapm_state *l)
 {
 	EC_DBG("t403_timeout...\n");

@@ -71,7 +71,7 @@
 #define DEBUG_URB_PRINT 0
 #define USB_DBG_URB(fmt...) // USB_DBG(fmt)
 
-#define MY_MAJOR 213
+#define MY_MAJOR 243
 
 static int debug = 0;
 MODULE_PARM(debug,"i");

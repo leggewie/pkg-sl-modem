@@ -379,61 +379,6 @@ static int process_Z(struct modem *m, char *p, int *len)
 
 
 /*
- *    AT& commands
- */
-
-static int process_ampersand_F(struct modem *m, char *p, int *len)
-{
-#if 0
-	char *s;
-	int set_num;
-	AT_DBG ("AT&F...\n");
-	set_num = strtoul(p,&s,0);
-	*len = s - p;
-	if (set_num < 0 || set_num > 1)
-		return -1;
-	s = load_profile (m, set_num+2);
-	if (s != NULL) {
-		/* FIXME: reset modem instead */
-		/* ... */
-		memcpy (m->sregs, s, sizeof(m->sregs));
-		return 0;
-	}
-#endif
-	return -1;
-}
-
-static int process_ampersand_W(struct modem *m,char *p, int *len)
-{
-#if 0
-	char *e = p;
-	int set_num;
-	AT_DBG ("AT&W...\n");
-	set_num = strtoul (p,&e,0);
-	if (set_num <0 || set_num >1)
-		return -1;
-	*len = e - p;
-	if (save_profile (m,set_num))
-		return -1;
-	return 0;
-#else
-	return -1;
-#endif
-}
-
-#if 0
-static int print_last_dial_string(struct modem *m)
-{
-	if (m->dial_string) {
-		modem_send_to_tty(m, m->dial_string, strlen(m->dial_string));
-		modem_send_to_tty(m, CRLF_CHARS(m),2);
-	}
-	return 0;
-}
-#endif
-
-
-/*
  *    AT+ commands
  */
 
@@ -1098,7 +1043,7 @@ int process_at_command(struct modem *m, char *cmd)
 				ret = set_sreg(m,SREG_CONNNECT_MSG_SPEED_SRC,*p,0,1,&len);
 				break;
 			case 'F': /* AT&F */
-				ret = process_ampersand_F(m,p,&len);
+				len = isdigit(*p)?1:0; ret = 0;
 				break;
 			case 'H':  /* AT&H */
 				ret = set_sreg(m,SREG_FLOW_CONTROL,*p,0,1,&len);
@@ -1110,9 +1055,8 @@ int process_at_command(struct modem *m, char *cmd)
 				ret = set_sreg(m,SREG_PULSE_RATIO,*p,0,3,&len);
 				break;
 			case 'V': /* AT&V */
-				break;
 			case 'W': /* AT&W */
-				ret = process_ampersand_W(m,p,&len);
+				ret = -1;
 				break;
 #if 0
 			case 'Z': /* AT&Z */

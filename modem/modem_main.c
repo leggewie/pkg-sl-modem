@@ -100,6 +100,8 @@ struct device_struct {
 #ifdef SUPPORT_ALSA
 	snd_pcm_t *phandle;
 	snd_pcm_t *chandle;
+	snd_mixer_t *mhandle;
+	snd_mixer_elem_t *hook_off_elem;
 	unsigned int period;
 	unsigned int started;
 #endif
@@ -123,26 +125,85 @@ static char outbuf[4096];
 extern unsigned use_alsa;
 static snd_output_t *dbg_out = NULL;
 
+static int alsa_mixer_setup(struct device_struct *dev, const char *dev_name)
+{
+	char card_name[32];
+	int card_num = 0;
+	char *p;
+	snd_mixer_elem_t *elem;
+	int err;
+
+	if((p = strchr(dev_name, ':')))
+		card_num = strtoul(p+1, NULL, 0);
+	sprintf(card_name, "hw:%d", card_num);
+	
+	err = snd_mixer_open(&dev->mhandle, 0);
+	if(err < 0) {
+		DBG("mixer setup: cannot open: %s\n", snd_strerror(err));
+		return err;
+	}
+	err = snd_mixer_attach(dev->mhandle, card_name);
+	if (err < 0) {
+		ERR("mixer setup: attach %s error: %s\n", card_name, snd_strerror(err));
+		goto error;
+	}
+	err = snd_mixer_selem_register(dev->mhandle, NULL, NULL);
+	if (err <0) {
+		ERR("mixer setup: register %s error: %s\n", card_name, snd_strerror(err));
+		goto error;
+	}
+	err = snd_mixer_load(dev->mhandle);
+	if (err < 0) {
+		ERR("mixer setup: load %s error: %s\n", card_name, snd_strerror(err));
+		goto error;
+	}
+	
+	for (elem = snd_mixer_first_elem(dev->mhandle) ; elem; elem = snd_mixer_elem_next(elem)) {
+		if(snd_mixer_selem_has_playback_switch(elem) &&
+		   !strcmp(snd_mixer_selem_get_name(elem),"Off-hook")) {
+			dev->hook_off_elem = elem;
+			break;
+		}
+	}
+
+	if(dev->hook_off_elem)
+		return 0;
+
+error:
+	snd_mixer_close(dev->mhandle);
+	dev->mhandle = NULL;
+	if (!err) {
+		ERR("mixer setup: Off-hook switch not found for card %s\n", card_name);
+		err = -ENODEV;
+	}
+	return err;
+}
+
 static int alsa_device_setup(struct device_struct *dev, const char *dev_name)
 {
 	struct pollfd pfd;
 	int ret;
 	memset(dev,0,sizeof(*dev));
+
+	ret = alsa_mixer_setup(dev, dev_name);
+	if(ret < 0)
+		DBG("alsa setup: cannot setup mixer: %s\n", snd_strerror(ret));
+
 	ret = snd_pcm_open(&dev->phandle, dev_name, SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK);
 	if(ret < 0) {
-		ERR("alsa setup: cannot open playback device '%s': %s",
+		ERR("alsa setup: cannot open playback device '%s': %s\n",
 		    dev_name, snd_strerror(ret));
 		return -1;
 	}
 	ret = snd_pcm_open(&dev->chandle, dev_name, SND_PCM_STREAM_CAPTURE, SND_PCM_NONBLOCK);
 	if(ret < 0) {
-		ERR("alsa setup: cannot open playback device '%s': %s",
+		ERR("alsa setup: cannot open playback device '%s': %s\n",
 		    dev_name, snd_strerror(ret));
 		return -1;
 	}
 	ret = snd_pcm_poll_descriptors(dev->chandle, &pfd, 1);
 	if(ret <= 0) {
-		ERR("alsa setup: cannot get poll descriptors of '%s': %s",
+		ERR("alsa setup: cannot get poll descriptors of '%s': %s\n",
 		    dev_name, snd_strerror(ret));
 		return -1;
 	}
@@ -159,6 +220,10 @@ static int alsa_device_release(struct device_struct *dev)
 {
 	snd_pcm_close (dev->phandle);
 	snd_pcm_close (dev->chandle);
+	if (dev->hook_off_elem) {
+		snd_mixer_selem_set_playback_switch_all(dev->hook_off_elem, 0);
+		snd_mixer_close(dev->mhandle);
+	}
 	return 0;
 }
 
@@ -431,7 +496,10 @@ static int alsa_ioctl(struct modem *m, unsigned int cmd, unsigned long arg)
         case MDMCTL_CAPABILITIES:
                 return -EINVAL;
         case MDMCTL_HOOKSTATE:
-                return 0;
+		return (dev->hook_off_elem) ?
+			snd_mixer_selem_set_playback_switch_all(
+				dev->hook_off_elem,
+				(arg == MODEM_HOOK_OFF) ) : 0 ;
         case MDMCTL_CODECTYPE:
                 return CODEC_SILABS;
         case MDMCTL_IODELAY:

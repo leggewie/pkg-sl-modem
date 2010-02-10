@@ -66,8 +66,9 @@ extern unsigned int modem_debug_level;
 extern unsigned int modem_debug_logging;
 
 /* config parameters */
-const char *modem_dev_name = "/dev/slamr0";
-const char *modem_alsa_dev_name = "hw:1";
+const char *modem_dev_name = NULL;
+const char *modem_default_dev_name = "/dev/slamr0";
+const char *modem_alsa_dev_name = "modem:1";
 unsigned int need_realtime = 1;
 unsigned int use_alsa = 0;
 const char *modem_group = "uucp";
@@ -119,7 +120,7 @@ static void usage(const char *prog_name)
 	struct opt *opt;
 	PR_INFO("Usage: %s [option...] <device>\n"
 		"Where 'device' is name of modem device (default `%s')\n"
-		"  and 'option' may be:\n", prog_name, modem_dev_name);
+		"  and 'option' may be:\n", prog_name, modem_default_dev_name);
 	for (opt = opt_list ; opt->name ; opt++ ) {
 		int n = 0;
 		if(opt->ch)
@@ -237,7 +238,6 @@ void modem_cmdline(int argc, char *argv[])
 		PR_INFO("ALSA support is not compiled in (see README for howto).\n");
 		exit(1);
 #endif
-		modem_dev_name = modem_alsa_dev_name;
 		use_alsa = 1;
 	}
 	if(opt_list[OPT_GROUP].found)
@@ -261,6 +261,9 @@ void modem_cmdline(int argc, char *argv[])
 		if(opt_list[OPT_LOG].arg_val &&
 		   (val= strtol(opt_list[OPT_LOG].arg_val,NULL,0)) > 0 )
 			modem_debug_logging = val;
+	}
+	if(!modem_dev_name) {
+		modem_dev_name = use_alsa ? modem_alsa_dev_name : modem_default_dev_name;
 	}
 }
 

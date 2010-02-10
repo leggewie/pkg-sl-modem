@@ -1,27 +1,3 @@
-
-From: Sasha Khapyorsky <sashak@smlink.com>
-To: goldberg@prep2.technion.ac.il, marvstod@comcast.com
-Cc: dsd@gentoo.org, discuss@linmodems.org
-Subject: [patch] amrmo_init.c for 2.6.10 kernels
-Date: Sun, 9 Jan 2005 00:26:53 +0000
-
-Hello Jacques, MarvS,
-
-Below is patch for slmodem-2.9.9[-alsa]/drivers/amrmo_init.c .
-
-This should fix 2.6.10 incompatibilities and still work with earlier
-kernels.
-
-Thanks and Best Regards,
-Sasha.
-==========
-The patch mentioned above is the included  patch-2.9.9 
-and HAS BEEN applied by Marvin Stodolsky Jan 8, 2005
-The remainder of this file is the original README.
-
-==========
-
-
 Smart Link Ltd.
 http://www.smlink.com
 Sep 30, 2003
@@ -220,6 +196,10 @@ ALSA has the built-in modem drivers included in 'alsa-driver' >= 1.0.2
 and in Linux kernel >= 2.6.5. Currently there is 'intel8x0m' (snd-intel8x0m)
 modem driver, which supports ICH based AC97 modems (MC97).
 
+Recent 'alsa-driver' (>=1.0.8) has also support for NVidia NForce, SiS 630
+(snd-intel8x0m), VIA686 (snd-via82xx-modem) and ATI IXP (snd-atiixp-modem)
+based modems.
+
 1. Configure your kernel and enable ALSA and ICH based modem support
    ( 'Device Drivers' -> 'Sound' -> 'Advanced Linux Sound Architecture' ->
      'PCI devices' -> 'Intel i8x0/MX440; AMD768/8111 modems' ) .
@@ -236,12 +216,20 @@ modem driver, which supports ICH based AC97 modems (MC97).
 
    This will build 'slmodemd' with ALSA support. If compilation is failed
    review Makefile (near ALSA_SUPPORT condition) and define right library
-   and/or CFLAGS
+   and/or CFLAGS .
+
+Note: For above you need ALSA library and header files installed.
 
 4. Use option '--alsa' when running 'slmodemd' and ALSA conventional
    device name ('hw:0' or 'hw:1' for instance). If modem support in
    the kernel was enabled as module module 'snd-intel8x0m' should be loaded.
-   When using ALSA modem driver you don't need to load other modules ('slamr').
+
+Note: Recent version of 'alsa-lib' (>= 1.0.6) has built-in "modem" device
+      name support ('modem:0', 'modem:1', etc). It is recommended to use
+      those names with modems (mandatory with ATI IXP modems).
+
+Note: When using ALSA modem driver you don't need to load other
+      modules ('slamr').
 
 
 Troubleshooting

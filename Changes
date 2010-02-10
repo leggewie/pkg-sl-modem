@@ -1,3 +1,16 @@
+* Version 2.9.9d
+	- Off-hook control via alsa mixer (ALSA mode)
+	- slamr and slusb device majors change (21x -> 24x)
+	- misc fixes
+
+* Version 2.9.9c
+	- added Intel ICH6 and ICH7
+
+* Version 2.9.9b
+	- slamr driver warns when device is grabbed by other driver
+	- CLEAR_ENDPOINT() macro replaced by usb_clear_halt() in st755.c (slusb)
+	- 'make clean' fix for drivers
+	- misc compatibilities fixes (applied to 2.9.9a)
 
 * Version 2.9.9
 	- sysfs support (contributed by Daniel Drake)

@@ -71,7 +71,7 @@
 #include <modem_defs.h>
 
 #define AMRMO_MODULE_NAME "slamr"
-#define AMRMO_MAJOR 212
+#define AMRMO_MAJOR 242
 
 #define AMRMO_DBG(fmt...) if (debug > 0) { printk(KERN_DEBUG AMRMO_MODULE_NAME ": " fmt) ; }
 
@@ -252,6 +252,10 @@ static struct pci_device_id amrmo_pci_tbl [] __devinitdata = {
        	{PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_ICH4,          /* 8086:24c6 */
 	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, ICH4_CARD},
        	{PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_ICH5,          /* 8086:24d6 */
+	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, ICH4_CARD},
+       	{PCI_VENDOR_ID_INTEL, 0x266d,                      /* ICH6 */
+	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, ICH4_CARD},
+       	{PCI_VENDOR_ID_INTEL, 0x27dd,                      /* ICH7 */
 	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, ICH4_CARD},
 	{PCI_VENDOR_ID_VIA, PCI_DEVICE_ID_VIA,             /* 1106:3068 */
 	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, VIA3058_CARD},
@@ -734,8 +738,8 @@ static int __init amrmo_init(void)
 				put_device(reldev);
 			}
 #else
-			AMRMO_DBG("device %04x:%04x is grabbed by another driver\n",
-				  dev->vendor,dev->device);
+			printk("slamr: device %04x:%04x is grabbed by another driver\n",
+			       dev->vendor,dev->device);
 #endif
 		}
 	}

@@ -40,13 +40,14 @@ kernel-ver::
 dep:
 clean:
 	$(RM) kernel-ver $(obj-m) $(obj-m:.o=.ko) *st7554.o amrmo_init.o sysdep_amr.o *.mod.* .*.cmd *~
+	$(RM) -r .tmp_versions
 
 install-devices:
 	mkdir -p ${DESTDIR}/dev
 	$(foreach minor,0 1 2 3, \
-	    mknod -m 600 ${DESTDIR}/dev/slamr$(minor) c 212 $(minor) ; ) echo -n
+	    mknod -m 600 ${DESTDIR}/dev/slamr$(minor) c 242 $(minor) ; ) echo -n
 	$(foreach minor,0 1 2 3, \
-	    mknod -m 600 ${DESTDIR}/dev/slusb$(minor) c 213 $(minor) ; ) echo -n
+	    mknod -m 600 ${DESTDIR}/dev/slusb$(minor) c 243 $(minor) ; ) echo -n
 remove-devices:
 	$(foreach minor,0 1 2 3, \
 	    $(RM) ${DESTDIR}/dev/slamr$(minor) ; ) echo -n
@@ -73,13 +74,13 @@ install: uninstall-old
 	install -D -m 644 slamr.o $(module-dir)/slamr.o
 	install -D -m 644 slusb.o $(module-dir)/slusb.o
 	cp /etc/modules.conf /etc/modules.conf.slamr && \
-	    echo 'alias char-major-212 slamr' >> /etc/modules.conf && \
-	    echo 'alias char-major-213 slusb' >> /etc/modules.conf 
+	    echo 'alias char-major-242 slamr' >> /etc/modules.conf && \
+	    echo 'alias char-major-243 slusb' >> /etc/modules.conf 
 	/sbin/depmod -a
 uninstall:
 	/sbin/modprobe -r slamr slusb
 	cp /etc/modules.conf /etc/modules.conf.slamr && \
-	   egrep -ve 'alias char-major-212 slamr|alias char-major-213 slusb' /etc/modules.conf.slamr > /etc/modules.conf
+	   egrep -ve 'alias char-major-242 slamr|alias char-major-243 slusb' /etc/modules.conf.slamr > /etc/modules.conf
 	$(RM) $(module-dir)/slamr.o
 	$(RM) $(module-dir)/slusb.o
 	/sbin/depmod -a
