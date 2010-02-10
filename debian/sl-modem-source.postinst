@@ -2,6 +2,7 @@
 set -e
 
 CVERSION=$(dpkg-query -W -f='${Version}' sl-modem-source | sed -e 's/\(.*\)-.*/\1/')
+ARCH=`dpkg --print-architecture`
 
 daemon_stop () {
    if [ -e /var/run/slmodemd.pid ] ; then
