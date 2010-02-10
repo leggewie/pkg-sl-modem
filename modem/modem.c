@@ -57,7 +57,7 @@
 
 #define MODEM_AUTHOR "Smart Link Ltd."
 #define MODEM_NAME "SmartLink Soft Modem"
-#define MODEM_VERSION "2.9.9d"
+#define MODEM_VERSION "2.9.9e-pre1"
 #define MODEM_DATE __DATE__" "__TIME__
 
 /* event mask */
@@ -98,6 +98,7 @@ extern void FAX_delete(void *obj);
 
 /* local prototypes */
 int modem_answer(struct modem *m);
+static int sregs_init(unsigned char sregs[]);
 static void do_modem_change_dp(struct modem *);
 static int modem_start(struct modem *);
 static int modem_stop (struct modem *);
@@ -1601,7 +1602,6 @@ int  modem_set_mode(struct modem *m, enum MODEM_MODE mode)
 
 int modem_reset(struct modem *m)
 {
-	static int sregs_init(unsigned char sregs[]);
 	MODEM_DBG("modem reset...\n");
 	if(m->state != STATE_MODEM_IDLE)
 		modem_hup(m,1);

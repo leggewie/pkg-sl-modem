@@ -71,6 +71,7 @@ const char *modem_default_dev_name = "/dev/slamr0";
 const char *modem_alsa_dev_name = "modem:1";
 unsigned int need_realtime = 1;
 unsigned int use_alsa = 0;
+unsigned int use_short_buffer = 0;
 const char *modem_group = "uucp";
 mode_t modem_perm  = 0660;
 
@@ -85,6 +86,7 @@ enum {
 	OPT_GROUP,
 	OPT_PERM,
 	OPT_USER,
+	OPT_SHORTBUF,
 	OPT_DEBUG,
 	OPT_LOG,
 	OPT_LAST
@@ -108,6 +110,7 @@ static struct opt {
 	{'g',"group","Modem TTY group",MANDATORY,STRING,"uucp"},
 	{'p',"perm","Modem TTY permission",MANDATORY,INTEGER,"0660"},
 	{'n',"nortpriority","run with regular priority"},
+	{'s',"shortbuffer","use short buffer (4 periods length)"},
 	{'d',"debug","debug level",OPTIONAL,INTEGER,"0"},
 	{'l',"log","logging mode",OPTIONAL,INTEGER,"5"},
 	{}
@@ -250,6 +253,8 @@ void modem_cmdline(int argc, char *argv[])
 	}
 	if(opt_list[OPT_USER].found)
 		need_realtime = 0;
+	if(opt_list[OPT_SHORTBUF].found)
+		use_short_buffer = 1;
 	if(opt_list[OPT_DEBUG].found) {
 		modem_debug_level = 1 ;
 		if(opt_list[OPT_DEBUG].arg_val &&

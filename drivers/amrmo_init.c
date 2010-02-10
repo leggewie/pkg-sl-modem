@@ -58,9 +58,6 @@
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,5,0)
 #define OLD_KERNEL 1
 #endif
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,10)
-#define pci_register_driver(drv) ( pci_register_driver(drv) ? 0 : -ENODEV )
-#endif
 
 #ifdef OLD_KERNEL
 #define iminor(i) MINOR((i)->i_rdev)
@@ -752,7 +749,11 @@ static int __init amrmo_init(void)
 		return err;
 	}
 #endif
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,10)
+	if (!pci_register_driver(&amrmo_pci_driver)) {
+#else
 	if ((err = pci_register_driver(&amrmo_pci_driver)) < 0) {
+#endif
 		pci_unregister_driver(&amrmo_pci_driver);
 #ifndef OLD_KERNEL
 		class_simple_destroy(amrmo_class);

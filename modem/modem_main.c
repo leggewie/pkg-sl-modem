@@ -62,6 +62,9 @@
 #define ALSA_PCM_NEW_HW_PARAMS_API 1
 #define ALSA_PCM_NEW_SW_PARAMS_API 1
 #include <alsa/asoundlib.h>
+/* buffer size in periods */
+#define BUFFER_PERIODS		12
+#define SHORT_BUFFER_PERIODS	4
 #endif
 
 #include <modem.h>
@@ -91,7 +94,7 @@ extern const char *modem_dev_name;
 extern unsigned need_realtime;
 extern const char *modem_group;
 extern mode_t modem_perm;
-
+extern unsigned int use_short_buffer;
 
 
 struct device_struct {
@@ -102,7 +105,10 @@ struct device_struct {
 	snd_pcm_t *chandle;
 	snd_mixer_t *mhandle;
 	snd_mixer_elem_t *hook_off_elem;
+	snd_mixer_elem_t *cid_elem;
+	snd_mixer_elem_t *speaker_elem;
 	unsigned int period;
+	unsigned int buf_periods;
 	unsigned int started;
 #endif
 	int delay;
@@ -159,11 +165,12 @@ static int alsa_mixer_setup(struct device_struct *dev, const char *dev_name)
 	}
 	
 	for (elem = snd_mixer_first_elem(dev->mhandle) ; elem; elem = snd_mixer_elem_next(elem)) {
-		if(snd_mixer_selem_has_playback_switch(elem) &&
-		   !strcmp(snd_mixer_selem_get_name(elem),"Off-hook")) {
+		if(strcmp(snd_mixer_selem_get_name(elem),"Off-hook") == 0)
 			dev->hook_off_elem = elem;
-			break;
-		}
+		else if(strcmp(snd_mixer_selem_get_name(elem),"Caller ID") == 0)
+			dev->cid_elem = elem;
+		else if(strcmp(snd_mixer_selem_get_name(elem),"Modem Speaker") == 0)
+			dev->speaker_elem = elem;
 	}
 
 	if(dev->hook_off_elem)
@@ -220,8 +227,13 @@ static int alsa_device_release(struct device_struct *dev)
 {
 	snd_pcm_close (dev->phandle);
 	snd_pcm_close (dev->chandle);
-	if (dev->hook_off_elem) {
-		snd_mixer_selem_set_playback_switch_all(dev->hook_off_elem, 0);
+	if (dev->mhandle) {
+		if (dev->hook_off_elem)
+			snd_mixer_selem_set_playback_switch_all(dev->hook_off_elem, 0);
+		if (dev->cid_elem)
+			snd_mixer_selem_set_playback_switch_all(dev->cid_elem, 0);
+		if (dev->speaker_elem)
+			snd_mixer_selem_set_playback_switch_all(dev->speaker_elem, 0);
 		snd_mixer_close(dev->mhandle);
 	}
 	return 0;
@@ -265,7 +277,7 @@ static int alsa_device_read(struct device_struct *dev, char *buf, int count)
 			break;
 		}
 	} while (ret == -EAGAIN);
-#if 1
+#if 0
 	if(ret != dev->period)
 		DBG("alsa_device_read (%d): %d ...\n",count,ret);
 #endif
@@ -274,7 +286,6 @@ static int alsa_device_read(struct device_struct *dev, char *buf, int count)
 
 static int alsa_device_write(struct device_struct *dev, const char *buf, int count)
 {
-	int asked = count;
 	int written = 0;
 	if(!dev->started)
 		return 0;
@@ -293,7 +304,7 @@ static int alsa_device_write(struct device_struct *dev, const char *buf, int cou
 		buf += ret;
 		written += ret;
 	}
-#if 1
+#if 0
 	if(written != dev->period)
 		DBG("alsa_device_write (%d): %d...\n",asked,written);
 #endif
@@ -371,7 +382,7 @@ static int setup_stream(snd_pcm_t *handle, struct modem *m, const char *stream_n
 		    size, stream_name, rsize);
 		return -1;		
 	}
-	rsize = size = rsize * 32;
+	rsize = size = use_short_buffer ? rsize * dev->buf_periods : rsize * 32;
 	err = snd_pcm_hw_params_set_buffer_size_near(handle, hw_params, &rsize);
 	if (err < 0) {
 		ERR("cannot set buffer for %s: %s\n", stream_name, snd_strerror(err));
@@ -436,6 +447,7 @@ static int alsa_start (struct modem *m)
 	int err, len;
 	DBG("alsa_start...\n");
 	dev->period = m->frag;
+	dev->buf_periods = use_short_buffer ? SHORT_BUFFER_PERIODS : BUFFER_PERIODS;
 	err = setup_stream(dev->phandle, m, "playback");
 	if(err < 0)
 		return err;
@@ -443,7 +455,7 @@ static int alsa_start (struct modem *m)
 	if(err < 0)
 		return err;
 	dev->delay = 0;
-	len = 384;           /* <-- FIXME */
+	len = dev->period * dev->buf_periods;
 	DBG("startup write: %d...\n",len);
 	err = snd_pcm_format_set_silence(SND_PCM_FORMAT_S16_LE, outbuf, len);
 	if(err < 0) {
@@ -500,6 +512,10 @@ static int alsa_ioctl(struct modem *m, unsigned int cmd, unsigned long arg)
 			snd_mixer_selem_set_playback_switch_all(
 				dev->hook_off_elem,
 				(arg == MODEM_HOOK_OFF) ) : 0 ;
+	case MDMCTL_SPEAKERVOL:
+		return (dev->speaker_elem) ?
+			snd_mixer_selem_set_playback_volume_all(
+					dev->speaker_elem, arg) : 0 ;
         case MDMCTL_CODECTYPE:
                 return CODEC_SILABS;
         case MDMCTL_IODELAY:
