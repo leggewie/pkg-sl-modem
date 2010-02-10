@@ -40,11 +40,21 @@
  *	Author: Sasha K (sashak@smlink.com)
  *
  */
-
+ 
+ /*
+  *	20070505: -Added Motorola Venor ID and rename Motorola device 5600
+  * http://linmodems.technion.ac.il/bigarch/archive-seventh/msg00846.html
+  * Marvin Stodolsky (marvin.stodolsky@gmail.com)
+  * Alvaro Aguirre (alvaro.aguirre@gmail.com)
+  */
+ 
 /*****************************************************************************/
 
-#include <linux/module.h>
 #include <linux/version.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19)
+#include <linux/config.h>
+#endif
+#include <linux/module.h>
 #include <linux/init.h>
 #include <linux/pci.h>
 #include <linux/kernel.h>
@@ -52,21 +62,18 @@
 #include <linux/poll.h>
 #include <linux/fs.h>
 #include <asm/uaccess.h>
-#if LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,17)
-#include <linux/devfs_fs_kernel.h>
-#endif
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,5,0)
 #define OLD_KERNEL 1
 #endif
 
 #ifdef OLD_KERNEL
+#include <linux/devfs_fs_kernel.h>
 #define iminor(i) MINOR((i)->i_rdev)
 #else
 #include <linux/device.h>
 #endif
 
-/* not allowed to use sysfs because interfaces are GPLed now */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,13)
 #define class_simple_device_add(class, dev, addr, name, i)
 #define class_simple_device_remove(dev)
@@ -85,6 +92,9 @@
 
 #define MAXNUM 4
 
+#ifndef IRQF_SHARED
+#define IRQF_SHARED SA_SHIRQ
+#endif
 
 /* modem cards ids list */
 
@@ -149,6 +159,12 @@
 #define PCI_VENDOR_ID_PCTEL                     0x134d
 #define PCI_DEVICE_ID_HSP1688                   0x2189
 
+/* Motorola section */
+#define PCI_VENDOR_ID_MOTOROLA          	0x1057
+
+/* Silicon Instruments */
+#define PCI_VENDOR_ID_SILICON                   0x1543
+
 enum {
 	ALS300_CARD = 1,
 	VIA3058_CARD,
@@ -164,7 +180,8 @@ enum {
 	SL1500_CARD,
 	SL1801_CARD,
 	SL1900_CARD,
-	SL2800_CARD
+	SL2800_CARD,
+	SL1543_CARD
 };
 
 
@@ -222,11 +239,16 @@ static const char *card_names[] = {
 	"SL1500",
 	"ALI545A",
 	"SL1900",
-	"SL2800"
+	"SL2800",
+	"SL1543"
 };
 
 
 static struct pci_device_id amrmo_pci_tbl [] __devinitdata = {
+	{PCI_VENDOR_ID_SILICON, PCI_DEVICE_ID_SL1900,	   /* SiliconInstr SL1543:3052 */
+	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1543_CARD},
+	{PCI_VENDOR_ID_MOTOROLA, PCI_DEVICE_ID_SL1900,     /* Motorola 1057:3052 */
+	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1900_CARD},
 	{PCI_VENDOR_ID_SMARTLINK_1, PCI_DEVICE_ID_SL1900,  /* 163c:3052 */
 	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1900_CARD},
 	{PCI_VENDOR_ID_SMARTLINK_2, PCI_DEVICE_ID_SL1900,  /* 10a5:3052 */
@@ -503,7 +525,11 @@ static void amrmo_pci_interrupt(int irq, void *dev_id, struct pt_regs *regs)
 	amrmo_card_interrupt(amrmo->card);
 }
 #else
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19)
+static irqreturn_t amrmo_pci_interrupt(int irq, void *dev_id, struct pt_regs *regs)
+#else
 static irqreturn_t amrmo_pci_interrupt(int irq, void *dev_id)
+#endif
 {
         struct amrmo_struct *amrmo = (struct amrmo_struct *)dev_id;
 	amrmo_card_interrupt(amrmo->card);
@@ -643,9 +669,6 @@ static int __init amrmo_pci_probe(struct pci_dev *pci_dev, const struct pci_devi
 #endif
 #else
 	class_simple_device_add(amrmo_class, MKDEV(AMRMO_MAJOR, i), NULL, "slamr%d", i);
-#ifdef CONFIG_DEVFS_FS
-	devfs_mk_cdev(MKDEV(AMRMO_MAJOR,i), S_IFCHR|S_IRUSR|S_IWUSR, "slamr%d", i);
-#endif
 #endif
 	return 0;
 
@@ -677,9 +700,6 @@ static void __exit amrmo_pci_remove(struct pci_dev *pci_dev)
 #endif
 #else
 	class_simple_device_remove(MKDEV(AMRMO_MAJOR, amrmo->num));
-#ifdef CONFIG_DEVFS_FS
-	devfs_remove("slamr%d", amrmo->num);
-#endif
 #endif
 	amrmo_table[amrmo->num] = NULL;
 	amrmo_card_disable(amrmo->card);
@@ -707,11 +727,7 @@ static struct pci_driver amrmo_pci_driver = {
  *  module stuff
  */
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,0)
-module_param(debug, int, 0444);
-#else
-MODULE_PARM(debug,"i");
-#endif
+module_param(debug, int, 1);
 MODULE_PARM_DESC(debug,"debug level: 0-3 (default=0)");
 
 MODULE_AUTHOR("Smart Link Ltd.");
@@ -737,7 +753,8 @@ static int __init amrmo_init(void)
 #ifdef OLD_KERNEL
 	pci_for_each_dev(dev) {
 #else
-        while ((dev = pci_find_device(PCI_ANY_ID, PCI_ANY_ID, dev)) != NULL) {
+      /*while ((dev = pci_find_device(PCI_ANY_ID, PCI_ANY_ID, dev)) != NULL) {*/
+        while ((dev = pci_get_device(PCI_ANY_ID, PCI_ANY_ID, dev)) != NULL) {
 #endif
 		if(pci_match_id(amrmo_pci_tbl, dev) &&
 		   pci_dev_driver(dev)) {
@@ -762,7 +779,11 @@ static int __init amrmo_init(void)
 			printk("slamr: device %04x:%04x is grabbed by another driver\n",
 			       dev->vendor,dev->device);
 #endif
+
 		}
+#ifndef OLD_KERNEL
+		pci_dev_put(dev);
+#endif
 	}
 
 #ifndef OLD_KERNEL
@@ -812,5 +833,3 @@ module_exit(amrmo_exit);
 #ifdef OLD_KERNEL
 EXPORT_NO_SYMBOLS;
 #endif
-
-

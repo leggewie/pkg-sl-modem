@@ -1,0 +1,70 @@
+*** xtel-3.3.0.orig/xteld.c	2008-03-10 23:02:40.000000000 +0100
+--- xtel-3.3.0.modif/xteld.c	2008-03-09 22:17:40.000000000 +0100
+***************
+*** 1088,1094 ****
+  	    fprintf(fplog, "%s, %s appel de : %s sur %s\n", at, utilisateur, service, definition_lignes[numero_ligne].nom);
+  	fclose(fplog);
+      }
+! #ifdef NO_TERMIO
+      parite = definition_lignes[numero_ligne].parity;
+  #endif
+  }
+--- 1088,1094 ----
+  	    fprintf(fplog, "%s, %s appel de : %s sur %s\n", at, utilisateur, service, definition_lignes[numero_ligne].nom);
+  	fclose(fplog);
+      }
+! #if defined(NO_TERMIO) || defined(FORCE_PARITY)
+      parite = definition_lignes[numero_ligne].parity;
+  #endif
+  }
+***************
+*** 1561,1567 ****
+  	kill (pid_fils, SIGTERM);
+        }
+        else {
+! #ifdef NO_TERMIO
+  	if (parite != SANS) {
+  	  register int p;
+  	  /* Calcul de parite... */			
+--- 1561,1567 ----
+  	kill (pid_fils, SIGTERM);
+        }
+        else {
+! #if defined(NO_TERMIO) || defined(FORCE_PARITY)
+  	if (parite != SANS) {
+  	  register int p;
+  	  /* Calcul de parite... */			
+*** xtel-3.3.0.orig/Config.tmpl	2008-03-10 23:02:40.000000000 +0100
+--- xtel-3.3.0.modif/Config.tmpl	2008-03-09 22:24:00.000000000 +0100
+***************
+*** 19,29 ****
+  /* Pour générer avec OSF-Motif */
+  #define MOTIF
+  
+  /* Pour ne pas utiliser TERMIO */
+  /*#define NO_TERMIO*/
+  
+  /* Pour ne pas utiliser le sélecteur de fichier (sous Athena) */
+  /*#define NO_SEL_FILE*/
+  
+  /* Pour les radins */
+  /*#define LOW_MEMORY*/
+--- 19,36 ----
+  /* Pour générer avec OSF-Motif */
+  #define MOTIF
+  
++ /* Pour générer avec Xaw3d plutot que Xaw */
++ /* (ceci suppose que MOTIF ne soit pas choisi précédemment ) */
++ /*#define XAW3D*/
++ 
+  /* Pour ne pas utiliser TERMIO */
+  /*#define NO_TERMIO*/
+  
++ /* Pour forcer l'usage de la parité avec NO_TERMIO non défini... */
++ #define FORCE_PARITY
++ 
+  /* Pour ne pas utiliser le sélecteur de fichier (sous Athena) */
+  /*#define NO_SEL_FILE*/
+  
+  /* Pour les radins */
+  /*#define LOW_MEMORY*/

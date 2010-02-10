@@ -1,0 +1,140 @@
+
+	from	Marvin Stodolsky <marvin.stodolsky@gmail.com>
+to	Jean-Pierre Demailly <Jean-Pierre.Demailly@ujf-grenoble.fr>,
+cc	Discuss@linmodems.org,
+date	Sun, Jan 20, 2008 at 11:18 AM
+subject	Re: Modem Motorola SM56
+	
+Jean
+
+ For candidate modem in PCI bus:  00:1b.0
+  Class 0403: 8086:284b Audio device: Intel Corporation 82801H
+     Primary PCI_id  8086:284b
+   Subsystem PCI_id  103c:30cc
+   Softmodem codec or chipset from diagnostics:
+                              from    Archives: 10573055
+------
+should be supported.  
+But the needed slmodemd helper has a precompiled 32 bit component. 
+So you must install 32 bit versions of packages libasound2 and libasound2-dev.
+
+With that done:
+---------------
+Download from http://linmodems.technion.ac.il/packages/smartlink/
+ the package SLMODEMD.gcc4.2.tar.gz having a compiled slmodemd. Unpack
+under Linux with:
+       $ tar zxf SLMODEMD.gcc4.2.tar.gz
+ and read instructions therein. But briefly, the modem is setup with
+command:
+        slmodemd -c YOUR_COUNTRY --alsa hw:0,1_or_hw:0,6
+ reporting dynamic creation of ports:
+       /dev/ttySL0 --> /dev/pts/N   , with N some number
+ Read Smartlink.txt and Modem/YourSystem.txt for follow through guidance.
+---------
+
+Report back presently.
+
+MarvS
+
+====================
+
+to	discuss@linmodems.org,
+Jean-Pierre Demailly <Jean-Pierre.Demailly@ujf-grenoble.fr>,
+date	Mon, Mar 10, 2008 at 6:51 PM
+subject	Patches for slmodem and related software
+	
+Hi:
+
+I am happy to report that I have finally been able to get most of
+the functionality of the winmodem Motorola SM56 to work on my laptop
+(HP Pavilion DV9000, running Debian/Linux kernel 2.6.23 on x86_64)
+
+However, I encountered several difficulties, some of them not
+so easy to solve -- I guess that most beginners would have got
+stuck at some point (if not all of them).
+
+Therefore I send here some bits which could help to fix these issues.
+
+1. Compilation
+
+The Makefiles distributed with the slmodem package are broken
+on 64 bit machines, because there are 32 bit binaries and you need
+ad hoc compile switches. I enclose in the enclosed tar ball sm56.tar.bz2
+a 'slmodem.diff' file which contains the required modifications
+to the Makefiles to make them work flawlessly in 32 bit/64 bit settings.
+
+2. fax
+Don't know in general, but it worked OK almost from scratch with
+xfax (of which I am a co-author). Very old stuff, but I am used to it
+and it still works fine !
+
+3. PPP connection
+It took me some time to figure out a wvdial.conf script that works.
+One is enclosed.
+
+4. V.23 mode for French Minitel
+I was really upset that it seemed almost to work, but the echo of
+characters was completely garbled and made the all process useless.
+I did not manage to get it working through adjustments of the xtel
+configuration files. The difficulty is that the SM56 has a rather
+awkward parity setting that xtel does not seem to know about, and the
+only way I found was to patch the xteld daemon - using a FORCE_PARITY
+switch which I added. Patch also enclosed here, together with the
+"xtel.lignes" configuration for SM56.
+
+5. I have added some docs that were useful to me, as well as scripts
+'modem' and 'modem.sh' which I use to start the modem services (as
+I want possibly to commute with another modem, and don't want to have
+them loaded at boot).
+
+I still have minor annoyances. For instance, the modem frequently does not
+hang off when the connection is over, e.g. with xtel. Maybe the init
+strings can be improved to achieve this.
+
+Best regards,
+
+Jean-Pierre Demailly
+
+===============================
+
+Jean-Pierre Demailly <Jean-Pierre.Demailly@ujf-grenoble.fr>,
+date	Sun, Mar 16, 2008 at 4:08 AM
+subject	Re: "This is a NEW softmodem case! 
+	
+On Sat, Mar 15, 2008 at 05:58:00PM -0400, Marvin Stodolsky wrote:
+
+Hi Marvin,
+
+>    What is the procedure for doing a 32 bit boot on a x86_64 system,
+> or does one simple use a 32 bit kernel+modules?
+>
+
+Yes indeed - that's it. x86_64 processors can execute all 64 bit and
+32 bit instructions, but only Linux kernels running in 64 bit mode can run
+simultaneously 64 bit and 32 bit binary programs, provided that all
+needed 32 bit and 64 bit dynamic libraries are available (I guess that
+the other way round on 32 bit kernels would be hard because of 64 bit
+system calls).
+
+Right now slmodemd has to be compiled in 32 bit mode because of the
+proprietary 32 bit binary blobs ; it might eventually be possible to
+convert them to 64 bit using binary conversion tools such as objcopy,
+but I didn't succeed to link the resulting blob (the table of pointers
+produced by objcopy was reported by gcc to be incorrect). In any case,
+32 bit slmodemd runs flawlessly on my x86_64 machine, with the
+following 'ldd /usr/sbin/slmodemd' output :
+
+linux-gate.so.1 =>  (0xffffe000)
+libasound.so.2 => /usr/lib32/libasound.so.2 (0xf7ee8000)
+libc.so.6 => /lib32/libc.so.6 (0xf7da1000)
+libm.so.6 => /lib32/libm.so.6 (0xf7d7c000)
+libdl.so.2 => /lib32/libdl.so.2 (0xf7d78000)
+libpthread.so.0 => /lib32/libpthread.so.0 (0xf7d60000)
+/lib/ld-linux.so.2 (0xf7fdc000)
+
+I believe that, on the other hand, it is not possible to get a 32 bit module
+being loaded by a 64 bit kernel (at least without using some kind of
+complicated emulation or virtual machine).
+
+Best regards,
+JP Demailly

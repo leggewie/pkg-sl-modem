@@ -1,0 +1,42 @@
+#!/bin/sh
+
+if test "$1" = ""
+then
+  echo "Usage du script 'modem' :"
+  echo "Configuration : modem [sm56] [olitec]"
+  echo "Appel PPP :     modem ppp"
+  echo ""
+  echo "En l'état, suppression de la configuration du modem ..."
+  sudo /usr/bin/modem.sh  
+  echo ""  
+  exit
+fi
+
+if test "$1" = "sm56"
+then
+  echo "Configuration 'sm56' comme modem de Classe 1 ..."
+  echo "CLASS=1" > ~/.xfaxcfg
+  echo "RESET=\"-kZ -kX3\"" >> ~/.xfaxcfg
+  sudo /usr/bin/modem.sh sm56
+  exit
+fi
+
+if test "$1" = "olitec"
+then
+  echo "Configuration 'olitec' comme modem de Classe 2 ..."
+  echo "CLASS=2" > ~/.xfaxcfg
+  sudo /usr/bin/modem.sh olitec
+  exit  
+fi
+
+if test "$1" = "ppp"
+then
+  if [ -r /etc/wvdial.conf ]
+  then
+    sudo /usr/bin/modem.sh ppp
+    wvdial
+  else
+    echo "Sélectionner d'abord le modem : modem [sm56] [olitec]  !!"
+  fi
+  exit
+fi

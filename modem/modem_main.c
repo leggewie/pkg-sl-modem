@@ -91,10 +91,12 @@ extern int  prop_dp_init(void);
 extern void prop_dp_exit(void);
 extern int datafile_load_info(char *name,struct dsp_info *info);
 extern int datafile_save_info(char *name,struct dsp_info *info);
+extern int modem_ring_detector_start(struct modem *m);
 
 /* global config data */
 extern const char *modem_dev_name;
-extern unsigned need_realtime;
+extern unsigned int ring_detector;
+extern unsigned int need_realtime;
 extern const char *modem_group;
 extern mode_t modem_perm;
 extern unsigned int use_short_buffer;
@@ -380,7 +382,7 @@ static int setup_stream(snd_pcm_t *handle, struct modem *m, const char *stream_n
 		ERR("cannot set periods for %s: %s\n", stream_name, snd_strerror(err));
 		return err;
 	}
-	if ( rsize != size ) {
+	if ( rsize < size ) {
 		ERR("period size %ld is not supported by %s (%ld).\n",
 		    size, stream_name, rsize);
 		return -1;		
@@ -458,7 +460,7 @@ static int alsa_start (struct modem *m)
 	if(err < 0)
 		return err;
 	dev->delay = 0;
-	len = dev->period * dev->buf_periods;
+	len = use_short_buffer ? dev->period * dev->buf_periods : 384;
 	DBG("startup write: %d...\n",len);
 	err = snd_pcm_format_set_silence(SND_PCM_FORMAT_S16_LE, outbuf, len);
 	if(err < 0) {
@@ -765,12 +767,18 @@ static int modem_run(struct modem *m, struct device_struct *dev)
 		if(m->event)
 			modem_event(m);
 
+#ifdef MODEM_CONFIG_RING_DETECTOR
+		if(ring_detector && !m->started)
+			modem_ring_detector_start(m);
+#endif
+
                 tmo.tv_sec = 1;
                 tmo.tv_usec= 0;
                 FD_ZERO(&rset);
 		FD_ZERO(&eset);
 		if(m->started)
 			FD_SET(dev->fd,&rset);
+
 		FD_SET(dev->fd,&eset);
 		max_fd = dev->fd;
 		

@@ -70,6 +70,9 @@ const char *modem_dev_name = NULL;
 const char *modem_default_dev_name = "/dev/slamr0";
 const char *modem_alsa_dev_name = "modem:1";
 unsigned int need_realtime = 1;
+#ifdef MODEM_CONFIG_RING_DETECTOR
+unsigned int ring_detector = 0;
+#endif
 unsigned int use_alsa = 0;
 const char *modem_group = "dialout";
 unsigned int use_short_buffer = 0;
@@ -85,6 +88,9 @@ enum {
 	OPT_ALSA,
 	OPT_GROUP,
 	OPT_PERM,
+#ifdef MODEM_CONFIG_RING_DETECTOR
+	OPT_RINGDET,
+#endif
 	OPT_USER,
 	OPT_SHORTBUF,
 	OPT_DEBUG,
@@ -109,6 +115,9 @@ static struct opt {
 	{'a',"alsa","ALSA mode (see README for howto)"},
 	{'g',"group","Modem TTY group",MANDATORY,STRING,"dialout"},
 	{'p',"perm","Modem TTY permission",MANDATORY,INTEGER,"0660"},
+#ifdef MODEM_CONFIG_RING_DETECTOR
+	{'r',"ringdetector","with internal ring detector (software)"},
+#endif
 	{'n',"nortpriority","run with regular priority"},
 	{'s',"shortbuffer","use short buffer (4 periods length)"},
 	{'d',"debug","debug level (developers only, for ./sl...)",OPTIONAL,INTEGER,"0"},
@@ -251,6 +260,10 @@ void modem_cmdline(int argc, char *argv[])
 			usage(prog_name);
 		modem_perm = val;
 	}
+#ifdef MODEM_CONFIG_RING_DETECTOR
+	if(opt_list[OPT_RINGDET].found)
+		ring_detector = 1;
+#endif
 	if(opt_list[OPT_USER].found)
 		need_realtime = 0;
 	if(opt_list[OPT_SHORTBUF].found)

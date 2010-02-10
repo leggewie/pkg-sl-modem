@@ -1,0 +1,67 @@
+#!/bin/sh
+#
+# rc.slmodemd
+#
+# Start slmodemd daemon for SmartLink
+#
+
+SLMODEMD_DEVICE=/dev/slusb0
+
+slmodemd_start() 
+{
+	if [ -x /usr/sbin/slmodemd ]; then
+		echo -n "Starting SmartLink modem daemon: "
+		echo "/usr/sbin/slmodemd"
+		/usr/sbin/slmodemd $SLMODEMD_DEVICE 1>/dev/null 2>/dev/null &
+	fi
+}
+
+slmodemd_stop()
+{
+	echo "Shutting down SmartLink modem daemon"
+	killall slmodemd
+}
+
+slmodemd_restart()
+{
+	slmodemd_stop
+	sleep 1
+	slmodemd_start
+}
+
+
+if [ "$SLMODEMD_DEVICE" ]; then readonly SLMODEMD_DEVICE; fi
+
+if [ -z $SLMODEMD_DEVICE ]; then
+	echo "slmodemd: SLMODEMD_DEVICE not set. You can set it in /etc/rc.d/rc.slmodemd file or as environment variable."
+	exit 5
+fi
+
+case `echo "$SLMODEMD_DEVICE"|cut -c6-10` in
+	slamr)
+	grep -q 'slamr\..*o' /lib/modules/`uname -r`/modules.dep ||\
+	{ echo "slmodemd: kernel module slamr.(k)o missing"; exit 1; }
+	;;
+	slusb)
+	grep -q 'slusb\..*o' /lib/modules/`uname -r`/modules.dep ||\
+	{ echo "slmodemd: kernel module slusb.(k)o missing"; exit 1; }
+	;;
+	*)
+	echo "slmodemd: no kernel module for $SLMODEMD_DEVICE - broken config?"
+	exit 1
+	;;
+esac
+
+case "$1" in
+	'start')
+	slmodemd_start
+	;;
+	'stop')
+	slmodemd_stop
+	;;
+	'restart')
+	slmodemd_restart
+	;;
+	*)
+	echo "usage $0 start|stop|restart"
+esac

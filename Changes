@@ -1,25 +1,27 @@
-* Version 2.9.9e-pre1a
-        - Applied patch for USB fix, from SashaK
-
-* Version 2.9.9e-pre
-	- Modem speaker support (ALSA mode)
-	- 'shortbuffer' slmodemd's option (required with ALI5451 modems)
-	- gcc4 build support
-	- fix slamr backward compatibility for 2.4 kernels
-
-* Version 2.9.9d
-	- Off-hook control via alsa mixer (ALSA mode)
-	- slamr and slusb device majors change (21x -> 24x)
+* Recent version
+	- automated recognition of x86_64 host for compile of 64 bit slusb, and concurent 32 bit slmodemd compile
+	- support upto 2.6.24 added 
+	- compatibility fixes
+	- class_simple wrapper by Stefan Schweizer
+	- example of Ubuntu startup script by Nicola Inchingolo
+	- example of Slackware startup script by Sanel Z
+	- merged 2.9.9x: Applied patch for USB fix, from SashaK
+	- merged 2.9.9x: Modem speaker support (ALSA mode)
+	- merged 2.9.9x: 'shortbuffer' slmodemd's option (required with ALI5451 modems)
+	- merged 2.9.9x: gcc4 build support
+	- merged 2.9.9x: added Intel ICH6 and ICH7 support
 	- misc fixes
 
-* Version 2.9.9c
-	- added Intel ICH6 and ICH7
+* Version 2.9.11
+	- Off-hook with mixer (ALSA mode)
+	- device major numbers change, (212 -> 242, 213 -> 243)
+	- support for HSP1688 PCI modem
+	- misc compatibility fixes
+	- misc improvements
 
-* Version 2.9.9b
-	- slamr driver warns when device is grabbed by other driver
-	- CLEAR_ENDPOINT() macro replaced by usb_clear_halt() in st755.c (slusb)
-	- 'make clean' fix for drivers
-	- misc compatibilities fixes (applied to 2.9.9a)
+* Version 2.9.10
+	- internal ring detector
+	- misc fixes
 
 * Version 2.9.9
 	- sysfs support (contributed by Daniel Drake)
@@ -123,4 +125,3 @@
         - pluggable hw modem drivers.
 	- support for multiple modems.
         - V34/V90 caller and answer data modem.
-

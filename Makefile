@@ -13,33 +13,37 @@
 #
 ###########################################################################
 
-KERNEL_DIR?=/lib/modules/$(shell uname -r)/build
+KERNEL_DIR:=/lib/modules/$(shell uname -r)/build
 
 # tools
 INSTALL:=install
-# Definitions
-MODULES_DIR  = /lib/modules/$(KVERS)/misc
-MODEM_DEV   := ttySL0
-MODEM_LINK  := modem
-MODULES_CONF:= /etc/modules.conf
-all: modem drivers
+
+all: modem
 
 modem:
 	$(MAKE) -C $@ all
 
-install: all install-drivers
+install: all
+
+ifndef SUPPORT_ALSA
+all: drivers
+install: install-drivers
+uninstall: uninstall-drivers
+endif
+
+install:
 	$(INSTALL) -D -m 755 modem/slmodemd ${DESTDIR}/usr/sbin/slmodemd
 	$(RM) -rf ${DESTDIR}/var/lib/slmodem
 	$(INSTALL) -d -D -m 755 ${DESTDIR}/var/lib/slmodem
 
-uninstall: uninstall-drivers
+uninstall:uninstall-drivers
 	$(RM) ${DESTDIR}/usr/sbin/slmodemd
 	$(RM) -rf ${DESTDIR}/var/lib/slmodem
 
 drivers:
 	$(MAKE) -C drivers KERNEL_DIR=$(KERNEL_DIR)
 
-install-drivers:
+install-drivers: drivers
 	$(MAKE) install -C drivers KERNEL_DIR=$(KERNEL_DIR)
 uninstall-drivers:
 	$(MAKE) uninstall -C drivers KERNEL_DIR=$(KERNEL_DIR)

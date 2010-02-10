@@ -145,7 +145,7 @@ After successful installation and configuration:
    Note: this will be done automatically when modules were
          configured for 'loading on demand'
 
-   Note: this is safe to load both 'alamr' and 'slusb' modules.
+   Note: this is safe to load both 'slamr' and 'slusb' modules.
 
 2. Run soft modem application.
 
@@ -183,6 +183,14 @@ After successful installation and configuration:
      like '/dev/ttySL0'. To workaround this you may create symbolic link
      '/dev/modem' ( # ln -s /dev/ttySL0 /dev/modem ) and use this link
      as modem device with 'kppp'
+
+   - some pci modem devices are declared as COMMUNICATION_MODEM class and
+     might be caught by other standard drivers - you will see "grabbed
+     by another driver" warning in dmesg buffer. There is no good way to
+     "release" it, but as silly workaround you may use 'ungrab-winmodem'
+     pseudo-driver from http://linmodems.technion.ac.il/packages/smartlink.
+     Note that you should load it before 'slamr' module.
+     
 
 4. Startup automation.
 

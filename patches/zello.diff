@@ -1,0 +1,95 @@
+diff -r -u slmodem-2.9.11-20070813/drivers/amrmo_init.c slmodem-new/drivers/amrmo_init.c
+--- slmodem-2.9.11-20070813/drivers/amrmo_init.c	2008-03-26 23:40:54.000000000 +0100
++++ slmodem-new/drivers/amrmo_init.c	2008-03-29 13:04:16.000000000 +0100
+@@ -92,6 +92,9 @@
+ 
+ #define MAXNUM 4
+ 
++#ifndef IRQF_SHARED
++#define IRQF_SHARED SA_SHIRQ
++#endif
+ 
+ /* modem cards ids list */
+ 
+@@ -617,7 +620,7 @@
+ 		}
+ 	}
+ 
+-        ret = request_irq(amrmo->irq, &amrmo_pci_interrupt,SA_SHIRQ,
++        ret = request_irq(amrmo->irq, &amrmo_pci_interrupt,IRQF_SHARED,
+ 			  amrmo->name,amrmo);
+ 	if(ret) {
+ 		printk(KERN_ERR "slamr: failed request_irq\n");
+@@ -757,7 +760,8 @@
+ #ifdef OLD_KERNEL
+ 	pci_for_each_dev(dev) {
+ #else
+-        while ((dev = pci_find_device(PCI_ANY_ID, PCI_ANY_ID, dev)) != NULL) {
++      /*while ((dev = pci_find_device(PCI_ANY_ID, PCI_ANY_ID, dev)) != NULL) {*/
++        while ((dev = pci_get_device(PCI_ANY_ID, PCI_ANY_ID, dev)) != NULL) {
+ #endif
+ 		if(pci_match_id(amrmo_pci_tbl, dev) &&
+ 		   pci_dev_driver(dev)) {
+@@ -782,7 +786,11 @@
+ 			printk("slamr: device %04x:%04x is grabbed by another driver\n",
+ 			       dev->vendor,dev->device);
+ #endif
++
+ 		}
++#ifndef OLD_KERNEL
++		pci_dev_put(dev);
++#endif
+ 	}
+ 
+ #ifndef OLD_KERNEL
+diff -r -u slmodem-2.9.11-20070813/modem/modem_ec.c slmodem-new/modem/modem_ec.c
+--- slmodem-2.9.11-20070813/modem/modem_ec.c	2008-03-29 12:59:49.000000000 +0100
++++ slmodem-new/modem/modem_ec.c	2008-03-29 13:04:16.000000000 +0100
+@@ -720,7 +720,7 @@
+ 		f = l->info_list;
+ 		if(!l->modem->get_chars)
+ 			return 0;
+-		n = l->modem->get_chars(l->modem,f->buf+3,l->tx_info_size);
++		n = l->modem->get_chars(l->modem,(char*)(f->buf+3),l->tx_info_size);
+ 		if (n < 0) { /* error */
+ 			EC_ERR("tx_info: get chars error.\n");
+ 			modem_update_status(l->modem,STATUS_EC_ERROR);
+@@ -807,7 +807,7 @@
+ 		return;
+ 	if (l->rx_count && l->modem->put_chars) {
+ 		int ret = l->modem->put_chars(l->modem,
+-					      l->rx_buf+l->rx_head,
++					      (const char*)(l->rx_buf+l->rx_head),
+ 					      l->rx_count);
+ 		if (ret > 0) {
+ 			l->rx_head += ret;
+@@ -857,7 +857,7 @@
+ 	/* recv data */
+ 	
+ 	if(l->modem->put_chars)
+-		ret = l->modem->put_chars(l->modem,f->buf+3,f->count-3);
++		ret = l->modem->put_chars(l->modem,(const char*)(f->buf+3),f->count-3);
+ 	if(ret<0) {
+ 		/* FIXME: handle error*/ ;
+ 	}
+diff -r -u slmodem-2.9.11-20070813/modem/modem_pack.c slmodem-new/modem/modem_pack.c
+--- slmodem-2.9.11-20070813/modem/modem_pack.c	2008-03-29 12:58:07.000000000 +0100
++++ slmodem-new/modem/modem_pack.c	2008-03-29 13:04:16.000000000 +0100
+@@ -97,7 +97,7 @@
+ 		if (bit_cnt <= 0)
+ 			break;
+ 		/* get char */
+-		if (!m->get_chars || m->get_chars(m, &ch, 1) != 1)
++		if (!m->get_chars || m->get_chars(m, (char*)&ch, 1) != 1)
+ 			break;
+ 		REVERSE_BITS(ch);
+ 		s->data <<= CHAR_SIZE(m);
+@@ -145,7 +145,7 @@
+ 			s->bit-= CHAR_SIZE(m);
+ 			REVERSE_BITS(ch);
+ 			if (m->put_chars)
+-				m->put_chars(m,&ch,1);
++				m->put_chars(m,(const char*)&ch,1);
+ 		}
+ 	}
+ 	return ret;

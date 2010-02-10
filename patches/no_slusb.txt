@@ -1,0 +1,11 @@
+Blocks compilation of slusb.ko for kernels after 2.6.24
+Otherwise a resultant Proprietary License related error would block
+compilation of slamr.ko and slmodemd
+Thanks to:
+ Gustavo Fernando Padovan
+ Engenharia de Computação 2006
+ LAS - Laboratório de Administração e Segurança de Sistemas
+ Instituto de Computação - UNICAMP
+and Jacques Goldberg, for contributing:
+ AGE=$(shell if [ "$(SUBLEVEL)" -gt 24 ] ;then echo NEW;fi)
+6/25/2008

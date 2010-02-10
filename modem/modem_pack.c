@@ -97,7 +97,7 @@ int modem_async_get_bits(struct modem *m, int nbits, u8 *bit_buf, int bit_cnt)
 		if (bit_cnt <= 0)
 			break;
 		/* get char */
-		if (!m->get_chars || m->get_chars(m, &ch, 1) != 1)
+		if (!m->get_chars || m->get_chars(m, (char*)&ch, 1) != 1)
 			break;
 		REVERSE_BITS(ch);
 		s->data <<= CHAR_SIZE(m);
@@ -145,7 +145,7 @@ int modem_async_put_bits(struct modem *m, int nbits, u8 *bit_buf, int bit_cnt)
 			s->bit-= CHAR_SIZE(m);
 			REVERSE_BITS(ch);
 			if (m->put_chars)
-				m->put_chars(m,&ch,1);
+				m->put_chars(m,(const char*)&ch,1);
 		}
 	}
 	return ret;
