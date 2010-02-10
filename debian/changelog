@@ -1,3 +1,11 @@
+sl-modem (2.9.11~20090222-3~1.gbp6e3407) UNRELEASED; urgency=low
+
+  ** SNAPSHOT build @6e340748db721554fe28a68806f1173c42f3a327 **
+
+  * Call /usr/lib/dkms/common.postinst for DKMS logic (LP: #497149)
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Thu, 14 Jan 2010 00:41:25 +0200
+
 sl-modem (2.9.11~20090222-2) unstable; urgency=low
 
   * Switch to 3.0 (quilt) source format.

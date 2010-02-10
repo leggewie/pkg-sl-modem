@@ -12,14 +12,8 @@ daemon_stop () {
 
 case "$1" in
   configure)
-    if [ -x /usr/sbin/dkms ]; then
-      echo "Adding Module to DKMS build system"
-      dkms add -m sl-modem -v $CVERSION > /dev/null
-      echo "Doing initial module build"
-      dkms build -m sl-modem -v $CVERSION > /dev/null
-      echo "Installing initial module"
-      dkms install -m sl-modem -v $CVERSION --force > /dev/null
-      echo "Done."
+    if [ -x /usr/lib/dkms/common.postinst ]; then
+      /usr/lib/dkms/common.postinst sl-modem $CVERSION /usr/share/sl-modem-source $ARCH $2
 
       # If either slamr or slusb module is actually in use, stop slmodemd, and 
       # remove the respective module:
