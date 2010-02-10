@@ -1,3 +1,12 @@
+* Version 2.9.9e-pre1a
+        - Applied patch for USB fix, from SashaK
+
+* Version 2.9.9e-pre
+	- Modem speaker support (ALSA mode)
+	- 'shortbuffer' slmodemd's option (required with ALI5451 modems)
+	- gcc4 build support
+	- fix slamr backward compatibility for 2.4 kernels
+
 * Version 2.9.9d
 	- Off-hook control via alsa mixer (ALSA mode)
 	- slamr and slusb device majors change (21x -> 24x)

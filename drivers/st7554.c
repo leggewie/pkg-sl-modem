@@ -291,7 +291,7 @@ static int dmabuf_copyin(struct dmabuf *db, void *buffer, unsigned int size)
 	(u)->number_of_packets = DESCFRAMES;  \
         (u)->interval = (ch)->interval; \
         (u)->status   = 0;              \
-	(u)->transfer_flags |= URB_ISO_ASAP;   }
+	(u)->transfer_flags |= URB_ISO_ASAP|URB_ASYNC_UNLINK;   }
 
 #define FILL_DESC_OUT(state,ch,u,count) { int i; \
 	unsigned shft = MFMT_BYTESSHIFT((state)->format); \
