@@ -1,0 +1,178 @@
+#!/bin/sh
+#
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/sbin/slmodemd
+NAME=slmodemd
+PIDFILE=/var/run/$NAME.pid
+DESC="SmartLink modem daemon"
+modprobe="$(cat /proc/sys/kernel/modprobe 2>/dev/null || echo modprobe)"
+
+test -x $DAEMON || exit 0
+
+# there may be old options there...
+test -r /etc/default/slmodemd && . /etc/default/slmodemd
+
+# but most likely they are here
+test -r /etc/default/sl-modem-daemon && . /etc/default/sl-modem-daemon
+
+config() {
+   if test "$DONTSTART" = 1 ; then
+      test "$BEQUIET" = 1 || echo "Not starting $DESC (options not set in /etc/default/slmodemd)"
+      exit 0
+   fi
+
+   if test "$SLMODEMD_COUNTRY" ; then
+      OPTS="$OPTS -c $SLMODEMD_COUNTRY"
+   fi
+
+   ALSA=`echo $SLMODEMD_DEVICE | grep :`
+   
+   if [ "`echo $SLMODEMD_DEVICE | grep auto`" ] ; then
+      AUTO=yes
+      if test -e /proc/asound/Modem ; then
+         # ALSA driver is loaded, use it
+         SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,hw:,`
+         ALSA=yes
+      else
+         # ALSA not loaded yet
+         if grep -q 'slamr\..*o' /lib/modules/`uname -r`/modules.dep ;
+         then
+            # we have the smartlink driver, use it and assume to have
+            # one modem
+            $modprobe slamr
+            SLMODEMD_DEVICE=slamr0
+         else
+            # or try to load alsa
+            $modprobe snd-intel8x0m
+            if [ $? != 0 ] ; then
+               echo Unable to detect the modem hardware.
+               exit 1
+            else
+               # ALSA driver is loaded, use it
+               SLMODEMD_DEVICE=`readlink /proc/asound/Modem | sed s,card,hw:,`
+               ALSA=yes
+               # if the kernel is too old, the warning will appear later
+            fi
+         fi
+      fi
+   fi
+
+   if [ "$ALSA" ] ; then
+      OPTS="$OPTS $SLMODEMD_DEVICE"
+      if dpkg --compare-versions `uname -r` ge 2.6.4 ; then
+         # kernel ok, do final driver checks
+
+         # don't grep again if autodetection was already done
+         test "$AUTO" && return 0
+
+         if ! grep -q 'snd-intel8x0m.ko' /lib/modules/`uname -r`/modules.dep
+         then 
+            echo "Sorry, ALSA driver has been choosen by snd-intel8x0m module is not available."
+            exit 1
+         fi
+      else
+         echo "Sorry, ALSA driver choosen but your kernel is too old (<< 2.6.4)."
+         exit 1
+      fi
+
+   else
+
+      if test "$SLMODEMD_DEVICE" ; then
+         OPTS="$OPTS /dev/$SLMODEMD_DEVICE"
+      fi
+
+      # don't grep again if autodetection was already done
+      test "$AUTO" && return 0
+
+      if ! grep -q 'slamr\..*o' /lib/modules/`uname -r`/modules.dep
+      then 
+         echo "SmartLink modem driver not available for this Kernel. Please read README.Debian"
+         echo "or try to install the package sl-modem-modules-`uname -r`. Exiting..."
+         exit 1
+      fi
+   fi
+}
+
+start() {
+   if [ "$ALSA" ] ; then
+      test -e /proc/asound/Modem || grep -q 'snd-intel8x0m' /proc/modules ||  { 
+            echo -n "Loading ALSA modem driver into kernel ... " 
+            $modprobe snd-intel8x0m && echo "done." ||  {
+               echo "failed."
+               exit -1
+            }
+      }
+      echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
+      start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- --alsa $OPTS
+   else
+      grep 'slamr' -q /proc/modules || { 
+         echo -n "Loading SmartLink Modem driver into kernel ... " 
+         $modprobe slamr && echo "done." || {
+            echo "failed."
+            exit -1
+         }
+      }
+      if test "$SLMODEMD_DEVICE" && ! test -e /dev/$SLMODEMD_DEVICE ; then
+         mknod /dev/$SLMODEMD_DEVICE c 212 ${SLMODEMD_DEVICE#slamr}
+      fi
+      echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
+      start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- $OPTS
+   fi
+	RETVAL=$?
+  if [ "$RETVAL" = 0 -a "$NOSYMLINK" != 1 ] ; then
+     echo "."
+     echo "Creating /dev/modem symlink, pointing to: /dev/ttySL0."
+     ln -sf ttySL0 /dev/modem
+  fi
+}
+
+stop() {
+	echo -n "Shutting down SmartLink Modem driver normally"
+  if [ "`pidof $NAME`" ] ; then 
+     if start-stop-daemon --stop --quiet --pidfile $PIDFILE --exec $DAEMON ; then
+        echo .
+     else
+        echo " probably failed."
+        echo "Trying it the hard way (send SIGKILL all $NAME processes): " 
+        killall -KILL $NAME || return 1
+     fi
+  else
+     echo " ... no $NAME daemon running."
+  fi
+  return 0
+}
+
+# See how we were called.
+case "$1" in
+#   usbcheck)
+#   # test whether the init script is uptodate
+#   exit 0
+#   ;;
+#   usbstart)
+#   test -r /etc/default/slmodemd && . /etc/default/slmodemd
+#   test -r /etc/default/sl-modem-daemon && . /etc/default/sl-modem-daemon
+#   test "$2" && SLMODEMD_DEVICE="$2" || SLMODEMD_DEVICE=slusb0
+#   unset DONTSTART
+#   unset BEQUIET
+#   config
+#   start
+#   ;;
+   start)
+   config
+   start
+   ;;
+   stop)
+   config
+   stop && rm -f $PIDFILE
+   ;;
+   restart|reload)
+   config
+   stop && rm -f $PIDFILE
+   start
+   ;;
+   *)
+   echo "Usage: /etc/init.d/$NAME {start|stop|restart}"
+   exit 1
+esac
+

@@ -1,0 +1,46 @@
+# NOTE: settings in /etc/defautls/slmodemd are used too
+
+# set this to 1 to never run the daemon from the init script
+# you can set it if you have an USB device, than the init script won't
+# be started at boot (but when the USB device is plugged on)
+DONTSTART=0
+
+# This is the default configuration for the slmodem driver daemon
+# running on Debian systems.
+#	
+# Edit device node and country code here ... 
+#
+# possible country codes are:
+#
+#   USA
+#   GERMANY
+#   BELGIUM
+#   etc.
+#   
+#  use 'slmodemd --countrylist' to check out other countries
+#
+#
+#SLMODEMD_DEVICE=slamr0
+#SLMODEMD_COUNTRY=GERMANY
+
+SLMODEMD_DEVICE=auto
+SLMODEMD_COUNTRY=USA
+
+#
+# Additional options for slmodemd, see "slmodemd -h" output for details.
+# Do NOT set country or device name here!
+
+OPTS=""
+
+# force the start of the daemon even if old type modules seem to be
+# installed (set it to 1)
+
+FORCESTART=0
+
+# set this to not see any hints of the init script on startup
+
+# BEQUIET=1
+
+# set this to not create the /dev/modem symlink
+
+# NOSYMLINK=1

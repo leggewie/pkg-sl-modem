@@ -1,0 +1,6 @@
+Template: sl-modem-daemon/country
+Type: select
+_Choices: _list_
+Default: USA
+_Description: In which country is your modem located?
+ Please select the telephone system used in your country.

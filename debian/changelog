@@ -1,0 +1,209 @@
+sl-modem (2.9.9a-1) unstable; urgency=medium
+
+  * New upstream release (linmodems fork with patches for kernel 2.6.10,
+    closes: #288362)
+  * modules postinst script now sleeps one second after stoppind the daemon
+    (to give the driver time to shutdown sth. or so, closes: #258821)
+
+ -- Eduard Bloch <blade@debian.org>  Wed,  2 Feb 2005 20:44:59 +0100
+
+sl-modem (2.9.9-2) unstable; urgency=medium
+
+  * Fix override disparity
+  * TODO! fixen restart teilchen da
+
+ -- Eduard Bloch <blade@debian.org>  Mon,  6 Sep 2004 18:18:39 +0200
+
+sl-modem (2.9.9-1) unstable; urgency=medium
+
+  * New upstream release
+    + sysfs support (closes: #240710)
+    + may solve Bug#260474
+  * Upstream patch to fix get the ALSA device name correctly (closes: #268952)
+
+ -- Eduard Bloch <blade@debian.org>  Mon, 06 Sep 2004 18:17:31 +0200
+
+sl-modem (2.9.8-2) unstable; urgency=high
+
+  * Added cs.po from Miroslav Jezbera (closes: #260359)
+  * Changes by karlheg@pdx.edu:
+    - Patch modem/modem.h to enlarge dial string buffer to 128 bytes. Some
+      dial strings that include calling card numbers can be longer than the
+      previously allowed 32 characters, causing them to be truncated.
+    - Add libasound2-dev to Build-Depends in debian/control
+
+ -- Eduard Bloch <blade@debian.org>  Mon, 23 Aug 2004 11:38:13 +0200
+
+sl-modem (2.9.8-1) unstable; urgency=low
+
+  * New upstream release (closes: #255714)
+  * postinst hook to reload modules, a phantom modprobe freeze appeared
+    otherwise
+
+ -- Eduard Bloch <blade@debian.org>  Mon, 28 Jun 2004 23:41:55 +0200
+
+sl-modem (2.9.7-2) unstable; urgency=low
+
+  * source package depends on debhelper (closes: #251608)
+  * loads the ALSA module with the correct name (closes: #252623)
+  * fallback to the command "modprobe" if the module auto-loading is disabled
+    in the kernel
+  * more explite package descriptions, explaining the relationship between
+    the daemon and low-level drivers
+
+ -- Eduard Bloch <blade@debian.org>  Fri, 21 May 2004 15:39:13 +0200
+
+sl-modem (2.9.7-1) unstable; urgency=low
+
+  * New upstream release (closes: #249810)
+  * modified the init script to be more smart on autodetection. The existance
+    of the ALSA driver is checked not only by looking at modules now 
+    (closes: #246950)
+  * added dependency on kernel-image-2.6 in the hope that people will install
+    a recent kernel (since versioned Provides: are not possible) as
+    alternative to the source package or installed modules (closes: #247476)
+
+ -- Eduard Bloch <blade@debian.org>  Fri, 21 May 2004 13:38:10 +0200
+
+sl-modem (2.9.6-5) unstable; urgency=medium
+
+  * moved sl-modem-source back to non-free (overlooked one object file, sorry)
+  * changed the /dev/modem device symlink to /dev/ttySL0 in the init script
+    (closes: #243614)
+  * ALSA support, enabled with : in SLMODEMD_DEVICE (closes: #240305)
+  * README.Debian improvements: ALSA mode documentation, explicit note why
+    sl-modem is non-free (closes: Bug#242241)
+  * (fixed in -4): using , as RegExp delimiter when setting the country
+    value (closes: #241210)
+  * first experimental hotplug agent for one USB modem
+
+ -- Eduard Bloch <blade@debian.org>  Wed, 14 Apr 2004 10:23:41 +0200
+
+sl-modem (2.9.6-4) unstable; urgency=medium
+
+  * the driver source contents were not included in the previos version
+    because of wrong tar options
+  * Danish template translation by Morten Brix Pedersen <morten@wtf.dk>
+    (closes: #241040)
+  * added [ ] in the modules postinst (this is not Perl ;-)
+
+ -- Eduard Bloch <blade@debian.org>  Mon, 29 Mar 2004 01:10:06 +0200
+
+sl-modem (2.9.6-3) unstable; urgency=low
+
+  * relaxed read permissions in the tarball
+  * restarting sl-modem-daemon after modules installation
+  * extra check for beeing not reconfigured in the config script to not
+    overwrite the selection on initial installation (closes: #239692)
+  * french debconf translation by Jean-Luc Coulon (closes: #238745)
+
+ -- Eduard Bloch <blade@debian.org>  Sun, 29 Feb 2004 21:03:54 +0100
+
+sl-modem (2.9.6-2) unstable; urgency=low
+
+  * finally droped the old 2.7.10 source, removed all crappy workarounds
+  * debconf integration to select the country
+  * changed the virtual dependency to make sure that people get the new source
+    on upgrade and do not keep old driver versions installed
+  * corrected the /dev/ path of SLMODEMD_DEVICE
+  * set the default device group to "dialout" (Closes: #235455)
+  * fixed typos in the init script (Closes: #235454)
+  * moved section to "non-free/net" (it is a modem driver, after all), and
+    "contrib/net" for modules (-source) packages (the kernel part is free
+    software)
+
+ -- Eduard Bloch <blade@debian.org>  Sat, 28 Feb 2004 13:16:31 +0100
+
+sl-modem (2.9.6-1) unstable; urgency=low
+
+  * New upstream release (closes: #234010 and clarifies issues brought up by
+    license nit-pickers)  
+  * Installs the .ko files on linux 2.6.x (closes: #231204)
+  * Hiding unhelpfull error messages - if they appear, the command was
+    deliberate (closes: #232102)
+  * corrected README.Debian to mention .bz2 instead of .gz (closes: #233231)
+  * better README.Debian for the -daemon package (closes:  #233242)
+  * finaly merged upstream suggested init script with my old version, now
+    including /etc/defaults/slmodemd along with /etc/defaults/sl-modem-daemon
+    (closes: #230200, #233244)
+
+ -- Eduard Bloch <blade@debian.org>  Sat, 28 Feb 2004 10:12:17 +0100
+
+sl-modem (2.9.5-1) unstable; urgency=low
+
+  * New upstream release
+  * Providing "slmodem" from the source package. Not the perfect solution but
+    a working one, helping users that look for wrong keywords (closes: #228416)
+  * debian/rules and Makefile cleanup to not loose the user-specified kernel
+    version string and blindly try include modversions.h (solves #228841 as-is
+    but shows the missing support for kernel 2.6.0 in the old driver branch)
+
+ -- Eduard Bloch <blade@debian.org>  Wed, 21 Jan 2004 14:26:01 +0100
+
+sl-modem (2.9.4-1) unstable; urgency=low
+
+  * New upstream release
+  * Fixed installation order and paths, thanks to Dorneles Treméa
+    <dorneles@x3ng.com.br>; also review and fixes of the county.dat
+    installation hook and the module postinst hook, separating for different
+    driver branches (closes: #218619, #218005)
+  * Help request: I do not have hardware to test the drivers from the new
+    branch. Your chance to become comaintainer if you have hardware supported
+    by the new driver branch.
+  * init script improvements, proper default file
+
+ -- Eduard Bloch <blade@debian.org>  Fri,  9 Jan 2004 14:26:02 +0100
+
+sl-modem (2.9.1-1) unstable; urgency=low
+
+  * new upstream release
+  * new package: sl-modem-daemon
+  * 2.7.10 version included in the Debian diff
+
+ -- Eduard Bloch <blade@debian.org>  Sat,  4 Oct 2003 18:43:00 +0200
+
+sl-modem (2.7.14+2.7.10-4) unstable; urgency=low
+
+  * adaptation to module-assistant
+  * purged useless objects from 2.7.10 source
+
+ -- Eduard Bloch <blade@debian.org>  Sun,  7 Sep 2003 03:47:18 +0200
+
+sl-modem (2.7.14+2.7.10-3) unstable; urgency=low
+
+  * Doing extra clean in 2.7.10 before using it; otherwise, it won't be
+    cleaned later
+
+ -- Eduard Bloch <blade@debian.org>  Sat,  6 Sep 2003 16:01:09 +0200
+
+sl-modem (2.7.14+2.7.10-2) unstable; urgency=low
+
+  * binary/rules wrapper was a very bad idea; replaced it with the script
+    symlinks the best source files into the build directory
+  * sorted source files in the correct directories
+
+ -- Eduard Bloch <blade@debian.org>  Sat,  6 Sep 2003 02:54:30 +0200
+
+sl-modem (2.7.14+2.7.10-1) unstable; urgency=low
+
+  * Merged version 2.7.10 into the package and implemented the selection of
+    the right source using the PCI Id table from linmodems.org people 
+    (Closes: #197693)
+
+ -- Eduard Bloch <blade@debian.org>  Sun, 31 Aug 2003 23:13:37 +0200
+
+sl-modem (2.7.14-1) unstable; urgency=low
+
+  * New upstream release
+  * Variable target path for generated packages, closes: #192449
+
+ -- Eduard Bloch <blade@debian.org>  Mon,  9 Jun 2003 14:04:57 +0200
+
+sl-modem (2.7.10-1) unstable; urgency=low
+
+  * Initial Release, closes: #185032
+  * Workaround with on-the-fly device node creation to work with devfs since
+    the main object is closed-source and compiled without devfs support
+
+ -- Eduard Bloch <blade@debian.org>  Sun, 21 Mar 2003 14:37:46 +0100
+

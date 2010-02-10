@@ -1,0 +1,52 @@
+#! /bin/bash
+# postinst script for sl-modem
+
+daemon-stop () {
+   if [ -e /var/run/slmodemd.pid ] ; then
+      /etc/init.d/sl-modem-daemon stop || true
+      sleep 1
+   fi
+}
+
+case "$1" in
+   configure)
+   # old DEVFS hack should be done by module post-install now
+   # test -c /dev/ttySL0 || mknod -m 666 /dev/ttySL0 c 212 0 || true
+
+   update-devfsd  2>/dev/null || true
+   update-modules 2>/dev/null || true
+   for module in slamr slusb ; do
+      if grep -q "$module" /proc/modules 2>/dev/null ; then
+         daemon-stop
+         rmmod $module
+      fi
+   done
+   modprobe slamr 2>/dev/null || modprobe slusb 2>/dev/null || true
+   if test -x /usr/sbin/slmodemd ; then
+      if ! [ -e /var/run/slmodemd.pid ] ; then
+         /etc/init.d/sl-modem-daemon start || true
+      else
+         # restart on upgrades
+         if test -n "$2" ; then
+            /etc/init.d/sl-modem-daemon restart || true
+         fi
+      fi
+   fi
+         
+   ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0
+
+

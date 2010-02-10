@@ -1,0 +1,138 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper. 
+# GNU copyright 1997 by Joey Hess.
+#
+# This version is for a hypothetical package that can build a kernel modules
+# architecture-dependant package via make-kpkg, as well as an
+# architecture-independent module source package, and other packages
+# either dep/indep for things like common files or userspace components
+# needed for the kernel modules.
+
+# Uncomment this to turn on verbose mode. 
+#export DH_VERBOSE=1
+
+CFLAGS = -Wall -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+	INSTALL_PROGRAM += -s
+endif
+
+export KVERS
+
+k = $(shell echo $(KVERS) | grep -q ^2.6 && echo k)
+
+build-indep:
+build-arch: build-arch-stamp
+build-arch-stamp:
+	dh_testdir
+	cd modem ; $(MAKE) SUPPORT_ALSA=1
+	touch build-arch-stamp
+
+build: build-arch
+configure:
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-arch-stamp build-indep-stamp configure-stamp
+
+	# Add here commands to clean up after the build process.
+	-$(MAKE) clean SUPPORT_ALSA=1
+	-cd modem; $(MAKE) clean SUPPORT_ALSA=1
+	dh_clean
+
+install: DH_OPTIONS=
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	# Create the directories to install the source into
+#	dh_installdirs -psl-modem-source  usr/src/modules/sl-modem/latest usr/src/modules/sl-modem/debian
+#	dh_installdirs -psl-modem-daemon
+
+	# Copy only the driver source to the proper location
+	tar -c --exclude ".svn" modem/*.h drivers patches | tar x -C debian/sl-modem-source/usr/src/modules/sl-modem/
+	# Copy the needed debian/ pieces to the proper location
+	cd debian ; cp control compat *_KVERS_* *.modules.in rules changelog copyright sl-modem-source/usr/src/modules/sl-modem/debian
+	chmod -R a+r debian/sl-modem-source/
+	cd debian/sl-modem-source/usr/src && tar c modules | bzip2 -9 > sl-modem.tar.bz2 && rm -rf modules
+	cp modem/slmodemd debian/sl-modem-daemon/usr/sbin/
+	cp debian/sl-modem-daemon.modutils debian/sl-modem-daemon/etc/modutils
+	cp debian/sl-modem-daemon.modutils debian/sl-modem-daemon/etc/modprobe.d
+	dh_installdocs -psl-modem-source debian/README.Debian README
+	dh_installdocs -psl-modem-daemon
+	dh_install
+
+binary-arch: build install
+	dh_testdir -a
+	dh_testroot -a
+	dh_installchangelogs -a Changes
+	dh_installdirs -psl-modem-daemon /etc/hotplug/usb
+	install -m 755 debian/hotplug debian/sl-modem-daemon/etc/hotplug/usb/slusb
+	dh_installdocs -a
+	dh_installexamples -a
+#	dh_install -a
+#	dh_installmenu -a
+	dh_installdebconf -a
+	perl debian/setcountries.pl debian/sl-modem-daemon/DEBIAN/templates
+#	dh_installlogrotate -a
+#	dh_installemacsen -a
+#	dh_installpam -a
+#	dh_installmime -a
+	dh_installinit -a -n
+#	dh_installcron -a
+#	dh_installinfo -a
+	dh_installman -a
+	dh_link -a
+	dh_strip -a
+	dh_compress -a
+	dh_fixperms -a
+	dh_installdeb -a
+#	dh_python -a
+#	dh_makeshlibs -a
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+binary: binary-arch binary-indep
+
+
+# prefix of the target package name
+PACKAGE=sl-modem-modules
+# modifieable for experiments or debugging m-a
+MA_DIR ?= /usr/share/modass
+# load generic variable handling
+-include $(MA_DIR)/include/generic.make
+# load default rules
+-include $(MA_DIR)/include/common-rules.make
+
+binary-modules:
+	dh_clean -k
+	dh_installdirs lib/modules/$(KVERS)/misc usr/lib/sl-modem
+	if ! test -e drivers/Makefile ; then echo "Please update the package, extract the tarball!"; exit 1 ; fi
+	$(MAKE) -C drivers KERNEL_DIR=$(KSRC) KVERS=$(KVERS)
+	cp drivers/slusb.$ko drivers/slamr.$ko debian/$(PKGNAME)/lib/modules/$(KVERS)/misc
+	dh_installdocs
+	dh_installchangelogs
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol -- -v$(VERSION)
+	dh_md5sums
+	dh_builddeb --destdir=$(DEB_DESTDIR)
+
+kdist_clean: clean
+	$(MAKE) -C drivers clean
+
+kdist_config: prep-deb-files
+
+.PHONY: build clean binary-indep binary-arch binary install configure binary-modules kdist kdist_config kdist_image kdist_clean configure

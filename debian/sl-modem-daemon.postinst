@@ -1,0 +1,41 @@
+#!/bin/sh -e
+
+. /usr/share/debconf/confmodule
+
+db_get sl-modem-daemon/country || true
+
+if test -n "$RET" ; then
+   perl -pe "s,^SLMODEMD_COUNTRY.*,SLMODEMD_COUNTRY=$RET," -i /etc/default/sl-modem-daemon
+fi
+
+if [ -x "/etc/init.d/sl-modem-daemon" ]; then
+	update-rc.d sl-modem-daemon defaults 12 >/dev/null
+	if [ -x /usr/sbin/invoke-rc.d ]; then
+		invoke-rc.d sl-modem-daemon start || true
+	else
+		/etc/init.d/sl-modem-daemon start || true
+	fi
+fi
+
+mkdev ()
+{
+   if test ! -e /dev/$1$2; then
+      mknod -m 660 /dev/$1$2 c $3 $2
+      chown root:dialout /dev/$1$2
+   fi
+}
+
+case "$1" in
+   configure)
+
+   for x in 0 1 2 3; do
+      mkdev slamr $x 212
+      mkdev slusb $x 213
+   done
+   ;;
+
+esac
+   
+#DEBHELPER#
+
+exit 0

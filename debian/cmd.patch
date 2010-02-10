@@ -1,0 +1,44 @@
+Index: slmodem/modem/modem_cmdline.c
+===================================================================
+RCS file: /cvsroot/linsmart/mlite/slmodem/modem/modem_cmdline.c,v
+retrieving revision 1.15
+diff -u -b -B -r1.15 modem_cmdline.c
+--- slmodem/modem/modem_cmdline.c	1 Jun 2004 15:21:55 -0000	1.15
++++ slmodem/modem/modem_cmdline.c	13 Jul 2004 15:22:48 -0000
+@@ -66,7 +66,8 @@
+ extern unsigned int modem_debug_logging;
+ 
+ /* config parameters */
+-const char *modem_dev_name = "/dev/slamr0";
++const char *modem_dev_name = NULL;
++const char *modem_default_dev_name = "/dev/slamr0";
+ const char *modem_alsa_dev_name = "hw:1";
+ unsigned int need_realtime = 1;
+ unsigned int use_alsa = 0;
+@@ -119,7 +120,7 @@
+ 	struct opt *opt;
+ 	PR_INFO("Usage: %s [option...] <device>\n"
+ 		"Where 'device' is name of modem device (default `%s')\n"
+-		"  and 'option' may be:\n", prog_name, modem_dev_name);
++		"  and 'option' may be:\n", prog_name, modem_default_dev_name);
+ 	for (opt = opt_list ; opt->name ; opt++ ) {
+ 		int n = 0;
+ 		if(opt->ch)
+@@ -237,7 +238,6 @@
+ 		PR_INFO("ALSA support is not compiled in (see README for howto).\n");
+ 		exit(1);
+ #endif
+-		modem_dev_name = modem_alsa_dev_name;
+ 		use_alsa = 1;
+ 	}
+ 	if(opt_list[OPT_GROUP].found)
+@@ -261,6 +261,9 @@
+ 		if(opt_list[OPT_LOG].arg_val &&
+ 		   (val= strtol(opt_list[OPT_LOG].arg_val,NULL,0)) > 0 )
+ 			modem_debug_logging = val;
++	}
++	if(!modem_dev_name) {
++		modem_dev_name = use_alsa ? modem_alsa_dev_name : modem_default_dev_name;
+ 	}
+ }
+ 

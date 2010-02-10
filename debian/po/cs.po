@@ -1,0 +1,41 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sl-modem\n"
+"POT-Creation-Date: 2004-02-29 19:29+0100\n"
+"PO-Revision-Date: 2004-07-19 21:18+0200\n"
+"Last-Translator: Miroslav Jezbera <jezberam@phoenix.inf.upol.cz>\n"
+"Language-Team: Czech <provoz@debian.cz>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: select
+#. Choices
+#: ../sl-modem-daemon.templates:3
+msgid "_list_"
+msgstr "_list_"
+
+#. Type: select
+#. Description
+#: ../sl-modem-daemon.templates:5
+msgid "In which country is this modem located?"
+msgstr "Ve které zemi je tento modem pou¾íván?"
+
+#. Type: select
+#. Description
+#: ../sl-modem-daemon.templates:5
+msgid "Please select the telephone system used in your country."
+msgstr "Vyberte prosím telefonní systém pou¾ívaný ve va¹í zemi."

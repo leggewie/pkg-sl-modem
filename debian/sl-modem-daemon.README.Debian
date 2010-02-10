@@ -1,0 +1,37 @@
+sl-modem-daemon for Debian
+--------------------------
+
+The driver daemon needs kernel modules to access the hardware. This can
+be done either with the kernel driver provided by SmartLink or trough
+ALSA in recent kernel versions. The SmartLink driver needs to be
+compiled as additional module (which requires kernel headers for your
+kernel version), but should work more stable and provide more features.
+
+By default, the init script is configured to detect the available driver
+(see /etc/default/sl-modem-daemon) and run the daemon for the first
+available modem(compatbile). If you wish to specify the device manually,
+edit the config file.
+
+To use SmartLink modules, create the drivers package using the separate
+sl-modem-source package (see its README.Debian for details). Usually,
+you can simply run "m-a a-i sl-modem" if module-assistant is installed
+on your system.
+
+When done, use "dpkg-reconfigure sl-modem-daemon -plow" to choose your
+contry or edit the file /etc/defaults/sl-modem-daemon manually.
+
+To use ALSA modules, make sure that you have a recent kernel (>= 2.6.4) and
+the intel8x0m module available. If the driver is not detected by the
+init script, edit the file /etc/defaults/sl-modem-daemon script and set
+the SLMODEMD_DEVICE to the ALSA conventional device name ('hw:0' or
+'hw:1' for instance)
+
+Why is sl-modem-daemon in non-free?
+-----------------------------------
+
+Because one part of the driver source is not available. Instead, a
+precompiled binary object is provided (probably to protect the
+Intellectual Property of the vendor). If you don't like it, feel free to
+buy a conventional external modem.
+
+ -- Eduard Bloch <blade@debian.org> -- Fri, 21 May 2004 13:47:06 +0200
