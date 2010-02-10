@@ -1,0 +1,53 @@
+
+The scripts in this folder were provided by Jean-Pierre Demailly.
+The test modem is on a High Definition Audio card:
+   Class 0403: 8086:284b Audio device: Intel Corporation 82801H
+   Primary PCI_id  8086:284b
+   Subsystem PCI_id  103c:30cc
+       hosting Motorola chip 0x1057305
+
+The software for Microsoft provided by Motorola has a sm56 designation.
+However the applicability of the Jean-Pierre's scripts most likely extends
+to any modem supportable with the slmodemd helper utility.
+Some modifications of the scripts may be necessary for these other modems. 
+--------------
+http://linmodems.technion.ac.il/bigarch/archive-eighth/msg00594.html
+
+Hi:
+
+Thanks to your previous help, I have been able to get my winmodem
+Smartlink SM56 to work at least partially on my x86_64 laptop
+(with a 64 bit kernel). However, some tweaks were necessary :
+
+1. The slmodem package fails to compile properly from scratch because
+  * the Makefile forgets to uses the -m32 option to force compilation
+    in 32 bit (necessary because of needed ld with 32 bit blobs)
+  * the slamr driver which is pure 32 bit cannot be compiled on a
+    a 64 bit machine, and so the Makefile should disable this
+    automatically. I enclose a Makefile which includes this test.
+    
+2. After tweaking as in 1), compilation of slmodemd in 32bit mode is
+   successful and I could call
+      slmodem -c FRANCE --alsa hw:0,6
+   (as this seems to be appropriate in my case).
+   Then device /dev/ttySL0 is created
+   
+However, when trying using to use the modem, I first got an error
+    period size 48 not supported by playback (64)
+(already reported by many people). Things improved a lot by using
+the "Hell labs patch" enclosed - it seems that a test fax (class 1)
+was succesfully sent. Maybe the change should be implemented in the
+next iteration of slmodemd and enabled/disabled through the use of an 
+ad hoc option. 
+
+I also got French Minitel (V23 mode) almost working - the initializing
+escape code is probably still not OK as the echo of keys was garbled.
+In addition, there is not sound on dialing - maybe the hell labs patch
+simply disables error after failure of using ALSA. Alsa support
+obviously has to be fixed for SM56 on 64 bit machines.
+
+Here is where I am - it seems pretty close to be made to work, but not
+there yet !
+
+Regards,
+Jean-Pierre Demailly

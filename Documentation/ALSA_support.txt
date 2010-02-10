@@ -1,0 +1,107 @@
+
+For service with the ALSA  modem drivers (snd-intel8x0m, snd-via82xx-modem,
+snd-atiixp-modem, and snd-hda-intel), the slmodemd helper was be compiled
+with incorporation of added ALSA code.  The necessary code is provides by
+installation of a package libasound2-dev, which may have alternative names
+in some Linux distros. But the installed components are listed below.
+
+The actual compiler must proceed within the modem/ sub-folder of this
+package. So the command sequence is:
+$ cd driver
+$ make clean
+$ make SUPPORT_ALSA=1
+
+The slmodemd is typically copied to the folder /usr/sbin/
+For Ubuntu related distros do:
+$ sudo cp -a slmodemd  /usr/sbin/
+$ sudo chmod +x  /usr/sbin/slmodemd
+
+For other distros
+$ su root
+# cp -a slmodemd  /usr/sbin/
+# chmod +x  /usr/sbin/slmodemd
+
+Very minimal functionality tests are:
+$ slmodemd --version
+which should report like:
+SmartLink Soft Modem: version 2.9.11 Feb 29 2008 21:22:01
+
+$ slmodemd --help
+$ slmodemd --countrylist
+will return details on parameter usage.
+
+Modem setup can proceed through:
+$ sudo modprobe DriverName
+though drivers will typically already be autoloaded.
+$ sudo slmodemd -c Country --alsa modem:1
+or for usage with the snd-hda-intel driver:
+$ sudo slmodemd -c Country --alsa hw:0,n
+with n typically being 1 or 6 .
+
+The choice of n is evident for example in an ouput
+$ cat /proc/asound/pcm
+00-00: STAC92xx Analog : STAC92xx Analog : playback 1 : capture 2
+00-06: Si3054 Modem : Si3054 Modem : playback 1 : capture 
+----
+wherein the 00-06 correponds to hw:0,6
+while a 00-01 would correspond to hw:0,1
+
+Note that hw:0,0 specifies the audio section of a High Definition Audio
+card, which may host a modem chip on the Subsystem.
+
+Components of the libasound2-dev package are:
+-----------------------------------------
+/usr/share/lintian/overrides
+/usr/share/aclocal/alsa.m4
+/usr/include/alsa/sound
+/usr/include/alsa/sound/ainstr_fm.h
+/usr/include/alsa/sound/ainstr_gf1.h
+/usr/include/alsa/sound/ainstr_simple.h
+/usr/include/alsa/sound/ainstr_iw.h
+/usr/include/alsa/sound/asound_fm.h
+/usr/include/alsa/sound/hdsp.h
+/usr/include/alsa/sound/sb16_csp.h
+/usr/include/alsa/sound/sscape_ioctl.h
+/usr/include/alsa/sound/emu10k1.h
+/usr/include/alsa/sound/type_compat.h
+/usr/include/alsa/asoundlib.h
+/usr/include/alsa/asoundef.h
+/usr/include/alsa/version.h
+/usr/include/alsa/global.h
+/usr/include/alsa/input.h
+/usr/include/alsa/output.h
+/usr/include/alsa/error.h
+/usr/include/alsa/conf.h
+/usr/include/alsa/pcm.h
+/usr/include/alsa/pcm_old.h
+/usr/include/alsa/pcm_plugin.h
+/usr/include/alsa/rawmidi.h
+/usr/include/alsa/timer.h
+/usr/include/alsa/hwdep.h
+/usr/include/alsa/control.h
+/usr/include/alsa/mixer.h
+/usr/include/alsa/mixer_abst.h
+/usr/include/alsa/seq_event.h
+/usr/include/alsa/seq.h
+/usr/include/alsa/seqmid.h
+/usr/include/alsa/seq_midi_event.h
+/usr/include/alsa/conv.h
+/usr/include/alsa/instr.h
+/usr/include/alsa/iatomic.h
+/usr/include/alsa/alisp.h
+/usr/include/alsa/pcm_external.h
+/usr/include/alsa/pcm_ioplug.h
+/usr/include/alsa/pcm_extplug.h
+/usr/include/alsa/pcm_rate.h
+/usr/include/alsa/control_external.h
+/usr/include/sys
+/usr/include/sys/asoundlib.h
+/usr/lib/libasound.a
+/usr/lib/libasound.la
+/usr/lib/pkgconfig
+/usr/lib/pkgconfig/alsa.pc
+/usr/share/doc/libasound2-dev
+/usr/lib/libasound.so
+
+Marv Stodolsky, 2008-03-24
+     

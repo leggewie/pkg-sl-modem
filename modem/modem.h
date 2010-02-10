@@ -96,6 +96,8 @@ enum MODEM_MODE {
 #define MODEM_CONFIG_FAX   1
 #define MODEM_CONFIG_FAX_CLASS1 1
 
+#define MODEM_CONFIG_RING_DETECTOR 1
+
 /*
  *    type definitions
  *
@@ -290,6 +292,9 @@ struct modem {
 	unsigned int ring_count;
 	unsigned long ring_first;
 	unsigned long ring_last;
+#ifdef MODEM_CONFIG_RING_DETECTOR
+	void *rd_obj;
+#endif
 	/* cid */
 #ifdef MODEM_CONFIG_CID
 	unsigned cid_requested;

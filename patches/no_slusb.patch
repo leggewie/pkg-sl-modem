@@ -1,0 +1,17 @@
+diff --git a/drivers/Makefile b/drivers/Makefile
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -22,9 +22,13 @@ EXTRA_CFLAGS = -I$(obj) -I$(obj)/../modem
+
+ ARCH64:=$(shell uname -m | sed -e '/amd64/s//x86_64/' | grep -c x86_64)
+
++SUBLEVEL=$(shell uname -r | cut -d. -f3 | cut -d. -f1 | cut -d-  -f1)
++AGE=$(shell if [ "$(SUBLEVEL)" -gt 24 ] ;then echo NEW;fi)
++JP=$(shell echo $(AGE))
+ ifeq ($(ARCH64), 0)
+-obj-m:= slamr.o slusb.o
+-else
++obj-m:= slarm.o
++endif
++ifneq ($(AGE),NEW)
+

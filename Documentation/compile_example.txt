@@ -1,0 +1,115 @@
+This is a sample compile.  
+	Always first:
+$ make clean
+make -C modem clean &&  make -C drivers clean &&  echo "done."
+make[1]: Entering directory `/usr/src/modules/slmodem-2.9.11-20080401/modem'
+rm -f slmodemd modem_test modem_main.o modem_cmdline.o modem_test.o modem.o
+modem_datafile.o modem_at.o modem_timer.o modem_pack.o modem_ec.o
+modem_comp.o modem_param.o modem_debug.o homolog_data.o dp_sinus.o
+dp_dummy.o sysdep_common.o
+rm -f *~ *.orig *.rej
+make[1]: Leaving directory `/usr/src/modules/slmodem-2.9.11-20080401/modem'
+make[1]: Entering directory
+`/usr/src/modules/slmodem-2.9.11-20080401/drivers'
+rm -f kernel-ver slamr.o slusb.o slamr.ko slusb.ko *st7554.o amrmo_init.o
+sysdep_amr.o *.mod.* .*.cmd *~
+rm -f -r .tmp_versions
+make[1]: Leaving directory
+`/usr/src/modules/slmodem-2.9.11-20080401/drivers'
+done.
+
+	Before the compile (see note at the end for including ALSA support):
+$ make -C modem all
+make[1]: Entering directory `/usr/src/modules/slmodem-2.9.11-20080401/modem'
+rebuild profile...
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_main.o -c modem_main.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_cmdline.o -c modem_cmdline.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem.o -c modem.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_datafile.o -c modem_datafile.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_at.o -c modem_at.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_timer.o -c modem_timer.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_pack.o -c modem_pack.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_ec.o -c modem_ec.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_comp.o -c modem_comp.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_param.o -c modem_param.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_debug.o -c modem_debug.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o homolog_data.o -c homolog_data.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o dp_sinus.o -c dp_sinus.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o dp_dummy.o -c dp_dummy.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o sysdep_common.o -c sysdep_common.c
+gcc  -o slmodemd modem_main.o modem_cmdline.o modem.o modem_datafile.o modem_at.o modem_timer.o modem_pack.o modem_ec.o modem_comp.o modem_param.o modem_debug.o homolog_data.o dp_sinus.o dp_dummy.o dsplibs.o sysdep_common.o
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM   -o modem_test.o -c modem_test.c
+gcc  -o modem_test modem_test.o modem_cmdline.o modem.o modem_datafile.o modem_at.o modem_timer.o modem_pack.o modem_ec.o modem_comp.o modem_param.o modem_debug.o homolog_data.o dp_sinus.o dp_dummy.o dsplibs.o sysdep_common.o
+make[1]: Leaving directory `/usr/src/modules/slmodem-2.9.11-20080401/modem'
+make -C drivers KERNEL_DIR=/lib/modules/2.6.22-14-generic/build
+make[1]: Entering directory `/usr/src/modules/slmodem-2.9.11-20080401/drivers'
+cc -I/lib/modules/2.6.22-14-generic/build/include -o kernel-ver kernel-ver.c
+make all KERNEL_VER=2.6.22-14-generic
+make[2]: Entering directory `/usr/src/modules/slmodem-2.9.11-20080401/drivers'
+make modules -C /lib/modules/2.6.22-14-generic/build SUBDIRS=/usr/src/modules/slmodem-2.9.11-20080401/drivers
+make[3]: Entering directory `/usr/src/linux-headers-2.6.22-14-generic'
+  CC [M]  /usr/src/modules/slmodem-2.9.11-20080401/drivers/amrmo_init.o
+  CC [M]  /usr/src/modules/slmodem-2.9.11-20080401/drivers/sysdep_amr.o
+  CC [M]  /usr/src/modules/slmodem-2.9.11-20080401/drivers/st7554.o
+  LD [M]  /usr/src/modules/slmodem-2.9.11-20080401/drivers/slamr.o
+  LD [M]  /usr/src/modules/slmodem-2.9.11-20080401/drivers/slusb.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /usr/src/modules/slmodem-2.9.11-20080401/drivers/slamr.mod.o
+  LD [M]  /usr/src/modules/slmodem-2.9.11-20080401/drivers/slamr.ko
+  CC      /usr/src/modules/slmodem-2.9.11-20080401/drivers/slusb.mod.o
+  LD [M]  /usr/src/modules/slmodem-2.9.11-20080401/drivers/slusb.ko
+make[3]: Leaving directory `/usr/src/linux-headers-2.6.22-14-generic'
+make[2]: Leaving directory `/usr/src/modules/slmodem-2.9.11-20080401/drivers'
+make[1]: Leaving directory `/usr/src/modules/slmodem-2.9.11-20080401/drivers'
+
+Products are:
+$ ls -l drivers/*.ko
+-rw-r--r-- 1 marv marv 767859 2008-03-31 22:41 drivers/slamr.ko
+-rw-r--r-- 1 marv marv 163768 2008-03-31 22:41 drivers/slusb.ko
+$ ls -l modem/slmodemd
+-rwxr-xr-x 1 marv marv 1302834 2008-03-31 22:41 modem/slmodemd
+
+It could be followed by:
+$ su root
+# make install
+
+or alternatively on Ubuntu like systems by:
+$ sudo make install
+
+The slmodemd is installed to /usr/sbin/slmodemd.
+
+ALSA support
+============
+To include in slmodemd support for the several modem drivers of the ALSA
+package, there are two differences:
+1) There must first be installed a package libasound2-dev or equivalent
+2) The make command is not given in the base slmodem folder, 
+	but within the modem/ folder.
+$ make SUPPORT_ALSA=1
+rebuild profile...
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_main.o -c modem_main.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_cmdline.o -c modem_cmdline.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem.o -c modem.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_datafile.o -c modem_datafile.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_at.o -c modem_at.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_timer.o -c modem_timer.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_pack.o -c modem_pack.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_ec.o -c modem_ec.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_comp.o -c modem_comp.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_param.o -c modem_param.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_debug.o -c modem_debug.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o homolog_data.o -c homolog_data.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o dp_sinus.o -c dp_sinus.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o dp_dummy.o -c dp_dummy.c
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o sysdep_common.o -c sysdep_common.c
+gcc -lasound -o slmodemd modem_main.o modem_cmdline.o modem.o modem_datafile.o modem_at.o modem_timer.o modem_pack.o modem_ec.o modem_comp.o modem_param.o modem_debug.o homolog_data.o dp_sinus.o dp_dummy.o dsplibs.o sysdep_common.o /usr/lib/libasound.so
+gcc -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -DSUPPORT_ALSA=1   -o modem_test.o -c modem_test.c
+gcc -lasound -o modem_test modem_test.o modem_cmdline.o modem.o modem_datafile.o modem_at.o modem_timer.o modem_pack.o modem_ec.o modem_comp.o modem_param.o modem_debug.o homolog_data.o dp_sinus.o dp_dummy.o dsplibs.o sysdep_common.o
+
+Next manually copy the slmodemd to /usr/sbin/slmodemd
+and activate
+$ sudo chmod +x /usr/sbin/slmodemd
+
+Marv Stodolsky
+

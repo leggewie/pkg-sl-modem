@@ -1,0 +1,6 @@
+Removes recogntion for a few cards which slamr failed to support,
+	retaining Zello's proven support for the chipset Motorola 1057:3052 
+	and adding test support for the chipset Silicon Instru.   1543:3052
+
+Marv Stodolsky 2008-04-01
+ 

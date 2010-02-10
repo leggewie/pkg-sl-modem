@@ -1,0 +1,338 @@
+Motorola Modem Init Strings
+
+
+      motorola 56
+      Command Option Description
+      *DD  Dial WaitSpecifies the time interval to wait when the modem
+      encounters a W or w while processing a dial string
+      *DD0 2 Seconds
+      *DD1 3 Seconds
+      *DD2 4 Seconds
+      *DD3 6 Seconds
+      *DD4 12 Seconds
+      *DD5 15 Seconds
+      *DD6 20 Seconds
+      *DD7 30 Seconds
+      *DD8 40 Seconds
+      *LS  Low-Speed Operation ProtocolLets you select a communications
+      protocol to communicate with very low-speed or older modems.
+      *LS0 Bell 103
+      *LS1 ITU-T V.21 (international standard)
+      *LS2 Bell 103 or ITU-T V.21 (Auto determination)
+      *MM  Modulation Mode
+      *MM0 V.34 Auto Modulation
+      *MM1 V.21
+      *MM2 Bell 103
+      *MM4 V.22/Bell 212
+      *MM5 V.22bis
+      *MM6 V.23
+      *MM10 V.32 Only
+      *MM11 V.32 bis
+      *MM12 V.34 Only
+      *MM13 K56flex™ Only
+      *MM14 K56flex™  Auto-modulation
+      *MM15 V.90 OnlyCommand Option Description
+      A (none) Answer incoming call
+      A/ (none) Repeat Last CommandRe-issues the previous command to the
+      modem.(Do not press Return; the command executes as soon as the / is
+      pressed.)
+      D (none) Dial a NumberInstructs the modem to dial the telephone number
+      that you enter immediately after the ATD command.  Example: ATD5554678.
+      Note: if multiple ATD commands are used in voice mode, the modem must be
+      forced to blind-dial after dial-tone detection.
+      E  Echo Async (Keyboard) Input to TerminalDetermines whether the
+      characters you type at the keyboard are displayed (echoed) to the
+      terminal-emulation window (if it is active) or to the communications
+      application.
+      E0 Disable
+      E1 Enable
+      H  Hook
+      H0 Go on Hook (disconnect from the telephone line; hang up)
+      H1 Go off Hook (connect to the telephone line)
+      I  Request Information From Modem
+      I0 “960”
+      I1  “000”
+      I2  “OK”
+      I3 Software Version
+      I4 “OK”
+      I5 Disconnect Reason
+      I6 Country Code
+      I7 Product Code
+      L  Speaker VolumeThis parameter determines the volume, for call-progress
+      monitor only, of sounds such as dialing, ringing, busy, negotiation.This
+      parameter is not supported in the SM56 Modem for ISA. It is supported in
+      the SM56 for PCI as follows.
+      L0, L1 Low
+      L2 Medium
+      L3 High
+      M  Speaker Control
+      M0 Off
+      M1 On During Training Only
+      M2 Always On
+      M3 Off during dialing; on during call progress; off during data transfer
+
+      O  Return to On-Line ModeThis parameter determines whether the modem
+      initiates a retrain after changing from escape mode to data mode, or
+      after a semi-colon in dial strings.
+      O0 No Retrain
+      O1 Retrain
+      O2 Initiate Rate Renegotiation
+      O3 Rate Renegotiation with silence
+      P P Pulse Dial
+      Q  Result-Code DisplayThe modem can send result codes and connect
+      messages to the computer as a result of connecting or failing to
+      connect; establishing a data rate; and establishing error-correction and
+      data-compression protocols.  Refer to: ATV; AT\V; ATX.
+      Q0 Enable display
+      Q1 Disable display
+      T T Tone DialThis command instructs the modem to use DTMF tone dialing.
+      V  Result-Code FormatDetermines whether the modem sends short- or
+      long-form messages to the communications application, indicating the
+      connection status, rate, and mode.
+      V0 Return Numeric Code (Short Form)
+      V1 Return Text  (Long Form)
+      X  Select Call-Progress Result Codes to Return
+      X0 No Carrier; Connect. Modem reports lack of a carrier signal;
+      connection success/failure; modem dials without waiting for a dial tone
+      X1 No Carrier; Connect; Connect . Modem reports lack of a carrier
+      signal; connection success/failure, and the computer data rate
+      established
+      X2 No Carrier; Connect; Connect ; No Dial Tone. Modem reports lack
+      of a carrier signal; connection success/failure; the computer data rate
+      established; and the lack of a dial tone
+      X3 No Carrier; Connect; Connect ; Busy-tone. Modem reports lack of
+      a carrier signal; connection success/failure; the computer data rate
+      established; and the presence of a busy signal
+      X4 No Carrier; Connect; Connect ; No Dial-tone; Busy-tone. Modem
+      reports lack of a carrier signal; connection success/failure; the
+      computer data rate established; the lack of a dial tone; and the
+      presence of a busy signal
+      Z Z Reset Modem Parameters to Default Configuration
+      &C  DCD Control
+      &C0 Always Asserted
+      &C1 Asserted in Data Mode Only
+      &D  DTR ControlDetermines how modem responds to DTR signal from DTE.
+      &D0 Ignore DTR
+      &D1 Enter Command mode when DTR transitions from asserted to de-asserted
+
+      &D2 Disconnect call when DTR transitions from asserted to de-asserted
+      &D3 Reset modem parameters to default configuration when DTR transitions
+      from asserted-to-de-asserted
+      &G  Guard Tone
+      &G0 Off
+      &G1 550 Hz Guard Tone
+      &G2 1800 Hz Guard Tone
+      &I  Dial TX Level
+      &In Level n; n = 0 to 15. Default = 9
+      &I99 Automatic Level
+      &P  Pulse CycleUsed when the modem is instructed to pulse dial.
+      &P0 40/60 Make/Break Ratio
+      &P1 33/67 Make/Break Ratio
+      &P2 38/62 Make/Break Ratio
+      &R  CTS Control
+      &R0 Normal
+      &R1 Always On
+      &S  DSR Control
+      &S0 Always On
+      &S1 On When Modem Recognizes Remote
+      &T  Test
+      &T0 Terminate Test
+      &T1 Initiate Local Analog Loopback TestDisconnect the telephone line
+      from the SM56 modem line input connector before using this command.With
+      SM56 Build 50 or later, set S-Register 46 = 23 (ATS46=23) before
+      executing &T1.
+      &TD  Dial TX Level
+      &TDn Level n; n = 0 to 15
+      &TD99 Automatic Level
+      &V  Modem Status
+      &V0 Short Form Report
+      &V1 Current or Last Connection Report
+      &V2 Long Form Report
+
+      Copyright© Motorola ISG 1998
+
+      *MM16 V.90 Auto
+      Command Option Description
+      %B  Maximum Modulation RateSets the rate that the modem uses when
+      connecting in a data modulation mode for performing functions such as
+      Internet access or file transfer
+      %B0 Maximum modem rate that the modem supports
+      %B1 300 BPS
+      %B2 1.2 KBPS
+      %B3 2.4 KBPS
+      %B4 4.8 KBPS
+      %B6 9.6 KBPS
+      %B7 7.2 KBPS
+      %B8 12.0 KBPS
+      %B9 14.4 KBPS
+      %B11 16.8 KBPS
+      %B12 19.2 KBPS
+      %B13 21.6 KBPS
+      %B14 24.0 KBPS
+      %B15 26.4 KBPS
+      %B16 28.8 KBPS
+      %B17 31.2 KBPS
+      %B18 33.6 KBPS
+      %B19 32.0 KBPS
+      %B20 34.0 KBPS
+      %B21 36.0 KBPS
+      %B22 38.0 KBPS
+      %B23 40.0 KBPS
+      %B24 42.0 KBPS
+      %B25 44.0 KBPS
+      %B26 46.0 KBPS
+      %B27 48.0 KBPS
+      %B28 50.0 KBPS
+      %B29 52.0 KBPS
+      %B30 54.0 KBPS
+      %B31 56.0 KBPS
+      %B32 58.0 KBPS
+      %B33 60.0 KBPS
+      %B34 28000 BPS
+      %B35 29333 BPS
+      %B36 30666 BPS
+      %B37 33333 BPS
+      %B38 34666 BPS
+      %B39 37333 BPS
+      %B40 38666 BPS
+      %B41 41333 BPS
+      %B42 42666 BPS
+      %B43 45333 BPS
+      %B44 46666 BPS
+      %B45 49333 BPS
+      %B46 50666 BPS
+      %B47 53333 BPS
+      %B48 54666 BPS
+      %C  Data CompressionDetermines whether the modem implements methods of
+      increasing the effective data rate by reducing the number of bits used
+      to represent data
+      %C0 Disable Compression
+      %C1 Enable Compression
+      %D  Disconnect Buffer DelayControls the delay after detection of a
+      disconnect request before the modem disconnects from the telephone line
+      %D0 Disable Delay
+      %Dn Delay for n Seconds (n = 1 to 255)
+      %L  Minimum Modulation Rate
+      %L0 Minimum modem rate that the modem supports
+      %L1 300 BPS
+      %L2 1.2 KBPS
+      %L3 2.4 KBPS
+      %L4 4.8 KBPS
+      %L7 7.2 KBPS
+      %L6 9.6 KBPS
+      %L8 12.0 KBPS
+      %L9 14.4 KBPS
+      %L11 16.8 KBPS
+      %L12 19.2 KBPS
+      %L13 21.6 KBPS
+      %L14 24.0 KBPS
+      %L15 26.4 KBPS
+      %L16 28.8 KBPS
+      %L17 31.2 KBPS
+      %L18 33.6 KBPS
+      %L19 32.0 KBPS
+      %L20 34.0 KBPS
+      %L21 36.0 KBPS
+      %L22 38.0 KBPS
+      %L23 40.0 KBPS
+      %L24 42.0 KBPS
+      %L25 44.0 KBPS
+      %L26 46.0 KBPS
+      %L27 48.0 KBPS
+      %L28 50.0 KBPS
+      %L29 52.0 KBPS
+      %L30 54.0 KBPS
+      %L31 56.0 KBPS
+      %L32 58.0 KBPS
+      %L33 60.0 KBPS
+      %L34 28000 BPS
+      %L35 29333 BPS
+      %L36 30666 BPS
+      %L37 33333 BPS
+      %L38 34666 BPS
+      %L39 37333 BPS
+      %L40 38666 BPS
+      %L41 41333 BPS
+      %L42 42666 BPS
+      %L43 60.0 KBPS
+      %L44 46666 BPS
+      %L45 49333 BPS
+      %L46 50666 BPS
+      %L47 53333 BPS
+      %L48 54666 BPS
+      \K  Break Handling Method
+      \K1 Destructive Expedited
+      \K3 Non-destructive Expedited
+      \K5 Non-destructive Non-expedited
+      \N  Error-Correction Mode
+      \N0 Normal
+      \N1 Direct
+      \N4 LAP-M Only
+      \N6 Reliable
+      \N7 Auto-Reliable
+      \Q  DTE Flow Control
+      \Q0 Disable
+      \Q1 XON/XOFF (software flow control)
+      \Q3 RTS/CTS (hardware flow control)
+      \T  Disconnect on DTE Inactivity
+      \T0 Disable
+      \Tn Disconnect after n minutes of inactivity by the computer;  n = 0 to
+      255
+      \V  Connect Message FormatDetermines which messages the modem generates
+      at connection time
+      \V0 Display DTE Rate
+      \V1 DTE with EC/DC Message
+      \V2 Display DCE Rate
+      \V3 DCE with EC/DC Message
+      \V4 DCE with Modulation & EC/DC Message
+
+      Copyright© Motorola ISG 1998
+      Copyright© Motorola ISG 1998
+
+      -Register Option Description
+      S0  Auto-Answer on Ring Number
+      S0=0 Disable
+      S0=n Answer on Ring n; n=0 to 255
+      S1  Ring Count
+      S1=n Counts the number of rings in an incoming call.  If the modem is
+      configured to auto-answer (S0 set to a non-zero option), when S1=S0, the
+      modem answers the call.
+      S2  Select Escape Character
+      S2=n Specifies ASCII character for Escape; n=0 to 255. Default = 43 (+)
+      S3  Select Carriage-Return Character
+      S3=n Specifies ASCII character for Carriage-Return; n=0 to 127. Default
+      = 13 (CR)
+      S4  Select Line-Feed Character
+      S4=n Specifies ASCII character for Line-Feed; n=0 to 127. Default = 10
+      (LF)
+      S5  Select Backspace Character
+      S5=n Specifies ASCII Character for Backspace; n=0 to 127. Default = 8
+      (BS)
+      S6  Blind Dial
+      S6=n Before dialing, the modem goes off-hook and waits n seconds; n=0 to
+      255. Note: When the ATX2 or ATX4 option is in effect, the S6 value is
+      disregarded.Default = 2
+      S7  Call Time-out
+      S7=n Pause for n seconds; n=0 to 255; before dialing. Default = 60
+      S8  Pause Delay
+      S8=n Pause for n seconds; n=0 to 255; for dial modifier in a dial
+      string. Default = 2
+      S10  DCD Loss Disconnect
+      S10=n Disconnect after n seconds; n=0 to 255 in 0.1 second increments;
+      after DCD signal is de-asserted.  Default = 14
+      S11  Tone Length
+      S11=n Specifies duration, in 0.001 second increments, of DTMF tone when
+      it is generated; n=60 to 255. Default =72
+      S12  Escape Code Guard Time
+      S12=n Specifies the interval, in 0.02-second increments, that must be
+      present on either side of the escape code (+++) for the modem to
+      recognize the escape command and enter command mode.  If S12=0, the
+      speed at which you enter the escape sequence is not a factor. Default =
+      50
+      S18  Test Timer
+      S18=n Specifies test execution duration; n=0 to 255. Default = 0
+
+      Copyright© Motorola ISG 1998
+
+
+      Sent to me by: Sharad Hirjee 

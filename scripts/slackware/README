@@ -1,0 +1,14 @@
+INSTALLATION
+=============
+
+Copy rc.slmodemd to /etc/rc.d/ directory. If you want to be started
+during boot, append to /etc/rc.d/rc.local line: "/etc/rc.d/rc.slmodemd start" or simply "rc.slmodemd start".
+
+If you want to customize it, or to direct it to the right device, edit SLMODEMD_DEVICE.
+
+Script will exec file assuming default location (/usr/sbin/slmodem), so if you placed it somewhere else,
+please correct it in rc.slmodemd.
+
+For problems or something else, please mail me at: <karijes@linuxmail.org>
+
+Sanel Zukan

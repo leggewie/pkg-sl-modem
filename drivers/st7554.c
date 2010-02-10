@@ -55,9 +55,15 @@
 #include <linux/poll.h>
 #include <linux/usb.h>
 #include <linux/device.h>
-#include <linux/devfs_fs_kernel.h>
 
 #include <modem_defs.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,13)
+#define class_simple_device_add(class, dev, addr, name, i)
+#define class_simple_device_remove(dev)
+#define class_simple_create(module, name) (struct class_simple *)(name)
+#define class_simple_destroy(class)
+#endif
 
 #define MAX_MODEMS 16
 
@@ -69,7 +75,8 @@
 #define USB_DBG_URB(fmt...) // USB_DBG(fmt)
 
 static int debug = 0;
-MODULE_PARM(debug,"i");
+
+module_param(debug, int, 1);
 MODULE_PARM_DESC(debug,"Debug level: 0-3 (default=0)");
 
 /* st7554 IDs */
@@ -270,6 +277,10 @@ static int dmabuf_copyin(struct dmabuf *db, void *buffer, unsigned int size)
 
 #define BYTES_IN_FRAMES(s,n) ((((s)->srate*(n))/1000)<<(MFMT_BYTESSHIFT((s)->format)))
 
+#ifndef URB_ASYNC_UNLINK
+#define URB_ASYNC_UNLINK 0
+#endif
+
 #define FILL_URB(state,ch,u) { \
 	(u)->dev = (state)->usbdev;  \
 	(u)->pipe = (ch)->pipe; \
@@ -385,7 +396,11 @@ static int mo_init (struct st7554_state *s)
 /* ----------------------------------------------------------------------- */
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19)
 static void st7554_interrupt(struct urb *urb, struct pt_regs* regs)
+#else
+static void st7554_interrupt(struct urb *urb)
+#endif
 {
 	struct st7554_state *s = urb->context;
 	u32 *status = urb->transfer_buffer;
@@ -426,7 +441,11 @@ static void st7554_interrupt(struct urb *urb, struct pt_regs* regs)
 /* --------------------------------------------------------------------- */
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19)
 static void mo_complete(struct urb *u, struct pt_regs* regs)
+#else
+static void mo_complete(struct urb *u)
+#endif
 {
 	struct st7554_state *s = u->context;
 	struct dmabuf *db = &s->mo.dma;
@@ -485,14 +504,22 @@ static void mo_complete(struct urb *u, struct pt_regs* regs)
 }
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19)
 static void mo_startup_complete(struct urb *u, struct pt_regs* regs)
+#else
+static void mo_startup_complete(struct urb *u)
+#endif
 {
 	struct st7554_state *s = u->context;
 	USB_DBG("mo_startup_complete %d: %d: sent %d.\n",
 		MO_URB_NO(s,u), u->start_frame, u->actual_length);
 	FILL_DESC_OUT(s,&s->mo,u,BYTES_IN_FRAMES(s,DESCFRAMES));
 	u->complete = mo_complete;
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19)
 	mo_complete(u,regs);
+#else
+	mo_complete(u);
+#endif
 	complete(&s->start_comp);
 }
 
@@ -500,7 +527,11 @@ static void mo_startup_complete(struct urb *u, struct pt_regs* regs)
 /* ----------------------------------------------------------------------- */
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19)
 static void mi_complete(struct urb *u, struct pt_regs* regs)
+#else
+static void mi_complete(struct urb *u)
+#endif
 {
 	struct st7554_state *s = u->context;
 	struct urb *next;
@@ -545,7 +576,11 @@ static void mi_complete(struct urb *u, struct pt_regs* regs)
 }
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19)
 static void mi_startup_complete(struct urb *u, struct pt_regs* regs)
+#else
+static void mi_startup_complete(struct urb *u)
+#endif
 {
 	struct st7554_state *s = u->context;
 	struct usb_iso_packet_descriptor *p;
@@ -933,6 +968,11 @@ static int st7554_ioctl(struct inode *inode, struct file *file, unsigned int cmd
 	return -ENOIOCTLCMD;
 }
 
+static long st7554_ioctl32(struct file *file, unsigned int cmd, unsigned long arg)
+{
+        return st7554_ioctl(NULL, file, cmd, arg);
+}
+
 static int st7554_open(struct inode *inode, struct file *file)
 {
 	struct st7554_state *s;
@@ -976,7 +1016,9 @@ static struct file_operations st7554_fops = {
         .read =    st7554_read,
         .write =   st7554_write,
         .poll =    st7554_poll,
-        .ioctl =   st7554_ioctl,
+//        .ioctl =   st7554_ioctl,
+	.unlocked_ioctl = st7554_ioctl32,
+	.compat_ioctl = st7554_ioctl32,
         .open =    st7554_open,
         .release = st7554_close,
 };
@@ -1139,7 +1181,9 @@ static struct usb_device_id st7554_ids [] = {
 MODULE_DEVICE_TABLE (usb, st7554_ids);
 
 static struct usb_driver st7554_usb_driver = {
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,15)
 	.owner =       THIS_MODULE,
+#endif
 	.name =	       "ST7554 USB Modem",
 	.probe =       st7554_probe,
 	.disconnect =  st7554_disconnect,
@@ -1272,7 +1316,6 @@ static int st7554_probe(struct usb_interface *interface,
 
 	usb_set_intfdata(interface, s );
 	class_simple_device_add(st7554_class, MKDEV(243, i), NULL, "slusb%d", i);
-	devfs_mk_cdev(MKDEV(243,i),S_IFCHR|S_IRUSR|S_IWUSR,"slusb%d",i);
 
 	USB_INFO(KERN_INFO "slusb: slusb%d is found.\n", s->minor);
 
@@ -1301,7 +1344,6 @@ static void st7554_disconnect(struct usb_interface *interface)
         }
 
 	class_simple_device_remove(MKDEV(243, s->minor));
- 	devfs_remove("slusb%d",s->minor);
 
 	st7554_stop(s);
 	down(&open_sem);

@@ -17,10 +17,21 @@
 #export KBUILD_VERBOSE
 
 KERNEL_DIR:=/lib/modules/$(shell uname -r)/build
+SUBLEVEL:=$(shell echo $(KERNEL_DIR) | cut -d. -f3 | cut -d. -f1 | cut -d-  -f1)
+# slusb support ends at 2.6.24
+AGE:=$(shell if [ "$(SUBLEVEL)" -gt 24 ] ;then echo NEW;fi)
 
 EXTRA_CFLAGS = -I$(obj) -I$(obj)/../modem
 
-obj-m := slamr.o slusb.o
+ARCH64:=$(shell uname -m | sed -e '/amd64/s//x86_64/' | grep -c x86_64)
+
+ifeq ($(ARCH64), 0)
+obj-m:= slamr.o 
+endif
+
+ifneq ($(AGE), NEW)
+obj-m:= $(obj-m) slusb.o 
+endif
 
 slamr-objs:= amrmo_init.o sysdep_amr.o amrlibs.o
 slusb-objs:= st7554.o
@@ -35,6 +46,7 @@ install: install-devices
 uninstall: remove-devices
 
 kernel-ver::
+	@echo "doing kernel-ver::"
 	$(CC) -I$(KERNEL_DIR)/include -o $@ $@.c
 
 dep:
@@ -46,8 +58,11 @@ install-devices:
 	mkdir -p ${DESTDIR}/dev
 	$(foreach minor,0 1 2 3, \
 	    mknod -m 600 ${DESTDIR}/dev/slamr$(minor) c 242 $(minor) ; ) echo -n
+ifneq ($(AGE), NEW)
 	$(foreach minor,0 1 2 3, \
 	    mknod -m 600 ${DESTDIR}/dev/slusb$(minor) c 243 $(minor) ; ) echo -n
+endif
+
 remove-devices:
 	$(foreach minor,0 1 2 3, \
 	    $(RM) ${DESTDIR}/dev/slamr$(minor) ; ) echo -n
@@ -71,7 +86,9 @@ slamr.o slusb.o:
 	$(LD) -r -o $@ $^
 
 install: uninstall-old
+ifeq ($(ARCH64), 0)
 	install -D -m 644 slamr.o $(module-dir)/slamr.o
+endif
 	install -D -m 644 slusb.o $(module-dir)/slusb.o
 	cp /etc/modules.conf /etc/modules.conf.slamr && \
 	    echo 'alias char-major-242 slamr' >> /etc/modules.conf && \
@@ -92,6 +109,7 @@ uninstall-old:
               $(module-dir)/slmodem.o  # remove old 2.7,2.8 version
 
 %.o: %.c
+	@echo "	doing %.o: %.c"
 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(CFLAGS_$@) -o $@ -c $<
 
 else
@@ -99,13 +117,24 @@ else
 module-dir:=${DESTDIR}/lib/modules/$(KERNEL_VER)/extra
 
 all:
+	@echo "	obj-m=$(obj-m)"
+	@echo "	slamr-objs=$(slamr-objs)" 
 	$(MAKE) modules -C $(KERNEL_DIR) SUBDIRS=$(shell pwd)
+	@echo "	finished all:"
+
 install:
+ifeq ($(ARCH64), 0)
 	install -D -m 644 slamr.ko $(module-dir)/slamr.ko
+endif
+ifneq ($(AGE), NEW)
 	install -D -m 644 slusb.ko $(module-dir)/slusb.ko
+endif
 	/sbin/depmod -a
+
 uninstall:
+ifeq ($(ARCH64), 0)
 	modprobe -r slamr ; echo -n
+endif
 	modprobe -r slusb ; echo -n
 	$(RM) $(module-dir)/slamr.ko
 	$(RM) $(module-dir)/slusb.ko

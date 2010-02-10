@@ -720,7 +720,7 @@ static int tx_info(struct lapm_state *l)
 		f = l->info_list;
 		if(!l->modem->get_chars)
 			return 0;
-		n = l->modem->get_chars(l->modem,f->buf+3,l->tx_info_size);
+		n = l->modem->get_chars(l->modem,(char*)(f->buf+3),l->tx_info_size);
 		if (n < 0) { /* error */
 			EC_ERR("tx_info: get chars error.\n");
 			modem_update_status(l->modem,STATUS_EC_ERROR);
@@ -807,7 +807,7 @@ static void push_rest_data(struct modem *m, int bits)
 		return;
 	if (l->rx_count && l->modem->put_chars) {
 		int ret = l->modem->put_chars(l->modem,
-					      l->rx_buf+l->rx_head,
+					      (const char*)(l->rx_buf+l->rx_head),
 					      l->rx_count);
 		if (ret > 0) {
 			l->rx_head += ret;
@@ -857,7 +857,7 @@ static int rx_info(struct lapm_state *l, frame_t *f)
 	/* recv data */
 	
 	if(l->modem->put_chars)
-		ret = l->modem->put_chars(l->modem,f->buf+3,f->count-3);
+		ret = l->modem->put_chars(l->modem,(const char*)(f->buf+3),f->count-3);
 	if(ret<0) {
 		/* FIXME: handle error*/ ;
 	}

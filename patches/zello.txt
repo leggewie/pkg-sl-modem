@@ -1,0 +1,33 @@
+========
+20080331
+========
+
+What's been changed:
+--------------------
+
+- in kernel 2.6.24 the macro SA_SHIRQ is undefined (it was deprecated - and
+  redefined to IRQF_SHARED - since some previous kernel, I think 2.6.22).
+  The code now use IRQF_SHARED if it's defined, and fall back to SA_SHIRQ if
+  IRQF_SHARED is undef
+
+- every use of pci_find_device function has been replaced with the pair
+  pci_get_device/pci_dev_put. pci_get_device is the recommended way to look
+  for a pci device since some earlier 2.6.x kernel, and pci_find_device has
+  been left for backward compatibility, but may be removed in some next
+  kernel version. The side effect is that you don't need to have
+  CONFIG_PCI_LEGACY defined in your kernel .config (choice Bus
+  Options->Enable deprecated pci_find_* API).
+
+- some explicit casts have been added to prevent some signedness mismatch
+  warnings when compiling
+
+How to patch
+------------
+
+Put the diff file in the directory created untarring
+slmodem-2.9.11-20070813. At the shell prompt, type:
+cat FILENAME.DIFF | patch -p1
+where FILENAME.DIFF is the name of the diff file.
+
+--
+zello <zello@libero.it>

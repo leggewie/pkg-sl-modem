@@ -1,0 +1,32 @@
+#
+# Fichier xtel.lignes
+#
+# Config V.23, modem OLITEC generique
+#modem0,/dev/modem,1200,7,E,\dat\r OK atm0b2\r OK atdt\T\r CONNECT,30
+
+# Config V.23, modem Motorola SM56
+modem0,/dev/modem,1200,7,E,\dat\r OK atm0x3+ms=23\r OK atdt\T\r CONNECT,30
+
+# Config V.23, modem HAYES generique
+#modem0,/dev/modem,1200,7,E,\dat\r OK atm1b2\r OK atdt\T\r CONNECT,30
+
+# Config TVR, Djinn-Flash 9600
+#le_tvr,/dev/modem,9600,8,N,\dat&fm1e0&k3+xm3\r OK atdt\T\r CONNECT,30
+
+# Ce meme Djinn-Flash en mode V.23
+#modem0,/dev/modem,38400,7,E,\dat&fm1e0&k3f3\r OK atdt\T\r CONNECT,30
+
+# Modems USR 28800/33600 (a choisir)
+#modem0,/dev/modem,1200,7,E,\dat\r OK ATM1S34=8&N2\r OK atdt\T\r CONNECT,30
+#modem0,/dev/modem,1200,7,E,\dat\r OK ATM1S34=14&N2\r OK atdt\T\r CONNECT,3
+#modem0,/dev/modem,1200,7,E,\dat\r OK ATM1S27.4=1&N2\r OK atdt\T\r CONNECT,3
+#modem0,/dev/modem,1200,7,E,\dat\r OK ATM1S27=16&N2S40=1S9=100&N2\r OK atdt\T\r CONNECT,30
+
+# Modem USR Sporter 56K
+#modem0,/dev/modem,1200,7,E,\dat\r OK AT&F1M1S27=16S34=8S40=6&N2S9=100&B2\r OK atdt\T\r CONNECT,30
+
+#Modem USR Courier I-modem externe bios 2.50
+#modem0,/dev/modem,38400,7,E,\dat\r OK AT&f1m1l1b0*v2=3s34=8&n2s27=16s40=1s9=100&b2\r OK atdt\T\r CONNECT,30
+
+# Minitel 1
+#modem0,/dev/modem,1200,7,E,minitel1,30

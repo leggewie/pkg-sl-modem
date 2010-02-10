@@ -57,15 +57,12 @@
 
 #define MODEM_AUTHOR "Smart Link Ltd."
 #define MODEM_NAME "SmartLink Soft Modem"
-#define MODEM_VERSION "2.9.9e-pre1"
+#define MODEM_VERSION "2.9.11"
 #define MODEM_DATE __DATE__" "__TIME__
 
 /* event mask */
-#define MDMEVENT_ERROR         0x01
-#define MDMEVENT_RING_START    0x02
-#define MDMEVENT_RING_COMPLETE 0x04
-#define MDMEVENT_RING_CANCEL   0x08
-#define MDMEVENT_ESCAPE        0x10
+#define MDMEVENT_RING_CHECK    0x01
+#define MDMEVENT_ESCAPE        0x02
 
 /* debug prints */
 #define MODEM_INFO(fmt,arg...) printf(fmt , ##arg) ; dprintf(fmt , ##arg)
@@ -79,6 +76,12 @@ extern void  dp_runtime_delete(void *runtime);
 extern void *dcr_create();
 extern void  dcr_delete(void *dcr);
 extern void  dcr_process(void *dcr, void *buf, int len);
+#ifdef MODEM_CONFIG_RING_DETECTOR
+extern void *RD_create(struct modem *m, unsigned rate);
+extern void RD_delete(void *obj);
+extern int  RD_process(void *obj, void *in, int count);
+extern void RD_ring_details(void *obj, long *freq, long *duration);
+#endif
 #ifdef MODEM_CONFIG_CID
 extern void *CID_create(struct modem *m, unsigned rate, unsigned cid_val);
 extern void CID_delete(void *cid);
@@ -696,7 +699,10 @@ void modem_process(struct modem *m,void *in,void *out,int count)
 static void timer_mark_event (void *data)
 {
 	struct modem *m = data;
-	//MODEM_DBG("timer_mark_event: now = %lu...\n", get_time());
+#ifdef DEBUG_TIMERS
+	MODEM_DBG("timer_mark_event: %x | %x : now = %lu...\n",
+		  m->event, m->new_event, get_time());
+#endif
 	m->event |= m->new_event;
 	m->new_event = 0;
 }
@@ -707,8 +713,11 @@ static void schedule_event(struct modem *m, unsigned mask, unsigned long when)
 	m->event_timer.data = m;
 	m->event_timer.func = timer_mark_event;
 	m->event_timer.expires = get_time() + when;
-	//MODEM_DBG("schedule_event: now %lu + %lu = %u...\n",
-	//	  get_time(), when, m->event_timer.expires);
+#ifdef DEBUG_TIMERS
+	MODEM_DBG("schedule_event: %x | %x : now %lu + %lu = %u...\n",
+		  m->new_event, mask,
+		  get_time(), when, m->event_timer.expires);
+#endif
 	timer_add(&m->event_timer);
 }
 
@@ -719,65 +728,42 @@ void modem_event(struct modem *m)
 	m->event = 0;
         MODEM_DBG("modem_event: %x...\n", event);
 
-	if(event&MDMEVENT_ERROR) {
-		MODEM_DBG("modem error...\n");
-	}
-
-	if(event&MDMEVENT_RING_START && m->state == STATE_MODEM_IDLE) {
-		unsigned long now = get_time();
-		m->ring_count++;
-		if(m->ring_count == 1) {
-			MODEM_DBG("ring_start...\n");
-			if(time_before(now,m->ring_last + RING_OFF_MIN(m))) {
-				MODEM_DBG("bad ring: now %lu, last %lu.\n",
-					  now,m->ring_last);
-				m->ring_count = 0;
-			}
-			else {
-				m->ring_first = now;
-				schedule_event(m,MDMEVENT_RING_COMPLETE,
-					       RING_ON_MAX(m) + 1);
-#ifdef MODEM_CONFIG_CID
-				if (TOTAL_RINGS_COUNT(m) == 0 && m->cid_requested)
-					modem_cid_start(m, RING_ON_MAX(m) + RING_OFF_MIN(m));
-#endif
-			}
+	if(event&MDMEVENT_RING_CHECK) {
+		if(m->ring_count == 0) {
+			MODEM_DBG("ring cancel...\n");
+			TOTAL_RINGS_COUNT(m) = 0;
 		}
-		m->ring_last = now;
-	}
-	else if(event&MDMEVENT_RING_COMPLETE) {
-		MODEM_DBG("ring_complete...\n");
-		if ( time_before(m->ring_last,m->ring_first+RING_ON_MIN(m)) ||
-		     time_after(m->ring_last,m->ring_first+RING_ON_MAX(m)) ||
-		     m->ring_count < RING_COUNT_MIN(m)) {
+		else if ( time_before(m->ring_last,m->ring_first+RING_ON_MIN(m)) ||
+			  time_after(m->ring_last,m->ring_first+RING_ON_MAX(m)) ||
+			  m->ring_count < RING_COUNT_MIN(m)) {
 			MODEM_DBG("ring reject: count %d (%lu-%lu)\n",
 				  m->ring_count,m->ring_first,m->ring_last);
 			TOTAL_RINGS_COUNT(m) = 0;
 			m->ring_count = 0;
 		}
 		else {
+			MODEM_DBG("ring valid.\n");
 			m->ring_count = 0;
 			TOTAL_RINGS_COUNT(m)++;
 			if(TOTAL_RINGS_COUNT(m) == 1)
 				modem_put_chars(m,CRLF_CHARS(m),2);
 			modem_report_result(m,RESULT_RING);
-			if (ANSWER_AFTER_RINGS(m) && !m->started &&
+			if (ANSWER_AFTER_RINGS(m) &&
+#ifdef MODEM_CONFIG_RING_DETECTOR
+			    (!m->started || m->rd_obj) &&
+#else
+			    !m->started &&
+#endif
 			    TOTAL_RINGS_COUNT(m) >= ANSWER_AFTER_RINGS(m)) {
 				TOTAL_RINGS_COUNT(m) = 0;
 				modem_answer(m);
 			}
 			else {
-				schedule_event(m,MDMEVENT_RING_CANCEL,
+				schedule_event(m,MDMEVENT_RING_CHECK,
 					       RING_OFF_MAX(m) + 1);
 			}
 		}
 	}
-	else if(event&MDMEVENT_RING_CANCEL) {
-		MODEM_DBG("ring_cancel...\n");
-		TOTAL_RINGS_COUNT(m) = 0;
-		m->ring_count = 0;
-	}
-
 	if(event&MDMEVENT_ESCAPE) {
 		MODEM_DBG("modem_escape (count %d)...\n", m->escape_count);
 		if (m->state == STATE_MODEM_ONLINE && m->escape_count == 3) {
@@ -791,16 +777,37 @@ void modem_event(struct modem *m)
 	}
 }
 
-void modem_error(struct modem *m)
-{
-	m->event |= MDMEVENT_ERROR;
-}
-
 void modem_ring(struct modem *m)
 {
-	m->event |= MDMEVENT_RING_START;
+	unsigned long now = get_time();
+	if (m->state != STATE_MODEM_IDLE)
+		return;
+	m->ring_count++;
+	if(m->ring_count == 1) {
+		MODEM_DBG("modem_ring...\n");
+		if(time_before(now,m->ring_last + RING_OFF_MIN(m))) {
+			MODEM_DBG("bad ring: now %lu, last %lu.\n",
+				  now,m->ring_last);
+			m->ring_count = 0;
+		}
+		else {
+			m->ring_first = now;
+			schedule_event(m,MDMEVENT_RING_CHECK,
+				       RING_ON_MAX(m) + 1);
+#ifdef MODEM_CONFIG_CID
+			if (TOTAL_RINGS_COUNT(m) == 0 && m->cid_requested)
+				modem_cid_start(m, RING_ON_MAX(m) + RING_OFF_MIN(m));
+#endif
+		}
+	}
+	m->ring_last = now;
 }
 
+
+void modem_error(struct modem *m)
+{
+	MODEM_DBG("modem error...\n");
+}
 
 
 
@@ -1193,6 +1200,12 @@ static int modem_stop (struct modem *m)
 		dcr_delete(m->dcr);
 		m->dcr = NULL;
 	}
+#ifdef MODEM_CONFIG_RING_DETECTOR
+	if(m->rd_obj) {
+		RD_delete(m->rd_obj);
+		m->rd_obj = NULL;
+	}
+#endif
 #ifdef MODEM_CONFIG_CID
 	if(m->cid) {
 		CID_delete(m->cid);
@@ -1216,6 +1229,8 @@ static int modem_stop (struct modem *m)
 		modem_report_result(m, m->result_code);
 		m->result_code = 0;
 	}
+
+	m->count = 0;
 	return m->started;
 }
 
@@ -1230,10 +1245,21 @@ static int modem_stop (struct modem *m)
 static void modem_cid_stop(struct modem *m)
 {
 	MODEM_DBG("modem_cid_stop...\n");
-	m->process = NULL;
 	m->sample_timer = 0;
 	m->sample_timer_func = NULL;
+#ifdef MODEM_CONFIG_RING_DETECTOR
+	if(!m->rd_obj) {
+		m->process = NULL;
+		modem_stop(m);
+	}
+	else {
+		CID_delete(m->cid);
+		m->cid = NULL;
+	}
+#else
+	m->process = NULL;
 	modem_stop(m);
+#endif
 	/* continue with answer if need */
 	if (ANSWER_AFTER_RINGS(m) &&
 	    TOTAL_RINGS_COUNT(m) >= ANSWER_AFTER_RINGS(m)) {
@@ -1258,19 +1284,80 @@ static void modem_cid_process(struct modem *m, void *in, void *out, int count)
 static int modem_cid_start(struct modem *m, unsigned timeout)
 {
 	MODEM_DBG("modem_cid_start: timeout = %d...\n", timeout);
+#ifdef MODEM_CONFIG_RING_DETECTOR
+	if(m->started && !m->rd_obj)
+#else
 	if(m->started)
+#endif
 		return -1;
 	m->cid = CID_create(m, m->srate, m->cid_requested);
 	if(!m->cid)
 		return -1;
-	m->sample_timer = m->srate*timeout/MODEM_HZ ;
+	m->sample_timer = m->count + m->srate*timeout/MODEM_HZ ;
 	m->sample_timer_func = modem_cid_stop;
+#ifdef MODEM_CONFIG_RING_DETECTOR
+	if(m->started && m->rd_obj)
+		return 0;
+#endif
 	m->process = modem_cid_process;
         modem_set_hook(m, MODEM_HOOK_SNOOPING);
 	return do_modem_start(m);
 }
 
 #endif /* MODEM_CONFIG_CID */
+
+
+/*
+ *    Ring detector (internal)
+ *
+ */
+
+#ifdef MODEM_CONFIG_RING_DETECTOR
+static void modem_ring_detector_process(struct modem *m, void *in, void *out, int count)
+{
+	int ret;
+	memset(out, 0, count*2);
+	ret = RD_process(m->rd_obj, in, count);
+	if (ret) {
+		long freq, duration;
+		RD_ring_details(m->rd_obj, &freq, &duration);
+		MODEM_DBG("ring details: freq = %ld, duration = %ld\n",
+			  freq, duration);
+		if(freq == 0) {
+			MODEM_DBG("report ring start...\n");
+			modem_ring(m);
+		}
+		else if (freq > 0) {
+			MODEM_DBG("report ring end...\n");
+			/* ring finishing */
+			m->event |= MDMEVENT_RING_CHECK;
+			if (m->ring_count <= 1)
+				m->ring_count = duration * freq / 1000 ;
+			m->ring_last = get_time();
+		}
+		else
+			MODEM_ERR("RD returns %ld freq. (duration %ld)\n",
+				  freq, duration);
+	}
+#ifdef MODEM_CONFIG_CID
+	if(m->cid)
+		modem_cid_process(m, in, out, count);
+#endif
+}
+
+int modem_ring_detector_start(struct modem *m)
+{
+	MODEM_DBG("modem_ring_detector_start...\n");
+	if(m->rd_obj) {
+		MODEM_ERR("modem_ring_detector_start: rd_obj already exists!\n");
+		return -1;
+	}
+	m->rd_obj = RD_create(m, m->srate);
+	m->process = modem_ring_detector_process;
+	modem_set_hook(m, MODEM_HOOK_SNOOPING);
+	return do_modem_start(m);
+}
+#endif /* MODEM_CONFIG_RING_DETECTOR */
 
 
 /*
@@ -1333,10 +1420,16 @@ int modem_voice_command(struct modem *m, enum VOICE_CMD cmd)
 int modem_voice_start(struct modem *m)
 {
 	MODEM_DBG("modem_voice_start...\n");
-	if(m->started)
-		return -1;
 	if(m->voice_obj)
 		return 0;
+	if(m->started) {
+#ifdef MODEM_CONFIG_RING_DETECTOR
+		if(m->rd_obj)
+			modem_stop(m);
+		else
+#endif
+			return -1;
+	}
 	m->voice_obj = VOICE_create(m, m->srate);
 	if(!m->voice_obj)
 		return -1;
@@ -1478,6 +1571,8 @@ int modem_answer(struct modem *m)
                 MODEM_ERR("dp %d is already exists.\n", m->dp->id);
                 return -1;
         }
+	if(m->started)
+		modem_stop(m);
 	m->dp_requested = 0;
 	m->automode_requested = 0; /* MODEM_AUTOMODE(m) */
 	m->sample_timer = ANSWER_DELAY(m) ?
@@ -1495,6 +1590,9 @@ static int modem_dial_start(struct modem *m)
 	if(m->dp) {
 		return -1;
 	}
+	if (m->started)
+		modem_stop(m);
+	m->caller = 1;
 	op = get_dp_operations(DP_CALLPROG);
 	if (op && op->create)
 		dp = op->create(m,DP_CALLPROG,
@@ -1515,7 +1613,6 @@ int modem_dial(struct modem *m)
         MODEM_DBG("modem dial: %s...\n", m->dial_string);
 	m->dp_requested = 0;
 	m->automode_requested = 0;
-        m->caller = 1;
  	ret = modem_dial_start(m);
 	if(ret)
 		return -1;

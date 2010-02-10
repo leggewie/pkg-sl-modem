@@ -1,0 +1,55 @@
+--- drivers/amrmo_init.c.orig	2008-03-31 01:43:53.000000000 -0400
++++ drivers/amrmo_init.c	2008-03-31 01:39:39.000000000 -0400
+@@ -159,16 +159,11 @@
+ #define PCI_VENDOR_ID_PCTEL                     0x134d
+ #define PCI_DEVICE_ID_HSP1688                   0x2189
+ 
+-/* Analogue Devices Inc. 11d4:1805, Motorola proxy */
+-#define PCI_VENDOR_ID_ANALOGUE			0x11d4
+-#define PCI_DEVICE_ID_ANALOGUE			0x1805 
+- /* 14e4:4212 BROADCOM */
+-#define PCI_VENDOR_ID_BROADCOM			0x14e4
+-#define PCI_DEVICE_ID_BROADCOM			0x4212
+-
+ /* Motorola section */
+-#define PCI_VENDOR_ID_MOTOROLA          0x1057
+-#define PCI_DEVICE_ID_MOTOROLA			0x5600
++#define PCI_VENDOR_ID_MOTOROLA          	0x1057
++
++/* Silicon Instruments */
++#define PCI_VENDOR_ID_SILICON                   0x1543
+ 
+ enum {
+ 	ALS300_CARD = 1,
+@@ -185,7 +180,8 @@
+ 	SL1500_CARD,
+ 	SL1801_CARD,
+ 	SL1900_CARD,
+-	SL2800_CARD
++	SL2800_CARD,
++	SL1543_CARD
+ };
+ 
+ 
+@@ -243,17 +239,14 @@
+ 	"SL1500",
+ 	"ALI545A",
+ 	"SL1900",
+-	"SL2800"
++	"SL2800",
++	"SL1543"
+ };
+ 
+ 
+ static struct pci_device_id amrmo_pci_tbl [] __devinitdata = {
+-	{PCI_VENDOR_ID_BROADCOM, PCI_DEVICE_ID_BROADCOM,   /* Broadcom 14e4:4212 */
+-	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1900_CARD},
+-	{PCI_VENDOR_ID_ANALOGUE, PCI_DEVICE_ID_ANALOGUE,   /* Analogue 11d4:1805 */
+-	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1900_CARD},  
+-	{PCI_VENDOR_ID_MOTOROLA, PCI_DEVICE_ID_MOTOROLA,   /* Motorola 1057:5600 */
+-	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1900_CARD},
++	{PCI_VENDOR_ID_SILICON, PCI_DEVICE_ID_SL1900,	   /* SiliconInstr SL1543:3052 */
++	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1543_CARD},
+ 	{PCI_VENDOR_ID_MOTOROLA, PCI_DEVICE_ID_SL1900,     /* Motorola 1057:3052 */
+ 	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1900_CARD},
+ 	{PCI_VENDOR_ID_SMARTLINK_1, PCI_DEVICE_ID_SL1900,  /* 163c:3052 */
