@@ -19,10 +19,7 @@
 KERNEL_DIR:=/lib/modules/$(shell uname -r)/build
 SUBLEVEL:=$(shell echo $(KERNEL_DIR) | cut -d. -f3 | cut -d. -f1 | cut -d-  -f1)
 # slusb support ends at 2.6.24
-
-ifndef USB
 AGE:=$(shell if [ "$(SUBLEVEL)" -gt 24 ] ;then echo NEW;fi)
-endif
 
 FOUND_CLASS_SIMPLE := $(shell grep -q 'class_simple_device_add' ${KERNEL_DIR}/include/linux/device.h 2> /dev/null && echo -DFOUND_CLASS_SIMPLE)
 
@@ -34,7 +31,6 @@ ifeq ($(ARCH64), 0)
 obj-m:= slamr.o 
 endif
 
-# AGE:=test
 ifneq ($(AGE), NEW)
 obj-m:= $(obj-m) slusb.o 
 endif
@@ -57,7 +53,7 @@ kernel-ver::
 
 dep:
 clean:
-	$(RM) kernel-ver $(obj-m) $(obj-m:.o=.ko) *st7554.o amrmo_init.o sysdep_amr.o *.mod.* .*.cmd *~ slusb.*
+	$(RM) kernel-ver $(obj-m) $(obj-m:.o=.ko) *st7554.o amrmo_init.o sysdep_amr.o *.mod.* .*.cmd *~
 	$(RM) -r .tmp_versions
 
 install-devices:
@@ -76,7 +72,7 @@ remove-devices:
 	    $(RM) ${DESTDIR}/dev/slusb$(minor) ; ) echo -n
 
 else
-ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/linux/utsrelease.h $(KERNEL_DIR)/include/linux/version.h 2>/dev/null),)
+ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/linux/version.h),)
 
 slusb-objs:= old_st7554.o
 obj:=.

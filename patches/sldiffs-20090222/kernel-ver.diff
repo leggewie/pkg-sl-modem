@@ -1,0 +1,14 @@
+Workaround for pre-2.6.18 kernels.
+Index: slmodem-2.9.11-20080817/drivers/Makefile
+===================================================================
+--- slmodem-2.9.11-20080817.orig/drivers/Makefile	2008-09-18 05:35:21.000000000 +0200
++++ slmodem-2.9.11-20080817/drivers/Makefile	2008-09-18 08:35:18.000000000 +0200
+@@ -78,7 +78,7 @@
+ 	    $(RM) ${DESTDIR}/dev/slusb$(minor) ; ) echo -n
+ 
+ else
+-ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/linux/version.h),)
++ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/linux/utsrelease.h $(KERNEL_DIR)/include/linux/version.h 2>/dev/null),)
+ 
+ slusb-objs:= old_st7554.o
+ obj:=.
