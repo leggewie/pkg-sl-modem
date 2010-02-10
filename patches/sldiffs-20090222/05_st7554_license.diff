@@ -1,0 +1,14 @@
+Changed the MODULE_LICENSE string to "Dual BSD/GPL" since the license is
+actually a BSD license clone.
+Index: slmodem-2.9.11-20080817/drivers/st7554.c
+===================================================================
+--- slmodem-2.9.11-20080817.orig/drivers/st7554.c	2008-04-18 04:56:46.000000000 +0200
++++ slmodem-2.9.11-20080817/drivers/st7554.c	2008-09-17 15:18:14.000000000 +0200
+@@ -1414,5 +1414,6 @@
+ 
+ MODULE_AUTHOR("Smart Link Ltd.");
+ MODULE_DESCRIPTION("ST7554 USB Smart Link Soft Modem driver.");
+-MODULE_LICENSE("Smart Link Ltd.");
++//MODULE_LICENSE("Smart Link Ltd.");
++MODULE_LICENSE("Dual BSD/GPL");
+ 

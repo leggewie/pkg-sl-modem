@@ -213,7 +213,25 @@ struct st7554_state {
 
 
 static struct st7554_state *st7554_table[MAX_MODEMS] = {};
+#ifdef FOUND_CLASS_SIMPLE
+#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_simple_device_add(class, dev, device, fmt, rest)
+#define CLASS_DESTROY(class) class_simple_destroy(class)
+#define CLASS_DEVICE_DESTROY(class, dev) class_simple_device_remove(dev)
+#define CLASS_CREATE(owner, name) class_simple_create(owner, name)
 static struct class_simple *st7554_class;
+#else
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,25)
+#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) device_create(class, dev, device, fmt, rest)
+#define CLASS_DEVICE_DESTROY(class, dev) device_destroy(class, dev)
+#else
+#include <linux/moduleparam.h>
+#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_device_create(class, dev, device, fmt, rest)
+#define CLASS_DEVICE_DESTROY(class, dev) class_device_destroy(class, dev)
+#endif
+#define CLASS_DESTROY(class) class_destroy(class)
+#define CLASS_CREATE(owner, name) class_create(owner, name)
+static struct class *st7554_class;
+#endif
 
 static DECLARE_MUTEX(open_sem);
 
@@ -1315,7 +1333,7 @@ static int st7554_probe(struct usb_interface *interface,
 	}
 
 	usb_set_intfdata(interface, s );
-	class_simple_device_add(st7554_class, MKDEV(243, i), NULL, "slusb%d", i);
+	CLASS_DEVICE_CREATE(st7554_class, MKDEV(243, i), NULL, "slusb%d", i);
 
 	USB_INFO(KERN_INFO "slusb: slusb%d is found.\n", s->minor);
 
@@ -1343,7 +1361,7 @@ static void st7554_disconnect(struct usb_interface *interface)
                 return;
         }
 
-	class_simple_device_remove(MKDEV(243, s->minor));
+	CLASS_DEVICE_DESTROY(st7554_class, MKDEV(243, s->minor));
 
 	st7554_stop(s);
 	down(&open_sem);
@@ -1376,7 +1394,7 @@ static int __init st7554_modem_init(void)
 	int ret;
 	USB_INFO ("ST7554 USB Modem.\n");
 
-	st7554_class = class_simple_create(THIS_MODULE, "slusb");
+	st7554_class = CLASS_CREATE(THIS_MODULE, "slusb");
 	if (IS_ERR(st7554_class)) {
 		ret = PTR_ERR(st7554_class);
 		USB_ERR("st7554_modem_init: failed to create sysfs class, error %d\n", ret);
@@ -1386,13 +1404,13 @@ static int __init st7554_modem_init(void)
 	ret = usb_register(&st7554_usb_driver);
 	if ( ret ) {
 		USB_ERR ("st7554_modem_init: cannot register usb device.\n");
-		class_simple_destroy(st7554_class);
+		CLASS_DESTROY(st7554_class);
 		return ret;
 	}
 
 	if(register_chrdev(243, "slusb", &st7554_fops) < 0) {
 		usb_deregister(&st7554_usb_driver);
-		class_simple_destroy(st7554_class);
+		CLASS_DESTROY(st7554_class);
 		return -ENOMEM;
 	}
 	return 0;
@@ -1404,7 +1422,7 @@ static void __exit st7554_modem_exit(void)
 	USB_DBG ("st7554: exit...\n");
 	unregister_chrdev(243,"slusb");
 	usb_deregister(&st7554_usb_driver);
-	class_simple_destroy(st7554_class);
+	CLASS_DESTROY(st7554_class);
 }
 
 
@@ -1414,5 +1432,5 @@ module_exit(st7554_modem_exit);
 
 MODULE_AUTHOR("Smart Link Ltd.");
 MODULE_DESCRIPTION("ST7554 USB Smart Link Soft Modem driver.");
-MODULE_LICENSE("Smart Link Ltd.");
-
+//MODULE_LICENSE("Smart Link Ltd.");
+MODULE_LICENSE("Dual BSD/GPL");

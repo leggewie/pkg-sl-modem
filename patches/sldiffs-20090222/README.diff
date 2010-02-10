@@ -1,0 +1,34 @@
+Dropped the TROUBLESHOOTING section from README and adapted the feedback
+section, mentioned the transfer of the modem business to Conexant.
+Index: slmodem-2.9.11-20080817/README
+===================================================================
+--- slmodem-2.9.11-20080817.orig/README	2008-09-18 08:38:11.000000000 +0200
++++ slmodem-2.9.11-20080817/README	2008-09-18 08:38:31.000000000 +0200
+@@ -239,21 +239,13 @@
+ Note: When using ALSA modem driver you don't need to load other
+       modules ('slamr').
+ 
+-
+-Troubleshooting
+-===============
+-
+-If you get an error message during installation/configuration or loading
+-the modules try to see it in FAQ file.
+-
+-Please report the problem to your modem provider or to us
+-(linux-support@smlink.com). 
+-
+-
+ Feedback
+ ========
+ 
+-Please send any feedbacks to Smart Link. See the Smart Link
+-web site for contact information (www.smlink.com) or to
+-linux-support@smlink.com.
++This software has been originaly created and distributed by Smart Link.
++However, Smart Link stopped supported them and apparently left the modem
++business. See http://www.smlink.com/smlink.asp for further information and
++contact data.
+ 
++---
++File modified by Eduard Bloch <blade@debian.org>, 2006

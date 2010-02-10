@@ -1,1 +1,2 @@
-kernel//usr/src/modules/slmodem-2.9.11-20080811/drivers/slamr.ko
+kernel//usr/src/modules/slmodem-2.9.11-20090222/drivers/slamr.ko
+kernel//usr/src/modules/slmodem-2.9.11-20090222/drivers/slusb.ko

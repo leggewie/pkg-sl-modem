@@ -301,7 +301,7 @@ struct modem {
 	void *cid;
 #endif
         /* dialer */
-        char dial_string[32];
+        char dial_string[128];
         /* escape counter */
         unsigned escape_count;
 	unsigned long last_esc_check;

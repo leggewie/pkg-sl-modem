@@ -48,6 +48,8 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include <modem_defs.h>
 #include <modem_debug.h>
@@ -111,7 +113,7 @@ int datafile_save_info(char *file_name,struct dsp_info *info)
 	int ret = -1;
 	int fd;
 
-	fd = open(file_name,O_CREAT|O_WRONLY);
+	fd = open(file_name,O_CREAT|O_WRONLY,(S_IRUSR|S_IWUSR));
 	if(fd < 0)
 		return -errno;
 
