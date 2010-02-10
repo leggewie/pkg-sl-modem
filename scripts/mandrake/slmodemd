@@ -1,0 +1,88 @@
+#!/bin/sh
+#
+# slmodemd:    Starts the SmartLink Modem Daemon
+#
+# chkconfig: 345 90 10
+# description: SmartLink Modem : Autoload slarm + slmodem
+# processname: slmodemd
+# config: /etc/sysconfig/slmodem
+
+# Source function library.
+. /etc/init.d/functions
+
+prog=slmodemd
+RETVAL=0
+
+# Default configuration
+SLMODEMD_DEVICE=slamr0
+SLMODEMD_COUNTRY=ITALY
+
+# Source configuration
+CONFIG=/etc/sysconfig/$prog
+if [ -f $CONFIG ]; then
+        . $CONFIG
+fi
+
+# uncomment this if you want this feature (if necessary edit module pattern):
+# do not try to start on a kernel which does not support it
+# grep -q 'slamr\.o' /lib/modules/`uname -r`/modules.dep || exit 0
+
+start() {
+	cat /proc/modules | grep 'slamr' >/dev/null || {
+	  echo -n "Loading SmartLink Modem driver into kernel ... "
+	  modprobe slamr && echo "done." || { 
+	    echo "failed."
+	    exit -1
+	  }
+	}
+	echo -n "Starting SmartLink Modem driver for $SLMODEMD_DEVICE: "
+	# if you want ALSA comment next line and uncomment last
+	$prog </dev/null >/dev/null 2>/dev/null --country=$SLMODEMD_COUNTRY /dev/$SLMODEMD_DEVICE &
+	# $prog </dev/null >/dev/null 2>/dev/null --country=$SLMODEMD_COUNTRY --alsa /dev/$SLMODEMD_DEVICE &
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && success $"$prog startup" || failure $"$prog startup"
+	echo
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog
+	return $RETVAL
+}
+
+stop() {
+	echo -n "Shutting down SmartLink Modem driver: "
+	killproc $prog
+	RETVAL=$?
+	modprobe -r slamr slusb
+	echo
+	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$prog
+	return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status $prog
+	RETVAL=$?
+	;;
+  restart|reload)
+	stop
+	start
+	RETVAL=$?
+	;;
+  condrestart)
+        if [ -f /var/lock/subsys/$prog ]; then
+		stop
+		start
+		RETVAL=$?
+	fi
+	;;
+  *)
+	echo "*** Usage: $prog {start|stop|status|restart|condrestart}"
+	exit 1
+esac
+
+exit $RETVAL

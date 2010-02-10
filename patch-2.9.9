@@ -1,0 +1,75 @@
+ --- orig/drivers/amrmo_init.c
++++ mod/drivers/amrmo_init.c
+@@ -58,6 +58,9 @@
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2,5,0)
+ #define OLD_KERNEL 1
+ #endif
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,10)
++#define pci_register_driver(drv) ( pci_register_driver(drv) ? 0 : -ENODEV )
++#endif
+ 
+ #ifdef OLD_KERNEL
+ #define iminor(i) MINOR((i)->i_rdev)
+@@ -350,7 +353,8 @@
+ 	if (count > sizeof(amrmo->ibuf))
+ 		count = sizeof(amrmo->ibuf);
+ 	ret = amrmo_card_read(amrmo->card,amrmo->ibuf,count);
+-	copy_to_user(buffer,amrmo->ibuf,ret);
++	if(copy_to_user(buffer,amrmo->ibuf,ret))
++		return -EFAULT;
+ 	return ret;
+ }
+ 
+@@ -363,7 +367,8 @@
+ 		return -EFAULT;
+ 	if (count > sizeof(amrmo->obuf))
+ 		count = sizeof(amrmo->obuf);
+-	copy_from_user(amrmo->obuf,buffer,count);
++	if(copy_from_user(amrmo->obuf,buffer,count))
++		return -EFAULT;
+ 	ret = amrmo_card_write(amrmo->card,amrmo->obuf,count);
+ 	return ret;
+ }
+@@ -692,6 +697,7 @@
+ static int __init amrmo_init(void)
+ {
+ 	struct pci_dev *dev = NULL;
++	int err;
+ #ifdef OLD_KERNEL
+ 	if (!pci_present())
+ 		return -ENODEV;
+@@ -717,7 +723,7 @@
+ 			if (dev->driver && dev->driver->remove)
+ 				dev->driver->remove(dev);
+ 			dev->driver = NULL;
+-#else
++#elif LINUX_VERSION_CODE < KERNEL_VERSION(2,6,10)
+ 			struct device *reldev = get_device(&dev->dev);
+ 			AMRMO_DBG("device %04x:%04x is grabbed by driver %s: try to release\n",
+ 				  dev->vendor,dev->device,
+@@ -727,6 +733,9 @@
+ 				device_release_driver(reldev);
+ 				put_device(reldev);
+ 			}
++#else
++			AMRMO_DBG("device %04x:%04x is grabbed by another driver\n",
++				  dev->vendor,dev->device);
+ #endif
+ 		}
+ 	}
+@@ -739,13 +748,12 @@
+ 		return err;
+ 	}
+ #endif
+-
+-	if (!pci_register_driver(&amrmo_pci_driver)) {
++	if ((err = pci_register_driver(&amrmo_pci_driver)) < 0) {
+ 		pci_unregister_driver(&amrmo_pci_driver);
+ #ifndef OLD_KERNEL
+ 		class_simple_destroy(amrmo_class);
+ #endif
+-                return -ENODEV;
++                return err;
+ 	}
+ 
+ 	if(register_chrdev(AMRMO_MAJOR, "slamr", &amrmo_fops) < 0) {

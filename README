@@ -1,0 +1,263 @@
+
+From: Sasha Khapyorsky <sashak@smlink.com>
+To: goldberg@prep2.technion.ac.il, marvstod@comcast.com
+Cc: dsd@gentoo.org, discuss@linmodems.org
+Subject: [patch] amrmo_init.c for 2.6.10 kernels
+Date: Sun, 9 Jan 2005 00:26:53 +0000
+
+Hello Jacques, MarvS,
+
+Below is patch for slmodem-2.9.9[-alsa]/drivers/amrmo_init.c .
+
+This should fix 2.6.10 incompatibilities and still work with earlier
+kernels.
+
+Thanks and Best Regards,
+Sasha.
+==========
+The patch mentioned above is the included  patch-2.9.9 
+and HAS BEEN applied by Marvin Stodolsky Jan 8, 2005
+The remainder of this file is the original README.
+
+==========
+
+
+Smart Link Ltd.
+http://www.smlink.com
+Sep 30, 2003
+
+
+Smart Link Soft Modem for Linux
+-------------------------------
+
+
+Introduction
+============
+
+This is Smart Link Soft Modem for Linux version 2.9. It provides
+full-featured 56K Voice Fax Modem.
+This is implemented as generic application (slmodemd) and set of
+hardware specific kernel-space drivers (slamr, slusb).
+ALSA modem drivers may be used instead of proprietary ones (see ALSA mode).
+
+Features
+========
+
+Modem: V.92, V.90, V.34, V.32bis, V.32, V.23, V.22, V.21, Bell 103/212.
+Flow control: V.42.
+Compression: V.44, V.42bis.
+Fax: Class 1.
+Voice: V253 like modem.
+Multiple modems are supported.
+
+
+Supported Hardware
+==================
+
+HAMR5600 based AMR/CNR/MDC/ACR modem cards on the following Southbridge
+chips:
+- Intel ICH0,ICH2, ICH3, ICH4
+- Via 686A, 686B, 8231, 8233
+- SiS 630
+- ALI 1535.
+SmartPCI56/561/562/563 based PCI modem cards.
+SmartUSB56 based USB modem.
+
+
+
+Requirements
+============
+
+CPU: Intel Pentium II, Celron. AMD K6, Cyrix 500MHz or higher.
+Memory: 64MB.
+
+OS: Linux 2.4. You need the kernel header files at least (or full kernel
+               source tree) installed and configured.
+    Linux 2.6. You need the full kernel source tree installed and configured.
+
+Note: Most Linux Distributions have 'ready to use' kernel source package -
+      be sure that this is installed.
+
+
+Installation
+============
+
+1. Unpack tar.gz package file:
+
+	$ gzip -dc slmodem-2.9.X.tar.gz | tar xf -
+
+2. 'cd' to package directory:
+
+	$ cd slmodem-2.9.X
+
+3. Review and edit 'Makefile' (if need):
+
+   In many cases you will need to correct path to your local kernel
+   source tree:
+
+        KERNEL_DIR=/path/to/linux
+
+   Default KERNEL_DIR is '/lib/modules/<kerne-version>/build'. Many Linux
+   Distributions use directory '/usr/src/linux-<version>' also.
+
+   Note: If you are using Linux kernel 2.4, only header files should be
+         available for build in $(KERNEL_DIR)/include
+
+   Another way to pass right value KERNEL_DIR is to use command line
+   parameter while running 'make':
+
+        $ make KERNEL_DIR=/path/to/linux ...
+
+4. Run 'make' command to compile package:
+
+	$ make
+
+5. Install. As 'root' user run:
+
+	# make install
+
+   It will install:
+
+   - application 'slmodemd' under '/usr/sbin' directory
+
+   - hardware specific drivers (kernel modules) 'slamr' and 'slusb'
+     under conventional kernel modules directory
+
+   - character device nodes '/dev/slamr0-3' with major number 212
+     (for pci modems) and '/dev/slusb0-3' with major number 213
+     (for usb modems).
+
+   - config modules for autoloading (by editing file '/etc/modules.conf')
+     (only with 2.4 kernels)
+
+6. Config modem country.
+
+   Use AT+GCI=<T.35 country code> command to setup country.
+
+   Also you can setup default modem country by passing command line
+   parameter '--country=MY_COUNTRY' to program 'slmodemd'.
+
+   See output of 'slmodemd --countrylist' for a list of supported
+   country names and T.35 country codes (see also 'slmodemd --help').
+
+   Note: Command ATI7 shows currently installed country setting.
+
+8. Uninstallation.
+
+   In package directory just type:
+
+	# make uninstall
+
+
+Getting Started
+===============
+
+After successful installation and configuration:
+
+1. Load modem driver.
+
+   Load your modem hardware specific kernel module:
+
+	# modprobe slamr
+
+   if you are using AMR/CNR/PCI modem, or
+
+	# modprobe slusb
+
+   if you are using SmartUSB56 Modem.
+
+   Note: this will be done automatically when modules were
+         configured for 'loading on demand'
+
+   Note: this is safe to load both 'alamr' and 'slusb' modules.
+
+2. Run soft modem application.
+
+       # /usr/sbin/slmodemd [options] <device_name>
+
+   Where device name is appropriate device node for your modem
+   (look at output of 'dmesg' command).
+   Run '/usr/sbin/slmodemd --help' for details.
+
+   Examples:
+
+       # /usr/sbin/slmodemd --country=USA /dev/slamr0
+
+   , or for SmartUSB56 Modems:
+
+       # /usr/sbin/slmodemd --country=ITALY /dev/slusb0
+
+3. Using the modem.
+
+   When 'slmodemd' is running this creates PTY (pseudo-terminal) to
+   emulate modem port device, also this creates symbolic link
+   like '/dev/ttySL0' (shown at startup).
+
+   Config your application to use this link '/dev/ttySL0' (or PTY node
+   itself) as modem port.
+
+   Note: Some application want 'to know' that they are working with
+         pseudo-terminal and may require additional configurations.
+
+   Known application notes:
+
+   - 'wvdial' requires option 'Carrier Check = no' in config file
+
+   - some versions of 'kppp' may not work properly with devices named
+     like '/dev/ttySL0'. To workaround this you may create symbolic link
+     '/dev/modem' ( # ln -s /dev/ttySL0 /dev/modem ) and use this link
+     as modem device with 'kppp'
+
+4. Startup automation.
+
+    There are examples of startup scripts in 'scripts' directory.
+
+
+ALSA mode
+=========
+
+ALSA has the built-in modem drivers included in 'alsa-driver' >= 1.0.2
+and in Linux kernel >= 2.6.5. Currently there is 'intel8x0m' (snd-intel8x0m)
+modem driver, which supports ICH based AC97 modems (MC97).
+
+1. Configure your kernel and enable ALSA and ICH based modem support
+   ( 'Device Drivers' -> 'Sound' -> 'Advanced Linux Sound Architecture' ->
+     'PCI devices' -> 'Intel i8x0/MX440; AMD768/8111 modems' ) .
+
+2. Build and install kernel and modules as usual (make , make modules_install,
+   etc.). ICH modem driver modem module name is 'snd-intel8x0m'
+  (if was configured as module).
+
+3. Build application 'slmodemd' with ALSA support. For this in
+   slmodem-2.9.x dir:
+
+      $ cd modem
+      $ make SUPPORT_ALSA=1
+
+   This will build 'slmodemd' with ALSA support. If compilation is failed
+   review Makefile (near ALSA_SUPPORT condition) and define right library
+   and/or CFLAGS
+
+4. Use option '--alsa' when running 'slmodemd' and ALSA conventional
+   device name ('hw:0' or 'hw:1' for instance). If modem support in
+   the kernel was enabled as module module 'snd-intel8x0m' should be loaded.
+   When using ALSA modem driver you don't need to load other modules ('slamr').
+
+
+Troubleshooting
+===============
+
+If you get an error message during installation/configuration or loading
+the modules try to see it in FAQ file.
+
+Please report the problem to your modem provider or to us
+(linux-support@smlink.com). 
+
+
+Feedback
+========
+
+Please send any feedbacks to Smart Link. See the Smart Link
+web site for contact information (www.smlink.com) or to
+linux-support@smlink.com.
+

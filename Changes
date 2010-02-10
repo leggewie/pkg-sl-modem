@@ -1,0 +1,104 @@
+
+* Version 2.9.9
+	- sysfs support (contributed by Daniel Drake)
+	- fix broken USB ST7554 support for 2.4 kernels
+	- V32 fixes
+	- misc fixes
+
+* Version 2.9.8
+	- T.35 country codes fixes
+	- Fax Class1 support
+	- Mandrake style startup script 'scripts/mandrake' (contributed by Gaetano Lombardo)
+	- misc improvements
+	- misc fixes
+
+* Version 2.9.7
+	- Support for SL2800 modem cards
+	- V90/V92 improvements
+	- Voice modem (V253 like, supports vgetty)
+	- V23 fixes
+        - CID, ring detection fixes
+	- misc improvements and fixes
+
+* Version 2.9.6
+	- v34 and v34 fallback fix
+	- v92 QC fix
+	- COPYING file was added
+	- '--perm' option fix (thanks to Michal Jaegermann)
+	- v34/v90/v92 improvements and fixes
+	- v32, v32bis modems
+	- v22, v22bis, Bell212 modems
+	- v23 modem
+	- Bell103, V21 modem
+	- Caller ID
+	- Pulse dialer
+	- SuSE style startup script 'scripts/suse' (contributed by Gerd Fleischer)
+	- improvements and fixes
+
+* Version 2.9.5
+	- v8/v34/v90 improvements
+	- ALSA mode improvements (looks more useful now)
+	- ALSA xrun recovery
+	- ability to update tx/rx delay
+	- ICH ALSA driver (intel8x0m.c) 'long names' fix
+	- Debian style startup script 'scripts/debian/slmodem' (contributed by Mike Gabriel)
+	- improvements and fixes
+
+* Version 2.9.4
+	- group and permission setup for PTY
+	- 'devfs' support (for Linux Kernel 2.4)
+	- improvements and fixes
+
+* Version 2.9.3
+	- ALSA mode (not finished, experimental, kernel patch is needed)
+	- ICH5 support
+        - RH style startup script and RPM spec file were contributed by Stefan Becker
+	- 'scripts' directory for misc useful utils was added
+	- improvements and fixes
+
+* Version 2.9.2
+	- support for st7554 based USB modems readded for kernels 2.4, 2.6
+	- 'devfs' support (for Linux Kernel 2.6)
+	- many fixes
+
+* Version 2.9.1
+	- user-space softmodem
+	- support for kernel 2.6
+
+* Version 2.8.4
+	- 2.8 release line is suspended
+	- v92 QC support
+
+* Version 2.8.3
+	- critical v34/v90 fixes
+	- backward compatible 'install-amr/-usb' make targets
+	- error corrector small improvements
+	- misc fixes
+
+* Version 2.8.2
+        - installation improvements.
+        - invalid start delay fix.
+        - disabling pulse dialing (not implemented yet).
+        - v34/v90 protocol fixes.
+        - at processor improvements.
+        - reentrant dsp code.
+        - misc fixes.
+
+* Version 2.8.1
+	- escape mode switch fix.
+	- AT&A,AT+MS commands.
+        - error corrector protocol fixes.
+        - tty driver improvements.
+        - mgetty support.
+	- support for speaker (if exists).
+        - procfs interface for debugging.
+	- hot device unplug support.
+        - misc fixes.
+
+* Version 2.8.0
+        - new open architecture.
+        - modem core from scratch.
+        - pluggable hw modem drivers.
+	- support for multiple modems.
+        - V34/V90 caller and answer data modem.
+

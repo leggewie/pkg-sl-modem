@@ -1,0 +1,122 @@
+#!/bin/sh
+#
+# slmodemd:    Starts the SmartLink Modem Daemon
+#
+# chkconfig: 345 90 10
+# description: This is the user space part of the SmartLink Modem driver
+# processname: slmodemd
+# config: /etc/sysconfig/slmodem
+
+# Source function library.
+#. /etc/init.d/functions
+
+NAME=slmodemd
+DAEMON=/usr/sbin/slmodemd
+PIDFILE=/var/run/$NAME.pid
+RETVAL=0
+
+# Default configuration
+SLMODEMD_DEVICE=slamr0
+SLMODEMD_COUNTRY=USA
+
+# Test presence of daemon binary
+test -f $DAEMON || exit 0
+
+# Source configuration
+CONFIG=/etc/default/$NAME
+if [ -f $CONFIG ]; then
+        . $CONFIG
+else
+  echo "
+#
+# This is the default configuration for the slmodem driver daemon
+# running on Debian systems.
+#	
+# Edit device node and country code here ... 
+#
+# possible country codes are:
+#
+#   USA
+#   GERMANY
+#   BELGIUM
+#   etc.
+#   
+#  use \'$DAEMON --countrylist\' to check out other countries
+#
+
+SLMODEMD_DEVICE=$SLMODEMD_DEVICE
+SLMODEMD_COUNTRY=$SLMODEMD_COUNTRY
+" > $CONFIG
+fi
+
+# uncomment this if you want this feature (if necessary edit module pattern):
+# do not try to start on a kernel which does not support it
+grep 'slamr\..*o' /lib/modules/`uname -r`/modules.dep > /dev/null || { \
+
+  echo "SmartLink modem driver not supported by Kernel `uname -r`. Exiting ..."
+  exit 0
+
+}
+
+start() {
+        cat /proc/modules | grep 'slamr' >/dev/null || { 
+	  echo -n "Loading SmartLink Modem driver into kernel ... " 
+	  modprobe slamr && echo "done." || { i
+	    echo "failed."
+	    exit -1
+	  }
+	}
+ 	echo -n "Starting SmartLink Modem driver for: $SLMODEMD_DEVICE"
+	start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON --make-pidfile --background --quiet -- -c $SLMODEMD_COUNTRY /dev/$SLMODEMD_DEVICE
+	RETVAL=$?
+}
+
+stop() {
+	echo -n "Shutting down SmartLink Modem driver normally"
+	ps -A | grep $NAME >/dev/null 2>/dev/null && {
+          start-stop-daemon --stop --quiet --pidfile $PIDFILE --exec $DAEMON ||
+	  {
+  	    echo " probably failed."
+ 	    echo -n "Trying it the hard way (send SIGKILL all $NAME processes): " 
+	    killall -KILL $NAME
+	    /bin/true
+	    RETVAL=0
+	  } 
+	} || { echo -n " ... no $NAME daemon running"; RETVAL=0; }
+	
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	stop
+        echo ""
+        rm $PIDFILE
+	start
+	;;
+  *)
+        echo "Usage: /etc/init.d/$NAME {start|stop|restart}"
+	exit 1
+esac
+
+									
+if [ $? == 0 ]; then
+  echo "."
+  if [ $1 == "stop" ]; then
+    rm $PIDFILE &>/dev/null
+  fi
+  exit 0
+else
+  echo " failed."
+  exit -1
+fi
+											       
+
+
+

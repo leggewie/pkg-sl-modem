@@ -1,0 +1,97 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          slmodemd
+# Required-Start:    $syslog $remote_fs 
+# Required-Stop:     $syslog
+# Default-Start:     3 5
+# Default-Stop:      0 1 2 6
+# Short-Description: slmodem daemon
+# Description:       Start slmodem daemon for smartlink
+#	softmodem driver.
+### END INIT INFO
+
+# Check for missing daemon 
+SLMODEMD_BIN=/usr/sbin/slmodemd
+if [ ! -x $SLMODEMD_BIN ]; then
+    echo "slmodemd: $SLMODEMD_BIN not found"
+    exit 5
+fi
+ 
+# Check for config file in /etc/sysconfig
+# if not using default config
+SLMODEMD_CONFIG=/etc/sysconfig/slmodemd
+if [ ! -r $SLMODEMD_CONFIG ]; then
+    echo "slmodemd: $SLMODEMD_CONFIG not found - using default config"
+    SLMODEMD_DEVICE=/dev/slamr0
+    SLMODEMD_COUNTRY=GERMANY
+else
+    . $SLMODEMD_CONFIG
+fi
+
+# Check for kernel modules
+case `echo "$SLMODEMD_DEVICE"|cut -c6-10` in
+    slamr)
+        grep -q 'slamr\..*o' /lib/modules/`uname -r`/modules.dep || \
+	    { echo "slmodemd: kernel module slamr.(k)o missing"; exit 1; }
+        ;;
+    slusb)
+    	grep -q 'slusb\..*o' /lib/modules/`uname -r`/modules.dep || \
+	    { echo "slmodemd: kernel module slusb.(k)o missing"; exit 1; }
+        ;;
+    *)
+        echo "slmodemd: no kernel module for $SLMODEMD_DEVICE - broken config?"
+	exit 1
+	;;
+esac
+	
+
+# Source SUSE rc functions and reset
+. /etc/rc.status
+rc_reset
+
+case "$1" in
+    start)
+	echo -n "Starting slmodemd"
+	# loading modules also required for restart
+	if [ "`echo "$SLMODEMD_DEVICE"|cut -c6-10`" == "slamr" ]; then
+	    modprobe slamr
+	else
+	    modprobe slusb
+	fi
+	startproc $SLMODEMD_BIN --country=$SLMODEMD_COUNTRY $SLMODEMD_DEVICE > /dev/null 2>&1
+	rc_status -v
+	;;
+    stop)
+	echo -n "Shutting down slmodemd"
+	killproc -TERM $SLMODEMD_BIN
+	modprobe -r slamr slusb
+	rc_status -v
+	;;
+    reload|restart)
+	$0 stop
+	$0 start
+	rc_status
+	;;
+    try-restart)
+        # only restart if already running
+        if [ "`$0 status > /dev/null 2>&1`" == "0" ]; then
+	    $0 restart
+	else
+	    echo "slmodemd not running"
+	fi
+	rc_status
+	;;
+    status)
+        echo -n "slmodemd is:"
+        checkproc $SLMODEMD_BIN
+	rc_status -v
+	;;	
+    *)
+	echo "Usage: $0 {start|stop|reload|restart|try-restart|status}"
+	exit 1
+	;;
+esac
+rc_exit
+
+
