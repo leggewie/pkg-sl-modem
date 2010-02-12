@@ -28,7 +28,7 @@ Package: sl-modem-daemon
 Architecture: i386 amd64
 Depends: ${misc:Depends}, ${shlibs:Depends}, debconf | debconf-2.0, adduser
 Provides: slmodem
-Conflicts: sl-modem-modules, sl-modem-source (<<2.9.9d+e-pre2-10)
+Conflicts: sl-modem-modules, sl-modem-source (<< 2.9.11~20080817)
 Description: SmartLink software modem daemon
  The SmartLink modem daemon is the application part of the
  driver for recent modems produced by Smart Link Ltd.
