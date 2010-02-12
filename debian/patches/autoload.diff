@@ -1,3 +1,5 @@
+Description: Export the right aliases for auto-load on open.
+Author: Scott James Remnant <scott@ubuntu.com>
 Index: sl-modem-2.9.11~20080817/drivers/old_st7554.c
 ===================================================================
 --- sl-modem-2.9.11~20080817.orig/drivers/old_st7554.c	2009-03-05 20:24:32.000000000 +0000
