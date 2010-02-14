@@ -1,10 +1,27 @@
-sl-modem (2.9.11~20090222-3~1.gbp6e3407) UNRELEASED; urgency=low
+sl-modem (2.9.11~20090222-3) unstable; urgency=low
 
-  ** SNAPSHOT build @6e340748db721554fe28a68806f1173c42f3a327 **
+  [ Rolf Leggewie ]
+  * debian/control:
+    - add myself to Uploaders
+    - update description for sl-modem-daemon package. (LP: #109620)
+    - request the package to be autobuilt (adjust debian/copyright accordingly)
+    - drop kernel-package from Recommends, we use dkms
+    - move linux-headers from Recommends to Depends and make more robust
+    - stop to provide sl-modem-modules-new which has been unused for years now
+  * debian/patches: add autoload.diff patch from Ubuntu
+    (Ubuntu should be able to go back to sync mode now)
 
-  * Call /usr/lib/dkms/common.postinst for DKMS logic (LP: #497149)
+  [ أحمد المحمودي (Ahmed El-Mahmoudy) ]
+  * debian/control:
+    - sl-modem-source conflicts with sl-modem-daemon version 2.9.11~20080817
+      and earlier (LP: #520890)
+    - Bump Standards-Version to 3.8.4
+  * debian/sl-modem-daemon.init: Fix error message when slamr is not found
+    (LP: #42991)
+  * debian/sl-modem-source.postinst: use DKMS-provided logic instead of
+    maintaining our own (LP: #497149)
 
- -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Thu, 14 Jan 2010 00:41:25 +0200
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sun, 14 Feb 2010 21:27:04 +0200
 
 sl-modem (2.9.11~20090222-2) unstable; urgency=low
 
