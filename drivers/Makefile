@@ -45,8 +45,14 @@ slusb-objs:= st7554.o
 ifndef KERNELRELEASE
 ifndef KERNEL_VER
 
+
+KVERS?=$(shell ./kernel-ver)
+
+
+
 all install uninstall: kernel-ver
-	$(MAKE) $@ KERNEL_VER=$(shell ./kernel-ver)
+	$(MAKE) $@ KERNEL_VER=$(KVERS)
+#	$(MAKE) $@ KERNEL_VER=$(shell ./kernel-ver)
 
 install: install-devices
 uninstall: remove-devices
@@ -80,9 +86,9 @@ ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/linux/utsrelease.h $(KERNE
 
 slusb-objs:= old_st7554.o
 obj:=.
-module-dir:=${DESTDIR}/lib/modules/$(KERNEL_VER)/misc
+module-dir ?= ${DESTDIR}/lib/modules/$(KERNEL_VER)/misc
 
-CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include $(FOUND_CLASS_SIMPLE)
+CFLAGS:= -Wall -pipe -O3 -fomit-frame-pointer -D__KERNEL__ -DMODULE -DEXPORT_SYMTAB `test -f $(KERNEL_DIR)/include/linux/modversions.h && echo -DMODVERSIONS --include $(KERNEL_DIR)/include/linux/modversions.h -I$(KERNEL_DIR)/include` $(FOUND_CLASS_SIMPLE)
 
 all: $(obj-m)
 
