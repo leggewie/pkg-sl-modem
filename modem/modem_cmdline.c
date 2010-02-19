@@ -74,8 +74,8 @@ unsigned int need_realtime = 1;
 unsigned int ring_detector = 0;
 #endif
 unsigned int use_alsa = 0;
-const char *modem_group = "dialout";
 unsigned int use_short_buffer = 0;
+const char *modem_group = "uucp";
 mode_t modem_perm  = 0660;
 
 
@@ -113,14 +113,14 @@ static struct opt {
 	{'c',"country","default modem country name",MANDATORY,STRING,"USA"},
 	{ 0 ,"countrylist","show list of supported countries"},
 	{'a',"alsa","ALSA mode (see README for howto)"},
-	{'g',"group","Modem TTY group",MANDATORY,STRING,"dialout"},
+	{'g',"group","Modem TTY group",MANDATORY,STRING,"uucp"},
 	{'p',"perm","Modem TTY permission",MANDATORY,INTEGER,"0660"},
 #ifdef MODEM_CONFIG_RING_DETECTOR
 	{'r',"ringdetector","with internal ring detector (software)"},
 #endif
 	{'n',"nortpriority","run with regular priority"},
 	{'s',"shortbuffer","use short buffer (4 periods length)"},
-	{'d',"debug","debug level (developers only, for ./sl...)",OPTIONAL,INTEGER,"0"},
+	{'d',"debug","debug level",OPTIONAL,INTEGER,"0"},
 	{'l',"log","logging mode",OPTIONAL,INTEGER,"5"},
 	{}
 };

@@ -62,9 +62,6 @@
 #include <linux/poll.h>
 #include <linux/fs.h>
 #include <asm/uaccess.h>
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)
-#include <linux/sched.h>
-#endif
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(2,5,0)
 #define OLD_KERNEL 1
@@ -736,7 +733,6 @@ MODULE_PARM_DESC(debug,"debug level: 0-3 (default=0)");
 MODULE_AUTHOR("Smart Link Ltd.");
 MODULE_DESCRIPTION("SmartLink HAMR5600,SmartPCI56/561 based modem driver");
 MODULE_LICENSE("Smart Link Ltd.");
-MODULE_ALIAS_CHARDEV_MAJOR(AMRMO_MAJOR);
 
 
 static int __init amrmo_init(void)

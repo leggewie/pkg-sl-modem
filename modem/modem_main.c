@@ -53,13 +53,10 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
-#include <sys/time.h>
-#include <sys/resource.h>
 #include <sched.h>
 #include <signal.h>
 #include <limits.h>
 #include <grp.h>
-#include <pwd.h>
 
 #ifdef SUPPORT_ALSA
 #define ALSA_PCM_NEW_HW_PARAMS_API 1
@@ -78,10 +75,6 @@
 
 #define DBG(fmt,args...) dprintf("main: " fmt, ##args)
 
-
-#define SLMODEMD_USER "Slmodemd"
-#define LOCKED_MEM_MIN_KB (8UL * 1024)
-#define LOCKED_MEM_MIN    (LOCKED_MEM_MIN_KB * 1024)
 
 #define CLOSE_COUNT_MAX 100
 
@@ -943,7 +936,6 @@ int modem_main(const char *dev_name)
 	struct modem *m;
 	int pty;
 	int ret = 0;
-	struct passwd *pwd;
 
 	modem_debug_init(basename(dev_name));
 
@@ -991,46 +983,6 @@ int modem_main(const char *dev_name)
 
 	signal(SIGINT, mark_termination);
 	signal(SIGTERM, mark_termination);
-
-#ifdef SLMODEMD_USER
-	if (need_realtime) {
-		struct rlimit limit;
-		if (getrlimit(RLIMIT_MEMLOCK, &limit)) {
-			ERR("getrlimit failed to read RLIMIT_MEMLOCK\n");
-			exit(-1);
-		}
-		if (limit.rlim_cur != RLIM_INFINITY &&
-			limit.rlim_cur < LOCKED_MEM_MIN) {
-			ERR("locked memory limit too low:\n");
-			ERR("need %lu bytes, have %lu bytes\n", LOCKED_MEM_MIN,
-				(unsigned long)limit.rlim_cur);
-			ERR("try 'ulimit -l %lu'\n", LOCKED_MEM_MIN_KB);
-			exit(-1);
-		}
-	}
-
-	pwd = getpwnam(SLMODEMD_USER);
-	if (!pwd) {
-		ERR("getpwnam " SLMODEMD_USER ": %s\n",strerror(errno));
-		exit(-1);
-	}
-
-	ret = (setgroups(1,&pwd->pw_gid) ||
-	       setgid(pwd->pw_gid) ||
-	       setuid(pwd->pw_uid));
-	if (ret) {
-		ERR("setgroups or setgid %ld or setuid %ld failed: %s\n",
-		    (long)pwd->pw_gid,(long)pwd->pw_uid,strerror(errno));
-		exit(-1);
-	}
-
-	if (setuid(0) != -1) {
-		ERR("setuid 0 succeeded after dropping privileges!\n");
-		exit(-1);
-	}
-	DBG("dropped privileges to %ld.%ld\n",
-	    (long)pwd->pw_gid,(long)pwd->pw_uid);
-#endif
 
 	INFO("Use `%s' as modem device, Ctrl+C for termination.\n",
 	     *link_name ? link_name : m->pty_name);
