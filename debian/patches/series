@@ -5,5 +5,4 @@ modem_group.diff
 11_logfile.diff
 debug_level.diff
 12_ulimit_warn.diff
-2.6.31.diff
 autoload.diff
