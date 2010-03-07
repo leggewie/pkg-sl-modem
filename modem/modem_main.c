@@ -552,14 +552,14 @@ static int modemap_start (struct modem *m)
 	int ret;
 	DBG("modemap_start...\n");
 	dev->delay = 0;
-        ret = ioctl(dev->fd,MDMCTL_START,0);
+        ret = ioctl(dev->fd,100000+MDMCTL_START,0);
 	if (ret < 0)
 		return ret;
 	ret = 192*2;
 	memset(outbuf, 0 , ret);
 	ret = write(dev->fd, outbuf, ret);
 	if (ret < 0) {
-		ioctl(dev->fd,MDMCTL_STOP,0);
+		ioctl(dev->fd,100000+MDMCTL_STOP,0);
 		return ret;
 	}
 	dev->delay = ret/2;
@@ -570,7 +570,7 @@ static int modemap_stop (struct modem *m)
 {
 	struct device_struct *dev = m->dev_data;
 	DBG("modemap_stop...\n");
-        return ioctl(dev->fd,MDMCTL_STOP,0);
+        return ioctl(dev->fd,100000+MDMCTL_STOP,0);
 }
 
 static int modemap_ioctl(struct modem *m, unsigned int cmd, unsigned long arg)
@@ -580,7 +580,7 @@ static int modemap_ioctl(struct modem *m, unsigned int cmd, unsigned long arg)
 	DBG("modemap_ioctl: cmd %x, arg %lx...\n",cmd,arg);
 	if (cmd == MDMCTL_SETFRAG)
 		arg <<= MFMT_SHIFT(m->format);
-	ret = ioctl(dev->fd,cmd,arg);
+	ret = ioctl(dev->fd,cmd+100000,&arg);
 	if (cmd == MDMCTL_IODELAY && ret > 0) {
 		ret >>= MFMT_SHIFT(m->format);
 		ret += dev->delay;
@@ -810,7 +810,7 @@ static int modem_run(struct modem *m, struct device_struct *dev)
 				continue;
 			}
 #endif
-			ret = ioctl(dev->fd,MDMCTL_GETSTAT,&stat);
+			ret = ioctl(dev->fd,100000+MDMCTL_GETSTAT,&stat);
 			if(ret < 0) {
 				ERR("dev ioctl: %s\n",strerror(errno));
 				return -1;

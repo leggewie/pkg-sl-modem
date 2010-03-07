@@ -1,0 +1,5 @@
+all:
+	@echo " finished all:"
+	@echo DEST=${DESTDIR}
+	@echo RM=${RM}
+	@echo module-dir=${module-dir}

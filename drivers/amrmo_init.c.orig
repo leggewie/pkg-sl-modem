@@ -437,17 +437,12 @@ static unsigned int amrmo_poll(struct file *file, poll_table *wait)
 
 
 
-static int amrmo_ioctl(struct inode *inode, struct file *file, unsigned int cmd, unsigned long parg)
+static int amrmo_ioctl(struct inode *inode, struct file *file, unsigned int cmd, unsigned long arg)
 {
 	struct amrmo_struct *amrmo = (struct amrmo_struct *)file->private_data;
         unsigned long flags;
 	int ret;
 	unsigned stat;
-	unsigned long arg=0;
-
-	cmd -= 100000;
-	if (parg)
-		copy_from_user(&arg, (unsigned long *)parg, sizeof(arg));
 	AMRMO_DBG("amrmo_ioctl: cmd %x, arg %lx...\n",cmd,arg);
         switch (cmd) 
         {
@@ -456,7 +451,7 @@ static int amrmo_ioctl(struct inode *inode, struct file *file, unsigned int cmd,
 		stat = amrmo->status;
 		amrmo->status = 0;
 		spin_unlock_irqrestore(&amrmo->lock,flags);
-                if (put_user(stat, (unsigned *) parg))
+                if (put_user(stat, (unsigned *) arg))
                         return -EFAULT;
 		return 0;
 	case MDMCTL_START:

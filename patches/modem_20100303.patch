@@ -1,0 +1,79 @@
+diff -ur orig/slmodem-2.9.11-20100106/drivers/amrmo_init.c slmodem-2.9.11-20100106/drivers/amrmo_init.c
+--- orig/slmodem-2.9.11-20100106/drivers/amrmo_init.c	2008-04-01 05:08:42.000000000 +0300
++++ slmodem-2.9.11-20100106/drivers/amrmo_init.c	2010-03-04 06:25:33.297133596 +0200
+@@ -434,12 +434,17 @@
+ 
+ 
+ 
+-static int amrmo_ioctl(struct inode *inode, struct file *file, unsigned int cmd, unsigned long arg)
++static int amrmo_ioctl(struct inode *inode, struct file *file, unsigned int cmd, unsigned long parg)
+ {
+ 	struct amrmo_struct *amrmo = (struct amrmo_struct *)file->private_data;
+         unsigned long flags;
+ 	int ret;
+ 	unsigned stat;
++	unsigned long arg=0;
++
++	cmd -= 100000;
++	if (parg)
++		copy_from_user(&arg, (unsigned long *)parg, sizeof(arg));
+ 	AMRMO_DBG("amrmo_ioctl: cmd %x, arg %lx...\n",cmd,arg);
+         switch (cmd) 
+         {
+@@ -448,7 +453,7 @@
+ 		stat = amrmo->status;
+ 		amrmo->status = 0;
+ 		spin_unlock_irqrestore(&amrmo->lock,flags);
+-                if (put_user(stat, (unsigned *) arg))
++                if (put_user(stat, (unsigned *) parg))
+                         return -EFAULT;
+ 		return 0;
+ 	case MDMCTL_START:
+diff -ur orig/slmodem-2.9.11-20100106/modem/modem_main.c slmodem-2.9.11-20100106/modem/modem_main.c
+--- orig/slmodem-2.9.11-20100106/modem/modem_main.c	2008-08-04 04:40:13.000000000 +0300
++++ slmodem-2.9.11-20100106/modem/modem_main.c	2010-03-04 06:17:48.366253090 +0200
+@@ -552,14 +552,14 @@
+ 	int ret;
+ 	DBG("modemap_start...\n");
+ 	dev->delay = 0;
+-        ret = ioctl(dev->fd,MDMCTL_START,0);
++        ret = ioctl(dev->fd,100000+MDMCTL_START,0);
+ 	if (ret < 0)
+ 		return ret;
+ 	ret = 192*2;
+ 	memset(outbuf, 0 , ret);
+ 	ret = write(dev->fd, outbuf, ret);
+ 	if (ret < 0) {
+-		ioctl(dev->fd,MDMCTL_STOP,0);
++		ioctl(dev->fd,100000+MDMCTL_STOP,0);
+ 		return ret;
+ 	}
+ 	dev->delay = ret/2;
+@@ -570,7 +570,7 @@
+ {
+ 	struct device_struct *dev = m->dev_data;
+ 	DBG("modemap_stop...\n");
+-        return ioctl(dev->fd,MDMCTL_STOP,0);
++        return ioctl(dev->fd,100000+MDMCTL_STOP,0);
+ }
+ 
+ static int modemap_ioctl(struct modem *m, unsigned int cmd, unsigned long arg)
+@@ -580,7 +580,7 @@
+ 	DBG("modemap_ioctl: cmd %x, arg %lx...\n",cmd,arg);
+ 	if (cmd == MDMCTL_SETFRAG)
+ 		arg <<= MFMT_SHIFT(m->format);
+-	ret = ioctl(dev->fd,cmd,arg);
++	ret = ioctl(dev->fd,cmd+100000,&arg);
+ 	if (cmd == MDMCTL_IODELAY && ret > 0) {
+ 		ret >>= MFMT_SHIFT(m->format);
+ 		ret += dev->delay;
+@@ -810,7 +810,7 @@
+ 				continue;
+ 			}
+ #endif
+-			ret = ioctl(dev->fd,MDMCTL_GETSTAT,&stat);
++			ret = ioctl(dev->fd,100000+MDMCTL_GETSTAT,&stat);
+ 			if(ret < 0) {
+ 				ERR("dev ioctl: %s\n",strerror(errno));
+ 				return -1;
+
