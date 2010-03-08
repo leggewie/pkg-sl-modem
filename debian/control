@@ -5,6 +5,7 @@ Maintainer: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sou
 Uploaders: Maurizio Avogadro <mavoga@gmail.com>, Rolf Leggewie <foss@rolf.leggewie.biz>
 Build-Depends: debhelper (>= 7.0.50~), bzip2, libasound2-dev (>> 1.0.6) [i386], lib32asound2-dev [amd64], libc6-dev-i386 [amd64] | lib32c-dev [amd64], gcc-multilib [amd64], po-debconf
 Standards-Version: 3.8.4
+DM-Upload-Allowed: yes
 Homepage: http://linmodems.technion.ac.il/packages/smartlink/
 Vcs-Git: git://git.debian.org/git/collab-maint/sl-modem.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/sl-modem.git
