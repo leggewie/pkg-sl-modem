@@ -1,3 +1,15 @@
+sl-modem (2.9.11~20100303-1) unstable; urgency=low
+
+  * New upstream release.
+    + Fixes NO CARRIER issue with linux kernel >= 2.6.31
+  * Dropped 2.6.31.diff patch, as it got applied upstream.
+  * Refreshed debian/sl-modem-source.lintian-overrides
+  * debian/control: Added DM-Upload-Allowed field.
+  * Only include modem/modem_defs.h in sl-modem-source
+  * debian/rules: add -s switch to dh to correctly build on amd64 archs.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sun, 14 Mar 2010 13:03:39 +0200
+
 sl-modem (2.9.11~20090222-3) unstable; urgency=low
 
   [ Rolf Leggewie ]
