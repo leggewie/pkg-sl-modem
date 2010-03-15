@@ -13,7 +13,7 @@ XS-Autobuild: yes
 
 Package: sl-modem-source
 Architecture: i386
-Depends: ${misc:Depends}, quilt, libc6-dev,
+Depends: ${misc:Depends}, libc6-dev,
  linux-headers-686 | linux-headers-amd64 | linux-headers-generic | linux-headers
 Recommends: dkms
 Description: SmartLink software modem driver - module building source
