@@ -1,3 +1,13 @@
+sl-modem (2.9.11~20100303-2) unstable; urgency=low
+
+  * debian/control:
+    + Really remove quilt from sl-modem-source's Depends
+    + Add execstack to Build-Deps
+  * debian/rules: Mark slmodemd as not requiring executable stack
+    (LP: #537650)
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Tue, 16 Mar 2010 22:44:51 +0200
+
 sl-modem (2.9.11~20100303-1) unstable; urgency=low
 
   * New upstream release.
