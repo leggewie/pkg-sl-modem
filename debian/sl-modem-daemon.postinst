@@ -21,6 +21,7 @@ fi
 
 # Remove old modutils file
 test -r /etc/modutils/sl-modem-daemon.modutils && rm /etc/modutils/sl-modem-daemon.modutils
+test -r /etc/modprobe.d/sl-modem-daemon.modutils && rm /etc/modprobe.d/sl-modem-daemon.modutils
 
 case "$1" in
     configure)
