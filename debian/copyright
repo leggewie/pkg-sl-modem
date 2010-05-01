@@ -14,10 +14,10 @@ Upstream-Source: http://linmodems.technion.ac.il/packages/smartlink/
 
 Files: debian/*
 Author: Eduard Bloch <blade@debian.org>
-Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users@users.sourceforge.net>
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
 Author: Maurizio Avogadro <mavoga@gmail.com>
 Author: Rolf Leggewie <foss@rolf.leggewie.biz>
-Copyright: Copyright © 2008-2010, أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users@users.sourceforge.net>
+Copyright: Copyright © 2008-2010, أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
 Copyright: Copyright © 2010 Rolf Leggewie
 License: BSD-C3
 
