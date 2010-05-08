@@ -1,3 +1,12 @@
+sl-modem (2.9.11~20100303-3) unstable; urgency=low
+
+  * debian/control, debian/copyright: Updated my email address
+  * Update Spanish translations (Closes: #577050)
+  * sl-modem-daemon.postinst: Remove /etc/modprobe.d/sl-modem-daemon.modutils
+    on upgrade/install (Closes: #579825).
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Sat, 08 May 2010 19:26:20 +0300
+
 sl-modem (2.9.11~20100303-2) unstable; urgency=low
 
   * debian/control:
