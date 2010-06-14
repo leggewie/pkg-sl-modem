@@ -1,8 +1,7 @@
-Helper module to tell the kernel to keep away from unsupported PCI id numbers.
-Index: slmodem-2.9.11-20080817/ungrab-winmodem/Readme.txt
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ slmodem-2.9.11-20080817/ungrab-winmodem/Readme.txt	2008-09-18 09:32:09.000000000 +0200
+Description: Helper module to tell the kernel to keep away from unsupported PCI id numbers.
+Origin: http://linmodems.technion.ac.il/packages/smartlink/ungrab-winmodem-20090716.tar.gz
+--- /dev/null
++++ b/ungrab-winmodem/Readme.txt
 @@ -0,0 +1,42 @@
 +---------------
 +
@@ -46,11 +45,9 @@ Index: slmodem-2.9.11-20080817/ungrab-winmodem/Readme.txt
 +
 +This text written by Jacques Goldberg
 +Questions: discuss@linmodems.org    , Subject: ungrab-winmodem
-Index: slmodem-2.9.11-20080817/ungrab-winmodem/ungrab-winmodem.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ slmodem-2.9.11-20080817/ungrab-winmodem/ungrab-winmodem.c	2008-09-18 09:33:45.000000000 +0200
-@@ -0,0 +1,101 @@
+--- /dev/null
++++ b/ungrab-winmodem/ungrab-winmodem.c
+@@ -0,0 +1,105 @@
 +/*
 + * Copyright (c) 2005, linmodems.org
 + * 
@@ -78,6 +75,10 @@ Index: slmodem-2.9.11-20080817/ungrab-winmodem/ungrab-winmodem.c
 +#include <linux/init.h>
 +#include <linux/pci.h>
 +#include <linux/kernel.h>
++
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,21)
++#define pci_find_device pci_get_device
++#endif
 +
 +#define PCI_DEVICE_ID_ALI5457			0x5457
 +#define PCI_DEVICE_ID_ALI5459			0x5459
@@ -152,10 +153,8 @@ Index: slmodem-2.9.11-20080817/ungrab-winmodem/ungrab-winmodem.c
 +MODULE_AUTHOR("linmodems.org");
 +MODULE_DESCRIPTION("No driver - just try release softmodem device");
 +MODULE_LICENSE("GPL");
-Index: slmodem-2.9.11-20080817/ungrab-winmodem/Makefile
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ slmodem-2.9.11-20080817/ungrab-winmodem/Makefile	2008-09-18 09:32:09.000000000 +0200
+--- /dev/null
++++ b/ungrab-winmodem/Makefile
 @@ -0,0 +1,23 @@
 +
 +KERNEL_VER:=$(shell uname -r)
@@ -179,4 +178,17 @@ Index: slmodem-2.9.11-20080817/ungrab-winmodem/Makefile
 +	modprobe -r ungrab-winmodem ; echo -n
 +	$(RM) $(INSTALL_DIR)/ungrab-winmodem.ko
 +	/sbin/depmod -a
++
+--- /dev/null
++++ b/ungrab-winmodem/updates.txt
+@@ -0,0 +1,10 @@
++
++20082701 - Support for Motorola chipset 1057:3052 retained, and Silicon Instr. 1543:3052 added.
++After testing support removed for 1053:3000, Broadcom and vendor=11d4 Analog Devices Inc (Motorola proxy) removed. 
++Marv Stodolsky
++
++20090716 - Thanks to Philippe Vouters
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,21)
++#define pci_find_device pci_get_device
++#endif
 +
