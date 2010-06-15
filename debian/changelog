@@ -1,3 +1,15 @@
+sl-modem (2.9.11~20100303-4) unstable; urgency=low
+
+  * Updated to ungrab-winmodem 20090716 from upstream. Credits to
+    Harald Jenny <harald@a-little-linux-box.at> for the heads up.
+  * Added patch 2.6.33.diff, to use path of utsrelease.h for linux
+    kernels >= 2.6.33 Credits to Harald Jenny
+    <harald@a-little-linux-box.at> for the heads up
+  * debian/source_sl-modem.py, debian/sl-modem-daemon.install: Added an apport
+    hook.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Tue, 15 Jun 2010 10:28:35 +0300
+
 sl-modem (2.9.11~20100303-3) unstable; urgency=low
 
   * debian/control, debian/copyright: Updated my email address
