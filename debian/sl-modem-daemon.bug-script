@@ -1,0 +1,11 @@
+#!/bin/sh
+
+for f in /proc/version_signature /etc/default/sl-modem-daemon /proc/asound/* /var/log/slmodem.log; do
+  echo ============ $f ===============
+  cat $f
+done >&3
+
+for c in 'lspci -vvnn' 'lsmod' 'lsusb'; do
+  echo ============ $c ===============
+  $c
+done >&3
