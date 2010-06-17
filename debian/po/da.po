@@ -1,24 +1,17 @@
-#
-#    Translators, if you are not familiar with the PO format, gettext
-#    documentation is worth reading, especially sections dedicated to
-#    this format, e.g. by running:
-#         info -n '(gettext)PO Files'
-#         info -n '(gettext)Header Entry'
-#
-#    Some information specific to po-debconf are available at
-#            /usr/share/doc/po-debconf/README-trans
-#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
-#
-#    Developers do not need to manually edit POT or PO files.
+# Danish translation sl-modem.
+# Copyright (C) 2010 sl-modem & nedenstående oversættere.
+# This file is distributed under the same license as the sl-modem package.
+# Morten Brix Pedersen <morten@wtf.dk>, 2004.
+# Joe Hansen <joedalton2@yahoo.dk>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: sl-modem\n"
 "Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
 "POT-Creation-Date: 2009-01-28 06:51+0200\n"
-"PO-Revision-Date: 2004-03-30 13:11+0200\n"
-"Last-Translator: Morten Brix Pedersen <morten@wtf.dk>\n"
-"Language-Team: Danish <dansk@klid.dk>\n"
+"PO-Revision-Date: 2010-06-17 17:30+01:00\n"
+"Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
+"Language-Team: Danish <debian-l10n-danish@lists.debian.org> \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,6 +23,8 @@ msgid ""
 "USA [ Enter the country (in uppercase and in English) where your language is "
 "mostly spoken, for example FRANCE for French ]"
 msgstr ""
+"USA [ Indtast landet (med store bogstaver og på engelsk) hvor dit sprog "
+"er mest udbredt, for eksempel FRANCE for fransk ]"
 
 #. Type: select
 #. Description
@@ -38,7 +33,7 @@ msgstr ""
 #. German
 #: ../sl-modem-daemon.templates:1002
 msgid "Location of the modem:"
-msgstr ""
+msgstr "Placering af modemmet:"
 
 #. Type: select
 #. Description
@@ -46,10 +41,6 @@ msgstr ""
 #. language is mostly spoken, for example FRANCE for French or GERMANY for
 #. German
 #: ../sl-modem-daemon.templates:1002
-#, fuzzy
-#| msgid ""
-#| "In which country is your modem located? Please select the telephone "
-#| "system used in your country."
 msgid ""
 "Indicate the country in which your modem is located. Please select the  "
 "telephone system used in your country."
@@ -57,5 +48,3 @@ msgstr ""
 "I hvilket land er dette modem placeret? Vælg telefonsystemet brugt i dit "
 "land."
 
-#~ msgid "_list_"
-#~ msgstr "_list_"
