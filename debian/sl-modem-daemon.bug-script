@@ -5,7 +5,8 @@ for f in /proc/version_signature /etc/default/sl-modem-daemon /proc/asound/* /va
   cat $f
 done >&3
 
-for c in 'lspci -vvnn' 'lsmod' 'lsusb'; do
-  echo ============ $c ===============
+for c in 'lspci -vvnn' 'lsmod' 'lsusb' \
+         'ls -l  /dev/ttySL*  /dev/pts/*  /dev/slamr* /dev/slusb*'; do
+  echo ============ "$c" ===============
   $c
 done >&3
