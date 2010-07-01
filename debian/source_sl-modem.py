@@ -10,3 +10,5 @@ def add_info(report):
   report['Lspci'] = command_output(['lspci','-vvnn'])
   report['Lsusb'] = command_output(['lsusb'])
   attach_file(report, '/proc/version_signature', 'ProcVersionSignature')
+  report['DevNodes'] = command_output(['sh', '-c',
+    'ls -l /dev/ttySL*  /dev/pts/*  /dev/slamr* /dev/slusb*'])
