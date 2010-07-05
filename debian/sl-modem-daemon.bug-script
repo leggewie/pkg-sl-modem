@@ -1,4 +1,51 @@
-#!/bin/sh
+#!/bin/bash
+
+WvDialConf=/etc/wvdial.conf
+Fax=
+Dialup=
+
+yesno "Is there a problem with dialup ? [y/N] " nop
+[ $REPLY = "nop" ] || Dialup=1
+yesno "Is there a problem with fax ? [y/N] " nop
+[ $REPLY = "nop" ] || Fax=1
+
+if [ $Fax ]; then
+  [ ! -r /etc/default/sl-modem-daemon ] || . /etc/default/sl-modem-daemon
+  # Check if sl-modem is configured for ALSA mode:
+  if echo $SLMODEMD_DEVICE | grep : > /dev/null \
+  || echo $OPTS | grep alsa > /dev/null; then
+    printf "\nsl-modem is configured for ALSA mode, yet fax does not work with ALSA mode\n\n"
+  fi
+  if ! lsmod | grep '\(slamr\|slusb\)' > /dev/null \
+      && [ $SLMODEMD_DEVICE  = "alsa" ]; then
+      printf \
+"
+SLMODEM_DEVICE is set to auto, and neither slamr nor slusb is loaded, please
+explicitly set SLMODEM_DEVICE to slamr ( or slusb if you are using a USB
+modem), and try again before continuing with this bug report.
+
+"
+    [ -z $Dialup ] || exit 1;
+  fi
+fi
+
+if [ $Dialup ]; then
+  printf "\nIt is recommended to test with wvdial before continuing with this bug report\n"
+  yesno "Did you try dialup using wvdial utility ? [y/N] " nop
+  if [ $REPLY = "yep" ]; then
+      printf \
+"
+Please enter the path to wvdial configuration file, by default it is
+/etc/wvdial.conf, note that this file will be included in the bug report after
+removing Username and Password fields
+"
+    read
+    [ -z $REPLY ] || [ ! -r $REPLY ] || WvDialConf=$REPLY
+  fi
+fi
+
+[ -z $Dialup ] || echo "Problem with dialup" >&3
+[ -z $Fax ] || echo "Problem with fax" >&3
 
 for f in /proc/version_signature /etc/default/sl-modem-daemon /proc/asound/* /var/log/slmodem.log; do
   echo ============ $f ===============
@@ -10,3 +57,8 @@ for c in 'lspci -vvnn' 'lsmod' 'lsusb' \
   echo ============ "$c" ===============
   $c
 done >&3
+
+if [ $Dialup -a -r $WvDialConf ]; then
+  echo ============ WvDial Conf =============== >&3
+  sed -e '/^\s*\(Password\|Username\)/ d'  $WvDialConf >&3
+fi
