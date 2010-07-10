@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
 Uploaders: Maurizio Avogadro <mavoga@gmail.com>, Rolf Leggewie <foss@rolf.leggewie.biz>
 Build-Depends: debhelper (>= 7.0.50~), bzip2, libasound2-dev (>> 1.0.6) [i386], lib32asound2-dev [amd64], libc6-dev-i386 [amd64] | lib32c-dev [amd64], gcc-multilib [amd64], po-debconf, execstack
-Standards-Version: 3.8.4
+Standards-Version: 3.9.0
 DM-Upload-Allowed: yes
 Homepage: http://linmodems.technion.ac.il/packages/smartlink/
 Vcs-Git: git://git.debian.org/git/collab-maint/sl-modem.git
@@ -30,7 +30,8 @@ Package: sl-modem-daemon
 Architecture: i386 amd64
 Depends: ${misc:Depends}, ${shlibs:Depends}, debconf | debconf-2.0, adduser
 Provides: slmodem
-Conflicts: sl-modem-modules, sl-modem-source (<< 2.9.11~20080817)
+Conflicts: sl-modem-modules
+Breaks: sl-modem-source (<< 2.9.11~20080817)
 Description: SmartLink software modem daemon
  The SmartLink modem daemon is the application part of the
  driver for recent modems produced by Smart Link Ltd.
