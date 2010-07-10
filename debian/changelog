@@ -1,3 +1,22 @@
+sl-modem (2.9.11~20100303-5) unstable; urgency=low
+
+  * debian/sl-modem-daemon.bug-*: Added reportbug customization and script
+    files.
+  * debian/rules: put sequence to run before any option (for
+    compatibility with debhelper v8)
+  * Update Danish translation (Closes: #586239)
+  * debian/source_sl-modem.py: Enhance apport hook
+    + Add output of: ls -l /dev/ttySL* /dev/pts/* /dev/slamr* /dev/slusb
+    + Interacts with user to specify the problem.
+    + Check for ALSA mode if problem is with fax.
+    + Ask to test with WvDial if problem is with dialup, also attach wvdial
+      conf file (if it exists).
+  * debian/control:
+    + Bumped Standards-Version to 3.9.0
+    + sl-modem-source (<< 2.9.11~20080817) moved from Conflicts to Breaks
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Sat, 10 Jul 2010 14:22:38 +0300
+
 sl-modem (2.9.11~20100303-4) unstable; urgency=low
 
   * Updated to ungrab-winmodem 20090716 from upstream. Credits to
