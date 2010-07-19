@@ -1,4 +1,4 @@
 version=3
 
-opts=dversionmangle=s/~/-/ \
+opts="uversionmangle=s/-/~/" \
   http://linmodems.technion.ac.il/packages/smartlink/slmodem-([\d.-]+)\.tar\.gz
