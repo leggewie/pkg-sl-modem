@@ -76,7 +76,7 @@ remove-devices:
 	    $(RM) ${DESTDIR}/dev/slusb$(minor) ; ) echo -n
 
 else
-ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/generated/utsrelease.h $(KERNEL_DIR)/include/linux/utsrelease.h $(KERNEL_DIR)/include/linux/version.h 2>/dev/null),)
+ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/linux/utsrelease.h $(KERNEL_DIR)/include/linux/version.h 2>/dev/null),)
 
 slusb-objs:= old_st7554.o
 obj:=.
