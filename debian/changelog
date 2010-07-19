@@ -1,3 +1,12 @@
+sl-modem (2.9.11~20100718-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/watch: Fixed mangling to get a proper orig tarball
+  * Removed 2.6.33.diff patch as it got applied upstream.
+  * debian/copyright: Replaced empty lines in license text with ' .'
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Mon, 19 Jul 2010 10:24:18 +0300
+
 sl-modem (2.9.11~20100303-5) unstable; urgency=low
 
   * debian/sl-modem-daemon.bug-*: Added reportbug customization and script
