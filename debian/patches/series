@@ -6,4 +6,3 @@ modem_group.diff
 debug_level.diff
 12_ulimit_warn.diff
 autoload.diff
-2.6.33.diff
