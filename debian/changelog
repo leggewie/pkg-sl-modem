@@ -1,3 +1,12 @@
+sl-modem (2.9.11~20100718-2) unstable; urgency=low
+
+  * debian/sl-modem-daemon.init: Run 'aplay -l' with LC_ALL=C to fix modem
+    detection with non-English locales (Closes: #626231) (LP: #626231), patch
+    submitted by: Milan Bouchet-Valat <nalimilan@club.fr>
+  * debian/control: Bumped Standards-Version to 3.9.1, no changes needed.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Sun, 29 Aug 2010 23:59:01 +0200
+
 sl-modem (2.9.11~20100718-1) unstable; urgency=low
 
   * New upstream release.
