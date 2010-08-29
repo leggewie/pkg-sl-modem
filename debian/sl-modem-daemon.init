@@ -43,7 +43,7 @@ alsaload() {
 
     if ! proc_grep=$(grep -i "\[Modem   " /proc/asound/cards) ; then
     # if there is aplay output, get card and device numbers and form SLMODEMD_DEVICE as hw:a,b
-        if aplay_grep=$(aplay -l | egrep '^card [0-9].*(M|m)odem') ; then
+        if aplay_grep=$(LC_ALL=C aplay -l | egrep '^card [0-9].*(M|m)odem') ; then
             aplay_grep_line=$(echo "$aplay_grep" | sed -r 's/^card ([[:digit:]]+).*device ([[:digit:]]+).*$/\1 \2/')
 
             # Let's configure subdevice
@@ -63,7 +63,7 @@ alsaload() {
             for x in $driverlist ; do $modprobe $x 2>/dev/null ; done
 
             for start_reps in `seq 100` ; do
-                test -e /proc/asound/cards && proc_grep=$(grep -i "\[Modem   " -i /proc/asound/cards) && (aplay -l | egrep '^card [0-9]*\: Modem ' >/dev/null) && break
+                test -e /proc/asound/cards && proc_grep=$(grep -i "\[Modem   " -i /proc/asound/cards) && (LC_ALL=C aplay -l | egrep '^card [0-9]*\: Modem ' >/dev/null) && break
                 sleep 0.1
             done
 
