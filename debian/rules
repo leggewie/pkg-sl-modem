@@ -5,7 +5,7 @@ export KVERS
 CVERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut -d- -f1)
 
 %:
-	dh $@ -s
+	dh $@ -s --with dkms
 
 override_dh_auto_build:
 	$(MAKE) SUPPORT_ALSA=1 CC="gcc $(shell dpkg-architecture -ei386 || echo -m32)"
@@ -20,7 +20,6 @@ override_dh_auto_install:
 
 	# Copy only the driver source to the proper location
 	tar -c --exclude ".svn" modem/modem_defs.h drivers patches ungrab-winmodem | tar x -C debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)
-	sed -e "s/#VERSION#/$(CVERSION)/g" debian/dkms.conf.in > debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)/dkms.conf
 	chmod -R a+r debian/sl-modem-source/
 
 override_dh_installchangelogs:
@@ -35,3 +34,6 @@ override_dh_installinit:
 
 override_dh_installmodules:
 	dh_installmodules --name=sl-modem
+
+override_dh_dkms:
+	dh_dkms -V
