@@ -1,8 +1,7 @@
 #!/bin/sh
 set -e
 
-CVERSION=$(dpkg-query -W -f='${Version}' sl-modem-source | sed -e 's/\(.*\)-.*/\1/')
-ARCH=`dpkg --print-architecture`
+#DEBHELPER#
 
 daemon_stop () {
    if [ -e /var/run/slmodemd.pid ] ; then
@@ -14,8 +13,6 @@ daemon_stop () {
 case "$1" in
   configure)
     if [ -x /usr/lib/dkms/common.postinst ]; then
-      /usr/lib/dkms/common.postinst sl-modem $CVERSION /usr/share/sl-modem-source $ARCH $2
-
       # If either slamr or slusb module is actually in use, stop slmodemd, and 
       # remove the respective module:
       for module in slamr slusb ; do
@@ -35,5 +32,4 @@ case "$1" in
   ;;
 esac
 
-#DEBHELPER#
 
