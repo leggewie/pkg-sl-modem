@@ -10,7 +10,7 @@ CVERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut
 override_dh_auto_build:
 	$(MAKE) SUPPORT_ALSA=1 CC="gcc $(shell dpkg-architecture -ei386 || echo -m32)"
 	# Mark slmodemd as not requiring executable stack (LP: #537650)
-	execstack -c modem/slmodemd
+	PATH=/usr/sbin:/sbin:$$PATH execstack -c modem/slmodemd
 
 	# Make 15sl-modem-daemon executable before install:
 	chmod +x debian/15sl-modem-daemon
