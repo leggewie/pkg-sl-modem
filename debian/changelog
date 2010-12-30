@@ -1,3 +1,9 @@
+sl-modem (2.9.11~20100718-3) unstable; urgency=low
+
+  * Add /usr/sbin:/sbin to PATH before calling execstack (Closes: #608367)
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Thu, 30 Dec 2010 17:50:05 +0200
+
 sl-modem (2.9.11~20100718-2) unstable; urgency=low
 
   * debian/sl-modem-daemon.init: Run 'aplay -l' with LC_ALL=C to fix modem
