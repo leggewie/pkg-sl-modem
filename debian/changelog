@@ -1,3 +1,15 @@
+sl-modem (2.9.11~20100718-4) unstable; urgency=low
+
+  * Added Indonesian translation (Closes: #608557)
+  * Added alsa-utils to sl-modem-daemon Depends (LP: #706236)
+  * Added ioctl.diff patch (from Gentoo) to fix compilation of slamr module
+    with kernel 2.6.36 and later (Closes: #613906) (LP: #737650)
+  * Added semaphore.diff patch to fix compilation of slusb module with kernel
+    2.6.37
+  * Remove leading ./ from lintian override
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Sat, 19 Mar 2011 17:02:27 +0200
+
 sl-modem (2.9.11~20100718-3) unstable; urgency=low
 
   * Add /usr/sbin:/sbin to PATH before calling execstack (Closes: #608367)
