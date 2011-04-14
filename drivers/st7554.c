@@ -233,7 +233,11 @@ static struct class_simple *st7554_class;
 static struct class *st7554_class;
 #endif
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)
 static DECLARE_MUTEX(open_sem);
+#else
+static DEFINE_SEMAPHORE(open_sem);
+#endif
 
 /* --------------------------------------------------------------------- */
 
@@ -1234,7 +1238,11 @@ static int st7554_probe(struct usb_interface *interface,
 	memset(s, 0, sizeof(*s));
 
 	spin_lock_init(&s->lock);
+#ifdef init_MUTEX
 	init_MUTEX (&s->sem);
+#else
+  sema_init (&s->sem, 1);
+#endif
 	init_waitqueue_head(&s->wait);
 
 	s->name = "ST7554 USB Modem";
