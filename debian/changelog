@@ -1,3 +1,26 @@
+sl-modem (2.9.11~20110321-1) unstable; urgency=low
+
+  * New upstream release
+  * Removed patches that got applied upstream: ioctl.diff, semaphore.diff
+  * Refreshed autoload.diff patch
+  * Bumped compat level to 8
+  * debian/control: Bumped Standards-Version to 3.9.2, no changes needed
+  * Use DKMS debhelper script
+    + Renamed debian/dkms.conf.in to debian/sl-modem-source.dkms, also
+      replaced #VERSION# with #MODULE_VERSION#
+    + debian/control:
+      - Added dkms >= 2.1.1.2-1~ to build-deps
+      - Removed dkms from Recommends, since dh_dkms will add it to Depends.
+    + debian/rules:
+      - Use DKMS debhelper addon
+      - override dh_dkms to invocate -V option.
+    + Removed debian/sl-modem-source.prerm
+    + debian/sl-modem-source.postinst: Removed DKMS invocation, as it will be
+      added by dh_dkms.
+  * debian/sl-modem-source.lintian-overrides: Updated path in override.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Thu, 14 Apr 2011 16:52:32 +0200
+
 sl-modem (2.9.11~20100718-4) unstable; urgency=low
 
   * Added Indonesian translation (Closes: #608557)
