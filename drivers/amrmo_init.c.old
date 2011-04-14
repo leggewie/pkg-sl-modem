@@ -437,11 +437,11 @@ static unsigned int amrmo_poll(struct file *file, poll_table *wait)
 
 
 
-static long amrmo_unlocked_ioctl(struct file *file, unsigned int cmd, unsigned long parg)
+static int amrmo_ioctl(struct inode *inode, struct file *file, unsigned int cmd, unsigned long parg)
 {
 	struct amrmo_struct *amrmo = (struct amrmo_struct *)file->private_data;
         unsigned long flags;
-	long ret;
+	int ret;
 	unsigned stat;
 	unsigned long arg=0;
 
@@ -514,7 +514,7 @@ static struct file_operations amrmo_fops = {
         .read =    amrmo_read,
         .write =   amrmo_write,
         .poll =    amrmo_poll,
-        .unlocked_ioctl =   amrmo_unlocked_ioctl,
+        .ioctl =   amrmo_ioctl,
         .open =    amrmo_open,
         .release = amrmo_release,
 };
