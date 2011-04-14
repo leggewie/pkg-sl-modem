@@ -3,7 +3,7 @@ Section: non-free/misc
 Priority: optional
 Maintainer: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
 Uploaders: Maurizio Avogadro <mavoga@gmail.com>, Rolf Leggewie <foss@rolf.leggewie.biz>
-Build-Depends: debhelper (>= 7.0.50~), bzip2, libasound2-dev (>> 1.0.6) [i386], lib32asound2-dev [amd64], libc6-dev-i386 [amd64] | lib32c-dev [amd64], gcc-multilib [amd64], po-debconf, execstack, dkms (>= 2.1.1.2-1~)
+Build-Depends: debhelper (>= 8), bzip2, libasound2-dev (>> 1.0.6) [i386], lib32asound2-dev [amd64], libc6-dev-i386 [amd64] | lib32c-dev [amd64], gcc-multilib [amd64], po-debconf, execstack, dkms (>= 2.1.1.2-1~)
 Standards-Version: 3.9.1
 DM-Upload-Allowed: yes
 Homepage: http://linmodems.technion.ac.il/packages/smartlink/
