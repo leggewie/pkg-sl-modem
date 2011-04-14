@@ -10,7 +10,7 @@ Author: Scott James Remnant <scott@ubuntu.com>
  
 --- a/drivers/st7554.c
 +++ b/drivers/st7554.c
-@@ -1434,3 +1434,4 @@
+@@ -1442,3 +1442,4 @@
  MODULE_DESCRIPTION("ST7554 USB Smart Link Soft Modem driver.");
  //MODULE_LICENSE("Smart Link Ltd.");
  MODULE_LICENSE("Dual BSD/GPL");
