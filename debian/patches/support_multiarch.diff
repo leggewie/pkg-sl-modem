@@ -1,0 +1,14 @@
+Description: Support multiarch include dirs
+ libc6 moved arch dependent headers to multiarch include directory
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+--- a/modem/Makefile
++++ b/modem/Makefile
+@@ -24,7 +24,7 @@
+ 
+ RM:= rm -f
+ 
+-CFLAGS+= -Wall -g -O -I. -DCONFIG_DEBUG_MODEM
++CFLAGS+= -Wall -g -O -I. -DCONFIG_DEBUG_MODEM -I/usr/include/$(shell dpkg-architecture -qDEB_BUILD_MULTIARCH)
+ 
+ modem-objs:= \
+ 	modem.o modem_datafile.o modem_at.o modem_timer.o \
