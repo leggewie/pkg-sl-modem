@@ -1,3 +1,10 @@
+sl-modem (2.9.11~20110321-2) unstable; urgency=low
+
+  * Added support_multiarch.diff patch to support multiarch include dirs,
+    since libc6 moved arch dependent headers to multiarch include directory.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Wed, 27 Jul 2011 19:25:59 +0200
+
 sl-modem (2.9.11~20110321-1) unstable; urgency=low
 
   * New upstream release
