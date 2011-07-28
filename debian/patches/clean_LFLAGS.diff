@@ -1,0 +1,19 @@
+Description: Just set LFLAGS -lasound
+Forwarded: yes
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+--- a/modem/Makefile
++++ b/modem/Makefile
+@@ -41,13 +41,8 @@
+ 
+ ifdef SUPPORT_ALSA
+ CFLAGS+= -DSUPPORT_ALSA=1
+-ifeq ($(ARCH64), 0)
+-LFLAGS+= /usr/lib/libasound.so
+-else
+-# LFLAGS+= /usr/lib32/libasound.so , replaced by -l commands search for asound
+ LFLAGS+= -lasound
+ endif
+-endif
+ 
+ slmodemd:
+ 	$(CC) -o slmodemd modem_main.o $(all-objs) $(LFLAGS)
