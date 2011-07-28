@@ -1,3 +1,10 @@
+sl-modem (2.9.11~20110321-3) unstable; urgency=low
+
+  * Added clean_LFLAGS.diff patch to remove logic for LFLAGS setting (just set
+    it to -lasound2)
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Thu, 28 Jul 2011 14:27:47 +0200
+
 sl-modem (2.9.11~20110321-2) unstable; urgency=low
 
   * Added support_multiarch.diff patch to support multiarch include dirs,
