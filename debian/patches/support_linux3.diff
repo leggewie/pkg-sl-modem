@@ -1,0 +1,14 @@
+Description: Support for linux 3.x series in build system
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Bug-Debian: http://bugs.debian.org/641151
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -82,7 +82,7 @@
+ 	    $(RM) ${DESTDIR}/dev/slusb$(minor) ; ) echo -n
+ 
+ else
+-ifeq ($(shell grep 'UTS.*"2\.6' $(KERNEL_DIR)/include/generated/utsrelease.h $(KERNEL_DIR)/include/linux/utsrelease.h $(KERNEL_DIR)/include/linux/version.h 2>/dev/null),)
++ifeq ($(shell grep 'UTS.*"\(2\.6\|3\)' $(KERNEL_DIR)/include/generated/utsrelease.h $(KERNEL_DIR)/include/linux/utsrelease.h $(KERNEL_DIR)/include/linux/version.h 2>/dev/null),)
+ 
+ slusb-objs:= old_st7554.o
+ obj:=.

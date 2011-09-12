@@ -8,3 +8,4 @@ debug_level.diff
 autoload.diff
 support_multiarch.diff
 clean_LFLAGS.diff
+support_linux3.diff
