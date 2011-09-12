@@ -1,3 +1,11 @@
+sl-modem (2.9.11~20110321-4) unstable; urgency=low
+
+  * Added support_linux3.diff patch to support for linux 3.x series in build
+    system. (Closes: 641151)
+    Thanks to Ben Hutchings <ben@decadent.org.uk>
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Mon, 12 Sep 2011 16:19:12 +0200
+
 sl-modem (2.9.11~20110321-3) unstable; urgency=low
 
   * Added clean_LFLAGS.diff patch to remove logic for LFLAGS setting (just set
