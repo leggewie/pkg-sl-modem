@@ -1,0 +1,38 @@
+Description: Fix device_create call for linux kernel >= 2.6.27
+ * Also fixed device_create call for linux kernel >= 2.6.25 (two arguments were switched together !!!)
+ * Used proper indentation to make things clear
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Bug-Debian: http://bugs.debian.org/651781
+Forwarded: yes
+--- a/drivers/st7554.c
++++ b/drivers/st7554.c
+@@ -219,19 +219,23 @@
+ #define CLASS_DEVICE_DESTROY(class, dev) class_simple_device_remove(dev)
+ #define CLASS_CREATE(owner, name) class_simple_create(owner, name)
+ static struct class_simple *st7554_class;
+-#else
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,25)
+-#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) device_create(class, dev, device, fmt, rest)
++#else /* ! FOUND_CLASS_SIMPLE */
++# if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,25)
++#   if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)
++#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) device_create(class, device, dev, NULL, fmt, rest)
++#   else /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27) */
++#define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) device_create(class, device, dev, fmt, rest)
++#   endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27) */
+ #define CLASS_DEVICE_DESTROY(class, dev) device_destroy(class, dev)
+-#else
++# else /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,25) */
+ #include <linux/moduleparam.h>
+ #define CLASS_DEVICE_CREATE(class, dev, device, fmt, rest) class_device_create(class, dev, device, fmt, rest)
+ #define CLASS_DEVICE_DESTROY(class, dev) class_device_destroy(class, dev)
+-#endif
++# endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,25) */
+ #define CLASS_DESTROY(class) class_destroy(class)
+ #define CLASS_CREATE(owner, name) class_create(owner, name)
+ static struct class *st7554_class;
+-#endif
++#endif /* FOUND_CLASS_SIMPLE */
+ 
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)
+ static DECLARE_MUTEX(open_sem);
