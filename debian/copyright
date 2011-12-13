@@ -1,34 +1,25 @@
-This package was debianized by Eduard Bloch <blade@debian.org> on
-Sun, 16 Mar 2003 16:37:46 +0100.
-
-This package ships two 32-bit binary blobs (modem/dsplibs.o and
-drivers/amrlibs.o) for which no source is provided.  Consequently,
-the package is in non-free in Debian.  Sl-Modem is released under BSD
-and there should not be any legal issues with autobuilding the package.
-cf. http://lists.debian.org/debian-devel-announce/2006/11/msg00012.html
-
-Format-Specification: http://wiki.debian.org/Proposals/CopyrightFormat
+Format: http://anonscm.debian.org/viewvc/dep/web/deps/dep5.mdwn?view=co&pathrev=174
 Upstream-Name: slmodem
-Upstream-Maintainer: Marvin Stodolsky <marvin.stodolsky@gmail.com>
-Upstream-Source: http://linmodems.technion.ac.il/packages/smartlink/
+Upstream-Contact: Marvin Stodolsky <marvin.stodolsky@gmail.com>
+Source: http://linmodems.technion.ac.il/packages/smartlink/
+Comment:
+ This package ships two 32-bit binary blobs (modem/dsplibs.o and
+ drivers/amrlibs.o) for which no source is provided.  Consequently,
+ the package is in non-free in Debian.  Sl-Modem is released under BSD
+ and there should not be any legal issues with autobuilding the package.
+ cf. http://lists.debian.org/debian-devel-announce/2006/11/msg00012.html
 
 Files: debian/*
-Author: Eduard Bloch <blade@debian.org>
-Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
-Author: Maurizio Avogadro <mavoga@gmail.com>
-Author: Rolf Leggewie <foss@rolf.leggewie.biz>
-Copyright: Copyright © 2008-2010, أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
-Copyright: Copyright © 2010 Rolf Leggewie
-License: BSD-C3
+Copyright: 2003-2008 Eduard Bloch <blade@debian.org>
+Copyright: 2008-2011 أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Copyright: 2010 Rolf Leggewie <foss@rolf.leggewie.biz>
+License: BSD-3-clause
 
 Files: *
-Author: Sasha Khapyorsky (sashak@smlink.com)
-Author: Seva (seva@smlink.com)
-Author: Alex Raer
 Copyright: 2002, Smart Link Ltd.
-License: BSD-C3
+License: BSD-3-clause
 
-License: BSD-C3
+License: BSD-3-clause
  Copyright (c) 2002, Smart Link Ltd.
  All rights reserved.
  .
