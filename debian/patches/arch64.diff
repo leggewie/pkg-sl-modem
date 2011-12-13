@@ -1,0 +1,18 @@
+Description: Better arch detection logic
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Bug-Debian: http://bugs.debian.org/651780
+Forwarded: yes
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -28,7 +28,11 @@
+ 
+ EXTRA_CFLAGS = -I$(obj) -I$(obj)/../modem $(FOUND_CLASS_SIMPLE)
+ 
++ifdef CONFIG_X86_32
++ARCH64:=0
++else
+ ARCH64:=$(shell uname -m | sed -e '/amd64/s//x86_64/' | grep -c x86_64)
++endif
+ 
+ ifeq ($(ARCH64), 0)
+ obj-m:= slamr.o 
