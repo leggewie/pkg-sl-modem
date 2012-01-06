@@ -1,0 +1,47 @@
+# Dutch translation of sl-modem debconf templates.
+# Copyright (C) 2012 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the sl-modem package.
+# Jeroen Schot <schot@a-eskwadraat.nl>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sl-modem 2.9.11~20110321-6\n"
+"Report-Msgid-Bugs-To: sl-modem@packages.debian.org\n"
+"POT-Creation-Date: 2009-01-28 06:51+0200\n"
+"PO-Revision-Date: 2012-01-05 16:11+0100\n"
+"Last-Translator: Jeroen Schot <schot@a-eskwadraat.nl>\n"
+"Language-Team: Debian l10n Dutch <debian-l10n-dutch@lists.debian.org>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: select
+#. Default
+#: ../sl-modem-daemon.templates:1001
+msgid ""
+"USA [ Enter the country (in uppercase and in English) where your language is "
+"mostly spoken, for example FRANCE for French ]"
+msgstr "NETHERLANDS"
+
+#. Type: select
+#. Description
+#. Translators: Enter the country (in uppercase and in English) where your
+#. language is mostly spoken, for example FRANCE for French or GERMANY for
+#. German
+#: ../sl-modem-daemon.templates:1002
+msgid "Location of the modem:"
+msgstr "Lokatie van de moden:"
+
+#. Type: select
+#. Description
+#. Translators: Enter the country (in uppercase and in English) where your
+#. language is mostly spoken, for example FRANCE for French or GERMANY for
+#. German
+#: ../sl-modem-daemon.templates:1002
+msgid ""
+"Indicate the country in which your modem is located. Please select the  "
+"telephone system used in your country."
+msgstr ""
+"Geef aan in welk land uw modem zich bevind. Kies het telefoonsysteem dat in "
+"uw land wordt gebruikt."
