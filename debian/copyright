@@ -1,4 +1,4 @@
-Format: http://anonscm.debian.org/viewvc/dep/web/deps/dep5.mdwn?view=co&pathrev=174
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0
 Upstream-Name: slmodem
 Upstream-Contact: Marvin Stodolsky <marvin.stodolsky@gmail.com>
 Source: http://linmodems.technion.ac.il/packages/smartlink/
@@ -11,7 +11,7 @@ Comment:
 
 Files: debian/*
 Copyright: 2003-2008 Eduard Bloch <blade@debian.org>
-Copyright: 2008-2011 أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Copyright: 2008-2012 أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
 Copyright: 2010 Rolf Leggewie <foss@rolf.leggewie.biz>
 License: BSD-3-clause
 
