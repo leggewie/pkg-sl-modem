@@ -11,10 +11,12 @@ Vcs-Git: git://git.debian.org/git/collab-maint/sl-modem.git
 Vcs-Browser: http://git.debian.org/?p=collab-maint/sl-modem.git
 XS-Autobuild: yes
 
-Package: sl-modem-source
+Package: sl-modem-dkms
 Architecture: i386 amd64
 Depends: ${misc:Depends}, libc6-dev,
  linux-headers-686 | linux-headers-amd64 | linux-headers-generic | linux-headers
+Replaces: sl-modem-source (<< 2.9.11~20110321-7)
+Breaks: sl-modem-source (<< 2.9.11~20110321-7)
 Description: SmartLink software modem driver - module building source
  This package contains source code for the low-level drivers for the
  software modems produced by Smart Link Ltd. It supports PCI and USB models.
@@ -43,5 +45,22 @@ Description: SmartLink software modem daemon
  and snd-intel8x0m module) which is sufficient for basic operation and
  data/Internet connection, or the SmartLink kernel driver which is
  provided by separate packages which you can build using the source from
- the sl-modem-source package. 
+ the sl-modem-dkms package.
+
+Package: sl-modem-source
+Architecture: all
+Depends: ${misc:Depends}, sl-modem-dkms
+Section: non-free/oldlibs
+Description: SmartLink software modem driver (dummy transitional package)
+ This package contains source code for the low-level drivers for the
+ software modems produced by Smart Link Ltd. It supports PCI and USB models.
+ .
+ In addition to this package, you will need the package sl-modem-daemon
+ which implements the application part of the driver.
+ .
+ Module packages can be built for the custom kernel package either by hand or
+ using DKMS.
+ .
+ This is a dummy transitional package that will ensure a proper upgrade path.
+ This package may be safely removed after upgrading.
 

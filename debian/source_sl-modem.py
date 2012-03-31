@@ -36,7 +36,7 @@ def add_info(report, ui):
   attach_conffiles(report, 'sl-modem-daemon')
   attach_alsa(report)
   attach_related_packages(report, [
-    "sl-modem-source"
+    "sl-modem-dkms"
     ])
   report['Lsmod'] = command_output(['lsmod'])
   attach_file_if_exists(report, "/var/log/slmodemd/slmodem.log")

@@ -16,11 +16,11 @@ override_dh_auto_build:
 	chmod +x debian/15sl-modem-daemon
 
 override_dh_auto_install:
-	mkdir -p debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)
+	mkdir -p debian/sl-modem-dkms/usr/src/sl-modem-$(CVERSION)
 
 	# Copy only the driver source to the proper location
-	tar -c --exclude ".svn" modem/modem_defs.h drivers patches ungrab-winmodem | tar x -C debian/sl-modem-source/usr/src/sl-modem-$(CVERSION)
-	chmod -R a+r debian/sl-modem-source/
+	tar -c --exclude ".svn" modem/modem_defs.h drivers patches ungrab-winmodem | tar x -C debian/sl-modem-dkms/usr/src/sl-modem-$(CVERSION)
+	chmod -R a+r debian/sl-modem-dkms/
 
 override_dh_installchangelogs:
 	dh_installchangelogs Changes

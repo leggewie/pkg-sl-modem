@@ -138,7 +138,7 @@ config() {
       # installed as module so just load it or bail out
       if MODPROBE_OPTIONS="" $modprobe slamr 2>&1 | grep -q not.found ; then
           echo "SmartLink modem driver not available for this Kernel. Please read README.Debian"
-          echo "or try to install the package sl-modem-source. Exiting..."
+          echo "or try to install the package sl-modem-dkms. Exiting..."
           exit 1
       fi
    fi
