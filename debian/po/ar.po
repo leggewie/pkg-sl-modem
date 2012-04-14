@@ -11,11 +11,13 @@ msgstr ""
 "PO-Revision-Date: 2009-01-28 10:23+0300\n"
 "Last-Translator: Ossama M. Khayat <okhayat@yahoo.com>\n"
 "Language-Team: Arabic <support@arabeyes.org>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms: nplurals=4; plural=(n == 1? 0 : (n == 2? 1 : (n <= 10? 2 : 3)))\n"
+"Plural-Forms: nplurals=4; plural=(n == 1? 0 : (n == 2? 1 : (n <= 10? 2 : "
+"3)))\n"
 
 #. Type: select
 #. Default
@@ -40,11 +42,9 @@ msgstr "موضع المودم:"
 #. language is mostly spoken, for example FRANCE for French or GERMANY for
 #. German
 #: ../sl-modem-daemon.templates:1002
-#| msgid ""
-#| "In which country is your modem located? Please select the telephone "
-#| "system used in your country."
 msgid ""
 "Indicate the country in which your modem is located. Please select the  "
 "telephone system used in your country."
-msgstr "حدد الدولية التي يوجد فيها جهاز المودم الخاص بك. رجاء اختر نظام الهاتف المستخدم في دولتك."
-
+msgstr ""
+"حدد الدولية التي يوجد فيها جهاز المودم الخاص بك. رجاء اختر نظام الهاتف "
+"المستخدم في دولتك."
