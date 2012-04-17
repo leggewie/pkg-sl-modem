@@ -1,3 +1,20 @@
+sl-modem (2.9.11~20110321-7) unstable; urgency=low
+
+  * Added Dutch debconf templates translation.
+    Thanks to Jeroen Schot <schot@A-Eskwadraat.nl> (Closes: #654759)
+  * debian/control: Updated Standards-Version to 3.9.3
+  * Bumped compat level to 9
+  * debian/copyright: Updated copyright format & years.
+  * Rename sl-modem-source to sl-modem-dkms.
+    Also added sl-modem-source as a dummy transitional package.
+    (Closes: #656407)
+  * Added Polish debconf translation.
+    Thanks to Michał Kułach <michal.kulach@gmail.com> (Closes: #666780)
+  * Automatic reformatting for PO files
+  * debian/rules: Remove -s switch from dh call, not needed anymore
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Mon, 16 Apr 2012 17:06:47 +0200
+
 sl-modem (2.9.11~20110321-6) unstable; urgency=low
 
   * debian/sl-modem-source.dkms: Conditionally build slamr for 32-bit archs
