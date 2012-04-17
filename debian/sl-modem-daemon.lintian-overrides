@@ -2,7 +2,6 @@
 # cannot be fixed as the original author of this binary blob (Smart Link)
 # stopped supporting the software.
 sl-modem-daemon: spelling-error-in-binary usr/sbin/slmodemd Recieved Received
-sl-modem-daemon: spelling-error-in-binary usr/sbin/slmodemd recieved received
 sl-modem-daemon: spelling-error-in-binary usr/sbin/slmodemd posible possible
 sl-modem-daemon: spelling-error-in-binary usr/sbin/slmodemd choosen chosen
 sl-modem-daemon: spelling-error-in-binary usr/sbin/slmodemd treshold threshold

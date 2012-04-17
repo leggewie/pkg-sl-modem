@@ -1,2 +1,3 @@
 # This file is actually a patch for a C code, not a license file.
 sl-modem-dkms: extra-license-file usr/src/sl-modem-2.9.11~20110321/patches/sldiffs-20090222/05_st7554_license.diff
+sl-modem-dkms: spelling-error-in-binary usr/src/sl-modem-2.9.11~20110321/drivers/amrlibs.o Writeable Writable
