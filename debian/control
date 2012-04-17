@@ -51,6 +51,7 @@ Package: sl-modem-source
 Architecture: all
 Depends: ${misc:Depends}, sl-modem-dkms
 Section: non-free/oldlibs
+Priority: extra
 Description: SmartLink software modem driver (dummy transitional package)
  This package contains source code for the low-level drivers for the
  software modems produced by Smart Link Ltd. It supports PCI and USB models.
