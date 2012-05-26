@@ -1,0 +1,13 @@
+Description: Use CPPFLAGS for building slmodemd
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+--- a/modem/Makefile
++++ b/modem/Makefile
+@@ -62,7 +62,7 @@
+ #
+ 
+ %.o: %.c .build_profile
+-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(CFLAGS_$@) -o $@ -c $<
++	$(CC) $(CFLAGS) $(CPPFLAGS) $(EXTRA_CFLAGS) $(CFLAGS_$@) -o $@ -c $<
+ 
+ dep: generic-dep
+ generic-dep:
