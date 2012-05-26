@@ -18,7 +18,7 @@ case "$1" in
       for module in slamr slusb ; do
         if grep -q "$module" /proc/modules 2>/dev/null ; then
           daemon_stop
-          rmmod $module
+          rmmod $module || true
         fi
       done
       modprobe slamr 2>/dev/null || modprobe slusb 2>/dev/null || true
