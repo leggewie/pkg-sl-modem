@@ -1,9 +1,9 @@
-Description: Just set LFLAGS -lasound
+Description: Just set LFLAGS to -lasound, also rename it to LDFLAGS
 Forwarded: yes
 Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
 --- a/modem/Makefile
 +++ b/modem/Makefile
-@@ -41,13 +41,8 @@
+@@ -41,19 +41,14 @@
  
  ifdef SUPPORT_ALSA
  CFLAGS+= -DSUPPORT_ALSA=1
@@ -11,9 +11,18 @@ Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
 -LFLAGS+= /usr/lib/libasound.so
 -else
 -# LFLAGS+= /usr/lib32/libasound.so , replaced by -l commands search for asound
- LFLAGS+= -lasound
- endif
+-LFLAGS+= -lasound
 -endif
++LDFLAGS+= -lasound
+ endif
  
  slmodemd:
- 	$(CC) -o slmodemd modem_main.o $(all-objs) $(LFLAGS)
+-	$(CC) -o slmodemd modem_main.o $(all-objs) $(LFLAGS)
++	$(CC) -o slmodemd modem_main.o $(all-objs) $(LDFLAGS)
+ 
+ modem_test:
+-	$(CC) -o modem_test modem_test.o $(all-objs) $(LFLAGS)
++	$(CC) -o modem_test modem_test.o $(all-objs) $(LDFLAGS)
+ 
+ clean:
+ 	$(RM) slmodemd modem_test modem_main.o modem_cmdline.o modem_test.o $(modem-objs) $(dp-objs) $(sysdep-objs)
