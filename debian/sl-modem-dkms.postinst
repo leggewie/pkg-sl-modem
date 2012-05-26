@@ -13,6 +13,10 @@ daemon_stop () {
 case "$1" in
   configure)
     if [ -x /usr/lib/dkms/common.postinst ]; then
+      # Check if slmodemd is running:
+      if [ -e /var/run/slmodemd.pid ] ; then
+        SLMODEMD_RUNNING=1
+      fi
       # If either slamr or slusb module is actually in use, stop slmodemd, and 
       # remove the respective module:
       for module in slamr slusb ; do
@@ -23,8 +27,8 @@ case "$1" in
       done
       modprobe slamr 2>/dev/null || modprobe slusb 2>/dev/null || true
 
-      # If slmodemd is running and we are upgrading, then restart slmodemd:
-      if [ -e /var/run/slmodemd.pid -a -n "$2" ]; then
+      # If slmodemd was running and we are upgrading, then restart slmodemd:
+      if [ -n "$SLMODEMD_RUNNING" -a -n "$2" ]; then
         invoke-rc.d sl-modem-daemon restart || true
       fi
 
