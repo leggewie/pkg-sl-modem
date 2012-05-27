@@ -1,3 +1,15 @@
+sl-modem (2.9.11~20110321-8) unstable; urgency=low
+
+  * debian/sl-modem-dkms.postinst: Guard rmmod with trailing '|| true'
+    Thanks to Andreas Beckmann <debian@abeckmann.de> (Closes: #674005)
+  * Check early if slmodemd was running (before probably stopping it in case
+    of upgrades)
+  * debian/copyright: Remove duplicate Copyright field.
+  * Added use_CPPFLAGS.diff patch to use CPPFLAGS for building slmodemd.
+  * debian/patches/clean_LFLAGs.diff: Rename LFLAGS to LDFLAGS
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Sat, 26 May 2012 22:09:24 +0200
+
 sl-modem (2.9.11~20110321-7) unstable; urgency=low
 
   * Added Dutch debconf templates translation.
