@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+
+# dummy empty prerm script to fix upgrade failures from squeeze
+# see #707821
+
+#DEBHELPER#
