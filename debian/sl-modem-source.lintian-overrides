@@ -1,0 +1,3 @@
+# sl-modem-source's prerm script is a dummy empty script to fix upgrade
+# failures from squeeze see #707821
+sl-modem-source: maintainer-script-empty prerm
