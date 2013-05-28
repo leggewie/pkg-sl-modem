@@ -1,0 +1,14 @@
+Description: Remove __devinitdata, as it is no longer needed, and it causes 
+build failures on 3.8.x kernels
+Author: Marvin Stodolsky <marvin.stodolsky@gmail.com>
+--- a/drivers/amrmo_init.c
++++ b/drivers/amrmo_init.c
+@@ -247,7 +247,7 @@
+ };
+ 
+ 
+-static struct pci_device_id amrmo_pci_tbl [] __devinitdata = {
++static struct pci_device_id amrmo_pci_tbl [] = {
+ 	{PCI_VENDOR_ID_SILICON, PCI_DEVICE_ID_SL1900,	   /* SiliconInstr SL1543:3052 */
+ 	 PCI_ANY_ID, PCI_ANY_ID, 0, 0, SL1543_CARD},
+ 	{PCI_VENDOR_ID_MOTOROLA, PCI_DEVICE_ID_SL1900,     /* Motorola 1057:3052 */
