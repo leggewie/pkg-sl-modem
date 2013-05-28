@@ -1,3 +1,27 @@
+sl-modem (2.9.11~20110321-9) unstable; urgency=low
+
+  * debian/sl-modem-source.prerm: Add dummy empty prerm script to work
+    aroundupgrade failures from squeeze.
+    Thanks to Andreas Beckmann <anbe@debian.org> (Closes: #707821)
+  * Added remove__devinitdata.diff patch (also refreshed
+    08_ungrab_winmodem.diff) to remove __devinitdata, as it is no longer
+    needed, and it causes build failures on 3.8.x kernels.
+    Thanks to Marvin Stodolsky <marvin.stodolsky@gmail.com>
+  * debian/control:
+    + Changed sl-modem-dkms Section to non-free/kernel
+    + Remove obsolete DMUA field.
+    + Bumped Standards-Version to 3.9.4
+    + Use canonical URIs in VCS-* fields.
+  * Build sl-modem-daemon for i386 arch only. amd64 users will need to enable
+    multiarch & install sl-modem-daemon:i386
+    (Closes: #709404, #710144)
+  * debian/sl-modem-dkms.lintian-overrides: Removed spelling-error-in-binary
+    lintian override, it is unused !
+  * debian/sl-modem-source.lintian-overrides: Added lintian override for
+    sl-modem-source's dummy empty prerm script
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Tue, 28 May 2013 22:57:20 +0200
+
 sl-modem (2.9.11~20110321-8) unstable; urgency=low
 
   * debian/sl-modem-dkms.postinst: Guard rmmod with trailing '|| true'
