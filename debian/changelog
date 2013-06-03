@@ -1,3 +1,17 @@
+sl-modem (2.9.11~20110321-8+deb7u1) wheezy; urgency=low
+
+  [ Andreas Beckmann ]
+  * Non-maintainer upload with maintainer approval.
+
+  [ ﺄﺤﻣﺩ ﺎﻠﻤﺤﻣﻭﺪﻳ (Ahmed El-Mahmoudy) ]
+  * debian/sl-modem-source.prerm: Add dummy empty prerm script to work
+    around upgrade failures from squeeze.
+    Thanks to Andreas Beckmann <anbe@debian.org> (Closes: #707821)
+  * debian/sl-modem-source.lintian-overrides: Added lintian override for
+    sl-modem-source's dummy empty prerm script
+
+ -- Andreas Beckmann <anbe@debian.org>  Mon, 03 Jun 2013 17:34:19 +0200
+
 sl-modem (2.9.11~20110321-8) unstable; urgency=low
 
   * debian/sl-modem-dkms.postinst: Guard rmmod with trailing '|| true'
