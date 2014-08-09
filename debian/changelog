@@ -1,3 +1,12 @@
+sl-modem (2.9.11~20110321-10) unstable; urgency=medium
+
+  * Add Turkish translation.
+    Thanks to Mert Dirik <mertdirik@gmail.com> (Closes: #757488)
+  * Bump Standards-Version to 3.9.5
+  * Update copyright years
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>  Sat, 09 Aug 2014 09:12:22 +0300
+
 sl-modem (2.9.11~20110321-9) unstable; urgency=low
 
   * debian/sl-modem-source.prerm: Add dummy empty prerm script to work
