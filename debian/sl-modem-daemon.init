@@ -19,6 +19,8 @@ PIDFILE=/var/run/$NAME.pid
 DESC="SmartLink modem daemon"
 modprobe="$(cat /proc/sys/kernel/modprobe 2>/dev/null || echo modprobe)"
 
+. /lib/lsb/init-functions
+
 test -x $DAEMON || exit 0
 
 # there may be old options there...
