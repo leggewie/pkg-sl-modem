@@ -13,3 +13,4 @@ device_create_changes.diff
 arch64.diff
 use_CPPFLAGS.diff
 remove__devinitdata.diff
+fix_perms.diff

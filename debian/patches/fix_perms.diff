@@ -1,0 +1,25 @@
+Description: Fix permissions in module_param call
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1362764
+--- a/drivers/amrmo_init.c
++++ b/drivers/amrmo_init.c
+@@ -735,7 +735,7 @@
+  *  module stuff
+  */
+ 
+-module_param(debug, int, 1);
++module_param(debug, int, S_IXUSR | S_IXGRP | S_IXOTH);
+ MODULE_PARM_DESC(debug,"debug level: 0-3 (default=0)");
+ 
+ MODULE_AUTHOR("Smart Link Ltd.");
+--- a/drivers/st7554.c
++++ b/drivers/st7554.c
+@@ -76,7 +76,7 @@
+ 
+ static int debug = 0;
+ 
+-module_param(debug, int, 1);
++module_param(debug, int, S_IXUSR | S_IXGRP | S_IXOTH);
+ MODULE_PARM_DESC(debug,"Debug level: 0-3 (default=0)");
+ 
+ /* st7554 IDs */
