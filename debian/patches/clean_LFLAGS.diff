@@ -1,6 +1,6 @@
 Description: Just set LFLAGS to -lasound, also rename it to LDFLAGS
 Forwarded: yes
-Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
 --- a/modem/Makefile
 +++ b/modem/Makefile
 @@ -41,19 +41,14 @@

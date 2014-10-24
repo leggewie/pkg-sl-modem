@@ -1,5 +1,5 @@
 Description: Use CPPFLAGS for building slmodemd
-Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
 --- a/modem/Makefile
 +++ b/modem/Makefile
 @@ -62,7 +62,7 @@

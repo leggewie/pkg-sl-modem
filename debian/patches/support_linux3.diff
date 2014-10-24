@@ -1,5 +1,5 @@
 Description: Support for linux 3.x series in build system
-Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
 Bug-Debian: http://bugs.debian.org/641151
 --- a/drivers/Makefile
 +++ b/drivers/Makefile

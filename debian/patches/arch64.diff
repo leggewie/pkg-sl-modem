@@ -1,5 +1,5 @@
 Description: Better arch detection logic
-Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
 Bug-Debian: http://bugs.debian.org/651780
 Forwarded: yes
 --- a/drivers/Makefile

@@ -1,7 +1,7 @@
 Source: sl-modem
 Section: non-free/misc
 Priority: optional
-Maintainer: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Maintainer: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
 Uploaders: Maurizio Avogadro <mavoga@gmail.com>, Rolf Leggewie <foss@rolf.leggewie.biz>
 Build-Depends: debhelper (>= 9), bzip2, libasound2-dev (>> 1.0.6), po-debconf, execstack, dkms (>= 2.1.1.2-1~)
 Standards-Version: 3.9.6

@@ -1,6 +1,6 @@
 Description: Support multiarch include dirs
  libc6 moved arch dependent headers to multiarch include directory
-Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
 --- a/modem/Makefile
 +++ b/modem/Makefile
 @@ -24,7 +24,7 @@

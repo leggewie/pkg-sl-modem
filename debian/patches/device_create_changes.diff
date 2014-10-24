@@ -1,7 +1,7 @@
 Description: Fix device_create call for linux kernel >= 2.6.27
  * Also fixed device_create call for linux kernel >= 2.6.25 (two arguments were switched together !!!)
  * Used proper indentation to make things clear
-Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@sabily.org>
+Author: أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
 Bug-Debian: http://bugs.debian.org/651781
 Forwarded: yes
 --- a/drivers/st7554.c
