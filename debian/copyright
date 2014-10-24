@@ -9,14 +9,14 @@ Comment:
  and there should not be any legal issues with autobuilding the package.
  cf. http://lists.debian.org/debian-devel-announce/2006/11/msg00012.html
 
+Files: *
+Copyright: 2002, Smart Link Ltd.
+License: BSD-3-clause
+
 Files: debian/*
 Copyright: 2003-2008 Eduard Bloch <blade@debian.org>
            2008-2014 أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>
            2010 Rolf Leggewie <foss@rolf.leggewie.biz>
-License: BSD-3-clause
-
-Files: *
-Copyright: 2002, Smart Link Ltd.
 License: BSD-3-clause
 
 License: BSD-3-clause
