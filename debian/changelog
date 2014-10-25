@@ -1,3 +1,17 @@
+sl-modem (2.9.11~20110321-11) unstable; urgency=medium
+
+  * debian/sl-modem-daemon.init: Source /lib/lsb/init-functions in init
+    script.
+  * Added fix_perms.diff to fix module build failure against linux kernel 3.16
+    (LP: #1362764)
+  * debian/control: Bump Standards-Version to 3.9.6
+  * Updated email address.
+  * debian/copyright: Moved copyright paragraph for debian/* below the
+    paragraph for *, to overcome a lintian issue.
+  * Remove unused lintian override.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Fri, 24 Oct 2014 10:31:01 +0200
+
 sl-modem (2.9.11~20110321-10) unstable; urgency=medium
 
   * Add Turkish translation.
