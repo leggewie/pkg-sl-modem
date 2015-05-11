@@ -1,3 +1,14 @@
+sl-modem (2.9.11~20110321-12) unstable; urgency=medium
+
+  * debian/control:
+    + Fix kernel-headers-* dependencies and demote them to Recommends.
+      Thanks to Ben Hutchings <ben@decadent.org.uk> (Closes: #728628)
+    + Remove libc6-dev from sl-modem-dkms' dependencies (dkms should be
+      enough)
+  * debian/copyright: Update copyright years.
+
+ -- أحمد المحمودي (Ahmed El-Mahmoudy) <aelmahmoudy@users.sourceforge.net>  Sat, 09 May 2015 18:27:36 +0200
+
 sl-modem (2.9.11~20110321-11) unstable; urgency=medium
 
   * debian/sl-modem-daemon.init: Source /lib/lsb/init-functions in init
