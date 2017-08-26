@@ -16,7 +16,7 @@ To use SmartLink modules, create the drivers package using the separate
 sl-modem-dkms package (see its README.Debian for details).
 
 When done, use "dpkg-reconfigure sl-modem-daemon -plow" to choose your
-contry or edit the file /etc/defaults/sl-modem-daemon manually.
+country or edit the file /etc/defaults/sl-modem-daemon manually.
 
 To use ALSA modules, make sure that you have a recent kernel (>= 2.6.4) and
 the intel8x0m module available. If the driver is not detected by the
