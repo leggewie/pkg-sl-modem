@@ -47,7 +47,7 @@ esac
 
 if [ -x "/etc/init.d/sl-modem-daemon" ]; then
 	update-rc.d sl-modem-daemon defaults 12 >/dev/null
-	if [ -x /usr/sbin/invoke-rc.d ]; then
+	if which invoke-rc.d ; then
 		invoke-rc.d sl-modem-daemon start || true
 	else
 		/etc/init.d/sl-modem-daemon start || true
